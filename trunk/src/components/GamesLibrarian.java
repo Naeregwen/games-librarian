@@ -43,7 +43,9 @@ import commons.enums.DumpMode;
 import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
 import commons.enums.LaunchType;
+import commons.enums.LibrarianTab;
 import commons.enums.LocaleChoice;
+import commons.enums.ProfileTab;
 import commons.enums.SteamAchievementsListsSortMethod;
 import commons.enums.SteamAchievementsSortMethod;
 import commons.enums.SteamFriendsDisplayMode;
@@ -62,6 +64,7 @@ import components.actions.DebugAction;
 import components.actions.DisplayToolTipsAction;
 import components.actions.ExitAction;
 import components.actions.GameChoiceAction;
+import components.actions.GotoAction;
 import components.actions.LoadAllAchievementsAction;
 import components.actions.LoadGameStatsAction;
 import components.actions.LoadLibraryAction;
@@ -510,9 +513,21 @@ public class GamesLibrarian extends JFrame {
 	ExitAction exitAction;
 	private JMenuItem exitMenuItem;
 
+	// Goto Menu
+	private JMenu gotoMenu;
+	GotoAction gotoControlsAction;
+	GotoAction gotoLibraryAction;
+	GotoAction gotoGameAction;
+	GotoAction gotoProfileAction;
+	GotoAction gotoOptionsAction;
+	GotoAction gotoSummaryAction;
+	GotoAction gotoStatusAction;
+	GotoAction gotoGroupsAction;
+	GotoAction gotoFriendsAction;
+	
 	// Controls Menu
 	
-	private JMenu controlMenu;
+	private JMenu controlsMenu;
 	
 	RollAction rollAction;
 	private JMenuItem rollMenuItem;
@@ -676,6 +691,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		fileMenu = new JMenu(BundleManager.getUITexts(me, "fileMenuLabel"));
+		fileMenu.setIcon(GamesLibrary.fileMenuIcon);
 		mainMenuBar.add(fileMenu);
 		
 		// loadParametersMenuItem
@@ -691,20 +707,54 @@ public class GamesLibrarian extends JFrame {
 		exitMenuItem = fileMenu.add(exitAction);
 		
 		//
+		// Goto Menu
+		//
+		gotoMenu = new JMenu(BundleManager.getUITexts(me, "gotoMenuLabel"));
+		gotoMenu.setIcon(GamesLibrary.gotoMenuIcon);
+		mainMenuBar.add(gotoMenu);
+		
+		gotoControlsAction = new GotoAction(me, LibrarianTab.Controls);
+		gotoLibraryAction = new GotoAction(me, LibrarianTab.Library);
+		gotoGameAction = new GotoAction(me, LibrarianTab.Game);
+		gotoProfileAction = new GotoAction(me, LibrarianTab.Profile);
+		gotoOptionsAction = new GotoAction(me, LibrarianTab.Options);
+		
+		gotoMenu.add(gotoControlsAction);
+		gotoMenu.add(gotoLibraryAction);
+		gotoMenu.add(gotoGameAction);
+		
+		// Goto Profile SubTabs Menu
+		JMenu profileSubMenu = new JMenu(gotoProfileAction);
+		
+		JMenuItem gotoSummaryMenuItem = new JMenuItem(gotoSummaryAction = new GotoAction(me, ProfileTab.Summary));
+		JMenuItem gotoStatusMenuItem = new JMenuItem(gotoStatusAction = new GotoAction(me, ProfileTab.Status));
+		JMenuItem gotoGroupsMenuItem = new JMenuItem(gotoGroupsAction = new GotoAction(me, ProfileTab.Groups));
+		JMenuItem gotoFriendsMenuItem = new JMenuItem(gotoFriendsAction = new GotoAction(me, ProfileTab.Friends));
+		
+		profileSubMenu.add(gotoSummaryMenuItem);
+		profileSubMenu.add(gotoStatusMenuItem);
+		profileSubMenu.add(gotoGroupsMenuItem);
+		profileSubMenu.add(gotoFriendsMenuItem);
+		
+		gotoMenu.add(profileSubMenu);
+		gotoMenu.add(gotoOptionsAction);
+		
+		//
 		// Controls Menu
 		//
 		
-		controlMenu = new JMenu(BundleManager.getUITexts(me, "controlsTabTitle"));
-		mainMenuBar.add(controlMenu);
+		controlsMenu = new JMenu(BundleManager.getUITexts(me, "controlsTabTitle"));
+		controlsMenu.setIcon(GamesLibrary.controlsMenuIcon);
+		mainMenuBar.add(controlsMenu);
 		
 		// rollMenuItem
 		rollAction = new RollAction(me);
-		rollMenuItem = controlMenu.add(rollAction);
+		rollMenuItem = controlsMenu.add(rollAction);
 		
 		// gameChoiceMenu
 		gameChoiceMenu = new JMenu(BundleManager.getUITexts(me, "gameChoiceMenuLabel"));
 		gameChoiceMenu.setIcon(GamesLibrary.gameChoiceIcon);
-		controlMenu.add(gameChoiceMenu);
+		controlsMenu.add(gameChoiceMenu);
 		
 		oneGameChoiceAction = new GameChoiceAction(me, GameChoice.One);
 		twoGamesChoiceAction = new GameChoiceAction(me, GameChoice.Two);
@@ -725,29 +775,30 @@ public class GamesLibrarian extends JFrame {
 
 		// refreshGamesListMenuItem
 		refreshGamesListAction = new RefreshGamesListAction(me);
-		refreshGamesListMenuItem = controlMenu.add(refreshGamesListAction);
+		refreshGamesListMenuItem = controlsMenu.add(refreshGamesListAction);
 		
 		// scrollLockMenuItem
 		scrollLockAction = new ScrollLockAction(me);
-		scrollLockMenuItem = controlMenu.add(scrollLockAction);
+		scrollLockMenuItem = controlsMenu.add(scrollLockAction);
 				
 		// debugMenuItem
 		debugAction = new DebugAction(me);
-		debugMenuItem = controlMenu.add(debugAction);
+		debugMenuItem = controlsMenu.add(debugAction);
 		
 		// clearConsoleMenuItem
 		clearConsoleAction = new ClearConsoleAction(me);
-		clearConsoleMenuItem = controlMenu.add(clearConsoleAction);
+		clearConsoleMenuItem = controlsMenu.add(clearConsoleAction);
 		
 		// viewParametersMenuItem
 		viewParametersAction = new ViewParametersAction(me);
-		viewParametersMenuItem = controlMenu.add(viewParametersAction);
+		viewParametersMenuItem = controlsMenu.add(viewParametersAction);
 		
 		//
 		// Library Menu
 		//
 		
 		libraryMenu = new JMenu(BundleManager.getUITexts(me, "libraryMenuLabel"));
+		libraryMenu.setIcon(GamesLibrary.libraryMenuIcon);
 		mainMenuBar.add(libraryMenu);
 		
 		// loadLibraryMenuItem
@@ -783,6 +834,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		gameMenu = new JMenu(BundleManager.getUITexts(me, "gameMenuLabel"));
+		gameMenu.setIcon(GamesLibrary.gameMenuIcon);
 		mainMenuBar.add(gameMenu);
 		
 		// loadGameStatsMenuItem
@@ -822,6 +874,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		profileMenu = new JMenu(BundleManager.getUITexts(me, "profileMenuLabel"));
+		profileMenu.setIcon(GamesLibrary.profileMenuIcon);
 		mainMenuBar.add(profileMenu);
 		
 		// loadProfileMenuItem
@@ -897,6 +950,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		optionsMenu = new JMenu(BundleManager.getUITexts(me, "optionsMenuLabel"));
+		optionsMenu.setIcon(GamesLibrary.optionsMenuIcon);
 		mainMenuBar.add(optionsMenu);
 		
 		// resetOptionsMenuItem
@@ -1008,10 +1062,25 @@ public class GamesLibrarian extends JFrame {
 		loadParametersAction.translate();
 		saveParametersAction.translate();
 		exitAction.translate();
+
+		// Goto Menu
 		
+		gotoMenu.setText(BundleManager.getUITexts(me, "gotoMenuLabel"));
+		
+		gotoControlsAction.translate();
+		gotoLibraryAction.translate();
+		gotoGameAction.translate();
+		gotoProfileAction.translate();
+		gotoOptionsAction.translate();
+		
+		gotoSummaryAction.translate();
+		gotoStatusAction.translate();
+		gotoGroupsAction.translate();
+		gotoFriendsAction.translate();
+
 		// Controls Menu
 		
-		controlMenu.setText(BundleManager.getUITexts(me, "controlsTabTitle"));
+		controlsMenu.setText(BundleManager.getUITexts(me, "controlsTabTitle"));
 		
 		rollAction.translate();
 		

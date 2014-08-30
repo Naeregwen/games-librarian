@@ -74,9 +74,11 @@ import commons.enums.DumpMode;
 import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
 import commons.enums.LaunchType;
+import commons.enums.LibrarianTab;
 import commons.enums.LocaleChoice;
 import commons.enums.OnlineState;
 import commons.enums.PrivacyState;
+import commons.enums.ProfileTab;
 import commons.enums.SteamAchievementsListsSortMethod;
 import commons.enums.SteamAchievementsSortMethod;
 import commons.enums.SteamFriendsDisplayMode;
@@ -85,6 +87,7 @@ import commons.enums.SteamGamesDisplayMode;
 import commons.enums.SteamGamesSortMethod;
 import commons.enums.SteamGroupsDisplayMode;
 import commons.enums.SteamGroupsSortMethod;
+import commons.enums.TabEnum;
 import commons.layouts.WrapLayout;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.RollAction;
@@ -802,7 +805,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		int selectedIndex = view.steamGroupsSortMethodComboBox.getSelectedIndex();
 		int previousIndex = selectedIndex == 0 ? view.steamGroupsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
 		view.steamGroupsSortMethodComboBox.setSelectedIndex(previousIndex);
-		displayProfileGroupsTab();
+    	displaySubTab(ProfileTab.Groups);
+		
 	}
 	
 	public void setNextSteamGroupSortMethod() {
@@ -810,7 +814,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		int selectedIndex = view.steamGroupsSortMethodComboBox.getSelectedIndex();
 		int nextIndex = selectedIndex == view.steamGroupsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
 		view.steamGroupsSortMethodComboBox.setSelectedIndex(nextIndex);
-		displayProfileGroupsTab();
+    	displaySubTab(ProfileTab.Groups);
 	}
 	
 	public void setPreviousSteamFriendSortMethod() {
@@ -818,7 +822,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		int selectedIndex = view.steamFriendsSortMethodComboBox.getSelectedIndex();
 		int previousIndex = selectedIndex == 0 ? view.steamFriendsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
 		view.steamFriendsSortMethodComboBox.setSelectedIndex(previousIndex);
-		displayProfileFriendsTab();
+        displaySubTab(ProfileTab.Friends);
 	}
 	
 	public void setNextSteamFriendSortMethod() {
@@ -826,7 +830,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		int selectedIndex = view.steamFriendsSortMethodComboBox.getSelectedIndex();
 		int nextIndex = selectedIndex == view.steamFriendsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
 		view.steamFriendsSortMethodComboBox.setSelectedIndex(nextIndex);
-		displayProfileFriendsTab();
+        displaySubTab(ProfileTab.Friends);
 	}
 	
 	/**
@@ -1779,7 +1783,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			((SteamGroupsDisplayModeAction) action).setTooltip();
         CardLayout cardLayout = (CardLayout) (view.profileGroupsPane.getLayout());
         cardLayout.show(view.profileGroupsPane, steamGroupsDisplayMode.name());
-        displayProfileGroupsTab();
+    	displaySubTab(ProfileTab.Groups);
 	}
 	
 	public void updateSteamFriendsDisplayMode(SteamFriendsDisplayMode steamFriendsDisplayMode) {
@@ -1788,7 +1792,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			((SteamFriendsDisplayModeAction) action).setTooltip();
         CardLayout cardLayout = (CardLayout) (view.profileFriendsPane.getLayout());
         cardLayout.show(view.profileFriendsPane, steamFriendsDisplayMode.name());
-        displayProfileFriendsTab();
+        displaySubTab(ProfileTab.Friends);
 	}
 	
 	//
@@ -2253,29 +2257,74 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	}
 
 	/**
-	 * Force display of ProfileSummaryTab
+	 * Determine MainTab to display from tabEnum type
+	 * @param tabEnum
+	 * @return the matching JPanel or null
 	 */
-	public void displayProfileSummaryTab() {
-        if (!view.profilePane.getSelectedComponent().equals(view.profileSummaryPane))
-        	view.profilePane.setSelectedComponent(view.profileSummaryPane);
+	public JPanel getMainTabFromEnum(TabEnum tabEnum) {
+		if (tabEnum instanceof ProfileTab)
+			return view.gamesLibrarianProfile;
+		return null;
 	}
 
 	/**
-	 * Force display of ProfileGroupsTab
+	 * Determine SubTab container to display from tabEnum type
+	 * @param tabEnum
+	 * @return the matching JTabbedPane or null
 	 */
-	public void displayProfileGroupsTab() {
-        if (!view.profilePane.getSelectedComponent().equals(view.profileGroupsPane))
-        	view.profilePane.setSelectedComponent(view.profileGroupsPane);
+	public JTabbedPane getSubTabFromEnum(TabEnum tabEnum) {
+		if (tabEnum instanceof ProfileTab)
+			return view.profilePane;
+		return null;
 	}
 
 	/**
-	 * Force display of ProfileFriendsTab
+	 * Get JPanel Main Tab component from TabEnum
+	 * @param tabEnum enumeration element identifying the tab 
+	 * @return the matching JPanel or null
 	 */
-	public void displayProfileFriendsTab() {
-        if (!view.profilePane.getSelectedComponent().equals(view.profileFriendsPane))
-		view.profilePane.setSelectedComponent(view.profileFriendsPane);
+	public JPanel getTabFromEnum(TabEnum tabEnum) {
+		if (tabEnum instanceof LibrarianTab)
+		switch ((LibrarianTab)tabEnum) {
+		case Controls: return view.gamesLibrarianControls;
+		case Library: return view.gamesLibrarianLibrary;
+		case Game: return view.gamesLibrarianGame;
+		case Profile: return view.gamesLibrarianProfile;
+		case Options: return view.gamesLibrarianOptions;
+		} else if (tabEnum instanceof ProfileTab)
+			switch ((ProfileTab)tabEnum) {
+			case Summary: return view.profileSummaryPane;
+			case Status: return view.profileStatusPane;
+			case Groups: return view.profileGroupsPane;
+			case Friends: return view.profileFriendsPane;
+			}
+		return null;
 	}
-
+	
+	/**
+	 * Display tab according to tabEnum, if not already displayed
+	 * @param tab
+	 */
+	public void displayMainTab(TabEnum tabEnum) {
+		JPanel tab = tabEnum instanceof ProfileTab ? getMainTabFromEnum(tabEnum) : getTabFromEnum(tabEnum);
+		if (tab == null) return;
+		if (!view.mainPane.getSelectedComponent().equals(tab))
+			view.mainPane.setSelectedComponent(tab);
+	}
+	
+	/**
+	 * Display passed mainTab/tab according to tabEnum, if not already displayed
+	 * @param tab
+	 */
+	public void displaySubTab(TabEnum tabEnum) {
+		JTabbedPane subTab = getSubTabFromEnum(tabEnum);
+		JPanel tab = getTabFromEnum(tabEnum);
+		if (subTab == null || tab == null) return;
+		displayMainTab(tabEnum);
+		if (!subTab.getSelectedComponent().equals(tab))
+			subTab.setSelectedComponent(tab);
+	}
+	
 	/**
 	 * Check a FriendWithSameGameButton
 	 * @param friend
@@ -3303,6 +3352,12 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			}
 			view.loadParametersAction.loadConfiguration(Parameters.defaultConfigurationFilename);
 		}
+		
+		// Set locale
+		view.localeChoiceComboBox.setSelectedItem(parameters.getLocaleChoice());
+		
+		// Set dumpMode
+		view.dumpModeComboBox.setSelectedItem(parameters.getDumpMode());
 		
 		// Check and display some status
 		if (parameters.isDebug())
