@@ -17,6 +17,7 @@ import commons.ColoredTee;
 import commons.GamesLibrary;
 import commons.api.SteamProfile;
 import commons.enums.OnlineState;
+import commons.enums.ProfileTab;
 import components.GamesLibrarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
@@ -167,7 +168,7 @@ public class SteamFriendButton extends JButton implements RemoteIconButton, Mous
 		if ((mouseEvent.getClickCount() == 1 || mouseEvent.getClickCount() == 2) && steamProfile != null)
 			librarian.updateProfileTab(steamProfile);
         if (mouseEvent.getClickCount() == 2)
-        	librarian.displayProfileSummaryTab();
+        	librarian.displaySubTab(ProfileTab.Summary);
 	}
 
 	@Override

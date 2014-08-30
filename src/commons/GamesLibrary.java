@@ -34,6 +34,14 @@ public class GamesLibrary {
 	public static final ImageIcon unloadAllAchievements = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/medal_gold_delete.png"));
 	public static final ImageIcon unableToloadAllAchievements = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/medal_gold_1.png"));
 	
+	public static final ImageIcon fileMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/disk.png"));
+	public static final ImageIcon gotoMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/tab.png"));
+	public static final ImageIcon controlsMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/wrench.png"));
+	public static final ImageIcon libraryMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/pictures_thumbs.png"));
+	public static final ImageIcon gameMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/controller.png"));
+	public static final ImageIcon profileMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/user_blue.png"));
+	public static final ImageIcon optionsMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/cog.png"));
+	
 	public static final ImageIcon libraryDisplayMode = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/layout.png"));
 	public static final ImageIcon librarySortMethod = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/table_sort.png"));
 	
@@ -42,7 +50,8 @@ public class GamesLibrary {
 	public static final ImageIcon statusAwayIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/status_away.png"));
 	public static final ImageIcon statusOfflineIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/status_offline.png"));
 	
-	public static final ImageIcon accountStatusIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/vcard.png"));
+	public static final ImageIcon accountSummaryIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/user_blue_home.png"));
+	public static final ImageIcon accountStatusIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/user_blue_database.png"));
 	public static final ImageIcon groupsIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/group.png"));
 	public static final ImageIcon friendsIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/group_friends.png"));
 	
