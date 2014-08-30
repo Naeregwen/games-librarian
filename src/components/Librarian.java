@@ -3279,7 +3279,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		
 		// Setup default application parameters
 		parameters.setGameChoice(GameChoice.One);
-		parameters.setGameLeftClickAction(GameLeftClickAction.Launch);
+		parameters.setGameLeftClickAction(GameLeftClickAction.Select);
 		parameters.setDefaultSteamLaunchMethod(SteamLaunchMethod.SteamProtocol);
 		parameters.setSteamGroupsDisplayMode(SteamGroupsDisplayMode.values()[0]);
 		parameters.setSteamFriendsDisplayMode(SteamFriendsDisplayMode.values()[0]);
