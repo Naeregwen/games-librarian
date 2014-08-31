@@ -1,18 +1,22 @@
 <parameters>
    <localeChoice>en_US</localeChoice>
    <lookAndFeelInfo>Nimbus</lookAndFeelInfo>
-   <gameChoice>One</gameChoice>
    <windowsDistribution>Windows 7 Home Premium</windowsDistribution>
    <steamExecutable>G:\Games\steam.exe</steamExecutable>
    <gamerSteamId></gamerSteamId>
-   <xmlOverrideRegistry>false</xmlOverrideRegistry>
-   <defaultSteamLaunchMethod>SteamExecutable</defaultSteamLaunchMethod>
+   <gameChoice>One</gameChoice>
    <gameLeftClickAction>Select</gameLeftClickAction>
+   <defaultSteamLaunchMethod>SteamExecutable</defaultSteamLaunchMethod>
+   <steamGroupsDisplayMode>Grid</steamGroupsDisplayMode>
+   <steamFriendsDisplayMode>List</steamFriendsDisplayMode>
+   <displayTooltips>true</displayTooltips>
+   <debug>false</debug>
    <checkCommunityOnStartup>false</checkCommunityOnStartup>
    <dumpMode>XML</dumpMode>
    <useConsole>true</useConsole>
    <useDateTime>true</useDateTime>
    <scrollLocked>false</scrollLocked>
+   <xmlOverrideRegistry>false</xmlOverrideRegistry>
    <gamesList>
       <!--Do not prevail on gamerSteamId-->
       <steamID64/>

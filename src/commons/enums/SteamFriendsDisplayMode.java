@@ -9,8 +9,8 @@ package commons.enums;
  */
 public enum SteamFriendsDisplayMode {
 
-	LIST ("steamFriendsDisplayModeList", "steamFriendsDisplayModeListMnemonic", "steamFriendsDisplayModeListAccelerator", "/images/icons/application_view_list.png"),
-	GRID ("steamFriendsDisplayModeGrid", "steamFriendsDisplayModeGridMnemonic", "steamFriendsDisplayModeGridAccelerator", "/images/icons/application_view_tile.png");
+	List ("steamFriendsDisplayModeList", "steamFriendsDisplayModeListMnemonic", "steamFriendsDisplayModeListAccelerator", "/images/icons/application_view_list.png"),
+	Grid ("steamFriendsDisplayModeGrid", "steamFriendsDisplayModeGridMnemonic", "steamFriendsDisplayModeGridAccelerator", "/images/icons/application_view_tile.png");
 	
 	String labelKey;
 	String mnemonicKey;

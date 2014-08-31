@@ -18,7 +18,6 @@ public enum DumpMode  {
 	String acceleratorKey;
 	String iconPath;
 	
-	
 	DumpMode(String labelKey, String mnemonicKey, String acceleratorKey, String iconPath) {
 		this.labelKey = labelKey;
 		this.mnemonicKey = mnemonicKey;
@@ -54,26 +53,4 @@ public enum DumpMode  {
 		return iconPath;
 	}
 
-	/**
-	 * @return a list of acceptable string values for parsing
-	 */
-	public static String getAcceptableValues() {
-		StringBuilder acceptableValues = new StringBuilder("");
-		for (DumpMode dumpMode : DumpMode.values()) 
-			acceptableValues.append((acceptableValues.length() == 0 ? dumpMode : ", " + dumpMode) + ", " + dumpMode.ordinal());
-		return acceptableValues.toString();	
-	}
-	
-	/**
-	 * Return the DumpMode the most corresponding to passed value
-	 *  
-	 * @param value the value to make pass the test
-	 * @return DumpMode if found, null otherwise
-	 */
-	public static DumpMode getAcceptableValue (String value) {
-		for (DumpMode dumpMode : DumpMode.values())
-			if (dumpMode.toString().equalsIgnoreCase(value))
-				return dumpMode;
-		return null;
-	}
 }

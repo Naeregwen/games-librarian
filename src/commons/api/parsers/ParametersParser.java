@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.xml.bind.JAXBContext;
@@ -33,6 +34,9 @@ import commons.enums.DumpMode;
 import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
 import commons.enums.LocaleChoice;
+import commons.enums.SteamFriendsDisplayMode;
+import commons.enums.SteamGroupsDisplayMode;
+import commons.enums.helpers.ParsableEnum;
 
 /**
  * @author Naeregwen
@@ -44,13 +48,13 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 	 * Temporary parsing containers
 	 */
 	private SteamGame game;
-	Integer position;
+	private Integer position;
 	
 	/**
 	 * Create a ParametersParser
 	 * 
-	 * @param debug
-	 * @param tee
+	 * @param parameters parameters to set
+	 * @param tee ColoredTee to display messages 
 	 */
 	public ParametersParser(Parameters parameters, ColoredTee tee) {
 		super(parameters, tee);
@@ -62,10 +66,9 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 	 * 
 	 * @param qName
 	 * @param context
-	 * @param contextsArrayLength
 	 * @return
 	 */
-	protected boolean checkContextAndStay(String qName, ParametersContexts context) {
+	private boolean checkContextAndStay(String qName, ParametersContexts context) {
 		return checkContext(qName, context, context, ParametersContexts.values().length, false);
 	}
 	
@@ -75,10 +78,10 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 	 * 
 	 * @param qName
 	 * @param context
-	 * @param contextsArrayLength
+	 * @param nextContext
 	 * @return
 	 */
-	protected boolean checkContextAndSave(String qName, ParametersContexts context, ParametersContexts nextContext) {
+	private boolean checkContextAndSave(String qName, ParametersContexts context, ParametersContexts nextContext) {
 		return checkContext(qName, context, nextContext, ParametersContexts.values().length, true);
 	}
 	
@@ -91,6 +94,45 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 		super.startDocument();
 		context = ParametersContexts.Start;
 		position = 0;
+	}
+	
+	/**
+	 * Try to parse characters as Enumeration
+	 * <ul>
+	 * <li>by their ordinal identifier</li>
+	 * <li>or by their alphabetical identifier</li>
+	 * </ul>
+	 * 
+	 * @param qName qualified tag name 
+	 * @param defaultValue value carrying the type to parse
+	 * @return parsed value or defaultValue
+	 */
+	private Enum<?> parseEnum(String qName, Enum<?> defaultValue, Pattern pattern) {
+		Enum<?> value = defaultValue;
+		Matcher matcher = Strings.startNumericPattern.matcher(characters);
+		if (matcher.find()) {
+			try {
+				Integer integer = Integer.parseInt(characters);
+				if (integer >= defaultValue.getClass().getEnumConstants().length)
+					tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, ParsableEnum.getAcceptableValues(defaultValue)));
+				else
+					value = defaultValue.getClass().getEnumConstants()[integer];
+			} catch (NumberFormatException e) {
+				tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, ParsableEnum.getAcceptableValues(defaultValue)));
+			}
+		} else {
+			boolean patternMatched = pattern != null ? pattern.matcher(characters).find() : true;
+			if (patternMatched) {
+				Enum<?> newValue = (Enum<?>) ParsableEnum.getAcceptableValue(characters, defaultValue);
+				if (newValue == null)
+					tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, ParsableEnum.getAcceptableValues(defaultValue)));
+				else
+					value = newValue;
+			} else {
+				tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, ParsableEnum.getAcceptableValues(Parameters.defaultLocaleChoice)));
+			}
+		}				
+		return value;
 	}
 	
 	/*/
@@ -157,34 +199,8 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 		// Collect startup parameters
 		} else if (qName.equalsIgnoreCase("localeChoice")) {
 			// localeChoice
-			LocaleChoice localeChoice = LocaleChoice.values()[0]; // Default value - en_US;
-			if (checkContextAndStay(qName, ParametersContexts.Parameters)) {
-				Matcher matcher = Strings.startNumericPattern.matcher(characters);
-				if (matcher.find()) {
-					try {
-						Integer integer = Integer.parseInt(characters);
-						if (integer >= LocaleChoice.values().length) {
-							tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, LocaleChoice.getAcceptableValues()));
-						} else {
-							localeChoice = LocaleChoice.values()[integer];
-						}
-					} catch (NumberFormatException e) {
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, LocaleChoice.getAcceptableValues()));
-					}
-				} else {
-					matcher = LocaleChoice.localePattern.matcher(characters);
-					if (matcher.find()) {
-						LocaleChoice newLocaleChoice = LocaleChoice.getAcceptableValue(characters);
-						if (newLocaleChoice == null)
-							tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, LocaleChoice.getAcceptableValues()));
-						else
-							localeChoice = newLocaleChoice;
-					} else {
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, LocaleChoice.getAcceptableValues()));
-					}
-				}
-				parameters.setLocaleChoice(localeChoice);
-			}
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setLocaleChoice((LocaleChoice) parseEnum(qName, Parameters.defaultLocaleChoice, LocaleChoice.localePattern));
 			
 		} else if (qName.equalsIgnoreCase("lookAndFeelInfo")) {
 			// lookAndFeelInfo
@@ -207,84 +223,6 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 				}
 			}
 			
-		} else if (qName.equalsIgnoreCase("dumpMode")) {
-			// dumpMode
-			DumpMode dumpMode = DumpMode.values()[0]; // Default value;
-			if (checkContextAndStay(qName, ParametersContexts.Parameters)) {
-				Matcher matcher = Strings.startNumericPattern.matcher(characters);
-				if (matcher.find()) {
-					try {
-						Integer integer = Integer.parseInt(characters);
-						if (integer >= DumpMode.values().length) {
-							tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, DumpMode.getAcceptableValues()));
-						} else {
-							dumpMode = DumpMode.values()[integer];
-						}
-					} catch (NumberFormatException e) {
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, DumpMode.getAcceptableValues()));
-					}
-				} else {
-					DumpMode newDumpMode = DumpMode.getAcceptableValue(characters);
-					if (newDumpMode == null)
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, DumpMode.getAcceptableValues()));
-					else
-						dumpMode = newDumpMode;
-				}				
-			}
-			parameters.setDumpMode(dumpMode);
-			
-		} else if (qName.equalsIgnoreCase("gameChoice")) {
-			// gameChoice
-			GameChoice gameChoice = GameChoice.values()[0]; // Default value - One;
-			if (checkContextAndStay(qName, ParametersContexts.Parameters)) {
-				Matcher matcher = Strings.startNumericPattern.matcher(characters);
-				if (matcher.find()) {
-					try {
-						Integer integer = Integer.parseInt(characters);
-						if (integer >= GameChoice.values().length) {
-							tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, GameChoice.getAcceptableValues()));
-						} else {
-							gameChoice = GameChoice.values()[integer];
-						}
-					} catch (NumberFormatException e) {
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, GameChoice.getAcceptableValues()));
-					}
-				} else {
-					GameChoice newGameChoice = GameChoice.getAcceptableValue(characters);
-					if (newGameChoice == null)
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, GameChoice.getAcceptableValues()));
-					else
-						gameChoice = newGameChoice;
-				}
-			}
-			parameters.setGameChoice(gameChoice);
-
-		} else if (qName.equalsIgnoreCase("gameLeftClickAction")) {
-			// gameLeftClickAction
-			GameLeftClickAction gameLeftClickAction = GameLeftClickAction.values()[0]; // Default value
-			if (checkContextAndStay(qName, ParametersContexts.Parameters)) {
-				Matcher matcher = Strings.startNumericPattern.matcher(characters);
-				if (matcher.find()) {
-					try {
-						Integer integer = Integer.parseInt(characters);
-						if (integer >= GameLeftClickAction.values().length) {
-							tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, GameLeftClickAction.getAcceptableValues()));
-						} else {
-							gameLeftClickAction = GameLeftClickAction.values()[integer];
-						}
-					} catch (NumberFormatException e) {
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, GameLeftClickAction.getAcceptableValues()));
-					}
-				} else {
-					GameLeftClickAction newGameLeftClickAction = GameLeftClickAction.getAcceptableValue(characters);
-					if (newGameLeftClickAction == null)
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, GameLeftClickAction.getAcceptableValues()));
-					else
-						gameLeftClickAction = newGameLeftClickAction;
-				}
-			}
-			parameters.setGameLeftClickAction(gameLeftClickAction);
-			
 		} else if (qName.equalsIgnoreCase("windowsDistribution")) {
 			// windowsDistribution
 			if (checkContextAndStay(qName, ParametersContexts.Parameters)) 
@@ -300,37 +238,46 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 			if (checkContextAndStay(qName, ParametersContexts.Parameters)) 
 				parameters.setMainPlayerSteamId(characters);
 			
-		} else if (qName.equalsIgnoreCase("xmlOverrideRegistry")) {
-			// xmlOverrideRegistry
+		} else if (qName.equalsIgnoreCase("gameChoice")) {
+			// gameChoice
 			if (checkContextAndStay(qName, ParametersContexts.Parameters))
-				parameters.setXmlOverrideRegistry(parseBooleanAlternatives(characters, qName));
+				parameters.setGameChoice((GameChoice) parseEnum(qName, Parameters.defaultGameChoice, null));
+
+		} else if (qName.equalsIgnoreCase("gameLeftClickAction")) {
+			// gameLeftClickAction
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setGameLeftClickAction((GameLeftClickAction) parseEnum(qName, Parameters.defaultGameLeftClickAction, null));
 			
 		} else if (qName.equalsIgnoreCase("defaultSteamLaunchMethod")) {
 			// defaultSteamLaunchMethod
-			SteamLaunchMethod steamLaunchMethod = SteamLaunchMethod.values()[0]; // Default value;
-			if (checkContextAndStay(qName, ParametersContexts.Parameters)) {
-				Matcher matcher = Strings.startNumericPattern.matcher(characters);
-				if (matcher.find()) {
-					try {
-						Integer integer = Integer.parseInt(characters);
-						if (integer >= SteamLaunchMethod.values().length) {
-							tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, SteamLaunchMethod.getAcceptableValues()));
-						} else {
-							steamLaunchMethod = SteamLaunchMethod.values()[integer];
-						}
-					} catch (NumberFormatException e) {
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, SteamLaunchMethod.getAcceptableValues()));
-					}
-				} else {
-					SteamLaunchMethod newSteamLaunchMethod = SteamLaunchMethod.getAcceptableValue(characters);
-					if (newSteamLaunchMethod == null)
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, SteamLaunchMethod.getAcceptableValues()));
-					else
-						steamLaunchMethod = newSteamLaunchMethod;
-				}				
-			}
-			parameters.setDefaultSteamLaunchMethod(steamLaunchMethod);
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setDefaultSteamLaunchMethod((SteamLaunchMethod) parseEnum(qName, Parameters.defaultDefaultSteamLaunchMethod, null));
 			
+		} else if (qName.equalsIgnoreCase("dumpMode")) {
+			// dumpMode
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setDumpMode((DumpMode) parseEnum(qName, Parameters.defaultDumpMode, null));
+			
+		} else if (qName.equalsIgnoreCase("steamGroupsDisplayMode")) {
+			// steamGroupsDisplayMode
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setSteamGroupsDisplayMode((SteamGroupsDisplayMode) parseEnum(qName, Parameters.defaultSteamGroupsDisplayMode, null));
+			
+		} else if (qName.equalsIgnoreCase("steamFriendsDisplayMode")) {
+			// steamFriendsDisplayMode
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setSteamFriendsDisplayMode((SteamFriendsDisplayMode) parseEnum(qName, Parameters.defaultSteamFriendsDisplayMode, null));
+			
+		} else if (qName.equalsIgnoreCase("displayTooltips")) {
+			// useConsole
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setDisplayTooltips(parseBooleanAlternatives(characters, qName));
+
+		} else if (qName.equalsIgnoreCase("debug")) {
+			// useConsole
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setDebug(parseBooleanAlternatives(characters, qName));
+
 		} else if (qName.equalsIgnoreCase("checkCommunityOnStartup")) {
 			// checkCommunityOnStartup
 			if (checkContextAndStay(qName, ParametersContexts.Parameters))
@@ -350,6 +297,11 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 			// scrollLocked
 			if (checkContextAndStay(qName, ParametersContexts.Parameters))
 				parameters.setScrollLocked(parseBooleanAlternatives(characters, qName));
+			
+		} else if (qName.equalsIgnoreCase("xmlOverrideRegistry")) {
+			// xmlOverrideRegistry
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setXmlOverrideRegistry(parseBooleanAlternatives(characters, qName));
 			
 		// Add a game to the list
 		// Pop context anyway
@@ -401,26 +353,7 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 			
 		} else if (qName.equalsIgnoreCase("steamLaunchMethod")) {
 			if (checkContextAndStay(qName, ParametersContexts.Game) && game != null) {
-				SteamLaunchMethod steamLaunchMethod = null; // No default value;
-				Matcher matcher = Strings.startNumericPattern.matcher(characters);
-				if (matcher.find()) {
-					try {
-						Integer integer = Integer.parseInt(characters);
-						if (integer >= SteamLaunchMethod.values().length) {
-							tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, SteamLaunchMethod.getAcceptableValues()));
-						} else {
-							steamLaunchMethod = SteamLaunchMethod.values()[integer];
-						}
-					} catch (NumberFormatException e) {
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, SteamLaunchMethod.getAcceptableValues()));
-					}
-				} else {
-					SteamLaunchMethod newSteamLaunchMethod = SteamLaunchMethod.getAcceptableValue(characters);
-					if (newSteamLaunchMethod == null)
-						tee.writelnError(String.format(parameters.getMessages().getString("errorUnexpectedValue"), characters, qName, SteamLaunchMethod.getAcceptableValues()));
-					else
-						steamLaunchMethod = newSteamLaunchMethod;
-				}				
+				SteamLaunchMethod steamLaunchMethod = (SteamLaunchMethod) parseEnum(qName, Parameters.defaultDefaultSteamLaunchMethod, null);
 				if (steamLaunchMethod != null)
 					game.setSteamLaunchMethod(steamLaunchMethod);
 			}
@@ -477,6 +410,7 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			marshaller.marshal(parameters, os);  
+			// FIXME: Parameters could contains a lot of data, freezing the GUI. Worker ?
 			tee.writelnMessage(Arrays.asList(new String(os.toByteArray()).split("\n")));
 		} catch (JAXBException e) {
 			tee.printStackTrace(e);
