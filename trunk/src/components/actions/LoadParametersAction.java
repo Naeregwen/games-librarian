@@ -12,12 +12,8 @@ import javax.swing.KeyStroke;
 
 import commons.BundleManager;
 import commons.GamesLibrary;
-import commons.Strings;
-import commons.GamesLibrary.LoadingSource;
 import commons.api.Parameters;
-import commons.api.SteamProfile;
 import commons.api.parsers.ParametersParser;
-import commons.enums.DumpMode;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 
@@ -69,50 +65,10 @@ public class LoadParametersAction extends AbstractAction {
 		librarian.printConfigurationMessage(messages.getString("infosLoadConfigurationIsStarting"), filename);
 		
 		// Load data from local XML file
-		// TODO: check parsing result
 		(new ParametersParser(parameters, librarian.getTee())).parse(filename, librarian.getTee());
-		
-		// Complete missing parameters with default values
-		if (parameters.getDumpMode() == null)
-			parameters.setDumpMode(DumpMode.XML);
 		
 		// Display results
 		librarian.getTee().writelnInfos(parameters.summarizeGamesList());
-		
-		// Update Control Tab
-		librarian.getScrollLockAction().restore();
-		
-		// Update Library Tab
-		librarian.updateGamesLibraryTab();
-		
-		// Clear Game Tab
-		librarian.clearGameTab();
-		
-		// Update Profile Tab
-		if (parameters.getMainPlayerSteamId() != null) {
-			SteamProfile currentProfile = new SteamProfile();
-			if (Strings.fullNumericPattern.matcher(parameters.getMainPlayerSteamId()).matches())
-				currentProfile.setSteamID64(parameters.getMainPlayerSteamId());
-			else
-				currentProfile.setSteamID(parameters.getMainPlayerSteamId());
-			currentProfile.setLoadingSource(LoadingSource.Preloading);
-			librarian.updateProfileTab(currentProfile);
-			librarian.addProfile(currentProfile, true);
-			librarian.updateSelectedSteamProfile(currentProfile);
-		}
-		
-		// Update Options Tab
-		librarian.getWindowsDistributionTextField().setText(parameters.getWindowsDistribution());
-		librarian.getSteamExecutableTextField().setText(parameters.getSteamExecutable());
-		librarian.getGamerSteamIdTextField().setText(librarian.getCurrentSteamProfile().getId());
-		
-		// Options Tab Selector
-		librarian.updateDefaultSteamLaunchMethod();
-		librarian.updateDumpMode();
-		librarian.updateLocaleChoice();
-		
-		// Roll a game
-		librarian.getRollAction().forceRoll();
 	}
 	
 	/* (non-Javadoc)
@@ -123,8 +79,14 @@ public class LoadParametersAction extends AbstractAction {
 		// Confirm operation
 		String filename = me.getLibrarian().confirmLoadConfigurationFile(Parameters.defaultConfigurationFilename);
 		if (filename == null) return;
+		// Preserve old set to complete missing parameters
+		Parameters previousParameters = (Parameters) me.getLibrarian().getParameters().clone();
 		// Process operation
 		loadConfiguration(filename);
+		// update UI according to new parameters
+		me.getLibrarian().updateUI(previousParameters, false);
+		// Roll a game
+		me.getLibrarian().getRollAction().forceRoll();
 	}
 
 }

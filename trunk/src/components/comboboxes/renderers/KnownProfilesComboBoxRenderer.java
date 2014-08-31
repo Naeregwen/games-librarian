@@ -37,27 +37,7 @@ public class KnownProfilesComboBoxRenderer extends ErroneousLabel implements Lis
 		JComponent component = (JComponent) listCellRenderer.getListCellRendererComponent(list, steamProfile, index, isSelected, cellHasFocus);
 		if (component instanceof JLabel && /* WindowBuilder */ steamProfile != null) {
 			// Set the text
-			((JLabel) component).setText(Jsoup.parseBodyFragment(steamProfile.getId()).body().text());
-			// Set the icon
-//			ImageIcon icon = images[selectedMethod.ordinal()];
-//			((JLabel) component).setIcon(icon);
-//			// Replace text by error message when icon is null
-//			ResourceBundle UITexts = ResourceBundle.getBundle("i18n/UITexts");
-//			String text = UITexts.getString(SteamGamesSortMethod.values()[selectedMethod.ordinal()].getOptionLabel());
-//			if (icon != null)
-//				((JLabel) component).setText(text);
-//			else
-//				setUhOhText((JLabel) component, String.format(UITexts.getString("errorComboBoxNoImageAvailable"), text), list.getFont());
-//			
-//			if (steamProfile != null && steamProfile.getId() != null)
-//				setText(Jsoup.parseBodyFragment(steamProfile.getId()).body().text());
-//			if (isSelected) {
-//				setBackground(list.getSelectionBackground());
-//				setForeground(list.getSelectionForeground());
-//			} else {
-//				setBackground(list.getBackground());
-//				setForeground(list.getForeground());
-//			}
+			((JLabel) component).setText(steamProfile != null && steamProfile.getId() != null ? Jsoup.parseBodyFragment(steamProfile.getId()).body().text() : "");
 		}
 		return component;
 	}

@@ -67,6 +67,28 @@ public class Parameters implements GameLeftClickActionObservables {
 	public static final String defaultConfigurationFilename = GamesLibrarian.class.getSimpleName() + ".xml";
 	public static final LookAndFeelInfo[] lookAndFeelInfos = UIManager.getInstalledLookAndFeels();
 	
+	public static final LocaleChoice defaultLocaleChoice = LocaleChoice.values()[0];
+	public static final LookAndFeelInfo defaultLookAndFeelInfo = lookAndFeelInfos[0];
+	
+	public static final String defaultWindowsDistribution = "";
+	public static final String defaultSteamExecutable = "";
+	public static final String defaultMainPlayerSteamId = "";
+	
+	public static final GameChoice defaultGameChoice = GameChoice.values()[0];
+	public static final GameLeftClickAction defaultGameLeftClickAction = GameLeftClickAction.Select;
+	public static final SteamLaunchMethod defaultDefaultSteamLaunchMethod = SteamLaunchMethod.SteamProtocol;
+	public static final SteamGroupsDisplayMode defaultSteamGroupsDisplayMode = SteamGroupsDisplayMode.values()[0];
+	public static final SteamFriendsDisplayMode defaultSteamFriendsDisplayMode = SteamFriendsDisplayMode.values()[0];
+	public static final Boolean defaultDisplayToolTips = true;
+	
+	public static final Boolean defaultDebug = false;
+	public static final Boolean defaultCheckCommunityOnStartup = false;
+	public static final DumpMode defaultDumpMode = DumpMode.values()[0];
+	public static final Boolean defaultUseConsole = true;
+	public static final Boolean defaultUseDateTime = true;
+	public static final Boolean defaultScrollLocked = false;
+	public static final Boolean defaultXmlOverrideRegistry = false;
+	
 	OS os;
 	
 	LocaleChoice localeChoice;
@@ -87,13 +109,13 @@ public class Parameters implements GameLeftClickActionObservables {
 	SteamFriendsDisplayMode steamFriendsDisplayMode;
 	Boolean displayTooltips;
 	
-	boolean debug;
-	boolean checkCommunityOnStartup;
+	Boolean debug;
+	Boolean checkCommunityOnStartup;
 	DumpMode dumpMode;
-	boolean useConsole;
-	boolean useDateTime;
-	boolean scrollLocked;
-	boolean xmlOverrideRegistry;
+	Boolean useConsole;
+	Boolean useDateTime;
+	Boolean scrollLocked;
+	Boolean xmlOverrideRegistry;
 	
 	SteamGamesList steamGamesList;
 	
@@ -332,7 +354,7 @@ public class Parameters implements GameLeftClickActionObservables {
 	/**
 	 * @return the debug
 	 */
-	public boolean isDebug() {
+	public Boolean isDebug() {
 		return debug;
 	}
 
@@ -340,21 +362,21 @@ public class Parameters implements GameLeftClickActionObservables {
 	 * @param debug the debug to set
 	 */
 	@XmlElement
-	public void setDebug(boolean debug) {
+	public void setDebug(Boolean debug) {
 		this.debug = debug;
 	}
 
 	/**
 	 * @return the checkCommunityOnStartup
 	 */
-	public boolean isCheckCommunityOnStartup() {
+	public Boolean isCheckCommunityOnStartup() {
 		return checkCommunityOnStartup;
 	}
 
 	/**
 	 * @param checkCommunityOnStartup the checkCommunityOnStartup to set
 	 */
-	public void setCheckCommunityOnStartup(boolean checkCommunityOnStartup) {
+	public void setCheckCommunityOnStartup(Boolean checkCommunityOnStartup) {
 		this.checkCommunityOnStartup = checkCommunityOnStartup;
 	}
 
@@ -376,7 +398,7 @@ public class Parameters implements GameLeftClickActionObservables {
 	/**
 	 * @return the useConsole
 	 */
-	public boolean isUseConsole() {
+	public Boolean isUseConsole() {
 		return useConsole;
 	}
 
@@ -384,14 +406,14 @@ public class Parameters implements GameLeftClickActionObservables {
 	 * @param useConsole the useConsole to set
 	 */
 	@XmlElement
-	public void setUseConsole(boolean useConsole) {
+	public void setUseConsole(Boolean useConsole) {
 		this.useConsole = useConsole;
 	}
 
 	/**
 	 * @return the useDateTime
 	 */
-	public boolean isUseDateTime() {
+	public Boolean isUseDateTime() {
 		return useDateTime;
 	}
 
@@ -399,14 +421,14 @@ public class Parameters implements GameLeftClickActionObservables {
 	 * @param useDateTime the useDateTime to set
 	 */
 	@XmlElement
-	public void setUseDateTime(boolean useDateTime) {
+	public void setUseDateTime(Boolean useDateTime) {
 		this.useDateTime = useDateTime;
 	}
 
 	/**
 	 * @return the scrollLocked
 	 */
-	public boolean isScrollLocked() {
+	public Boolean isScrollLocked() {
 		return scrollLocked;
 	}
 
@@ -414,14 +436,14 @@ public class Parameters implements GameLeftClickActionObservables {
 	 * @param scrollLocked the scrollLocked to set
 	 */
 	@XmlElement
-	public void setScrollLocked(boolean scrollLocked) {
+	public void setScrollLocked(Boolean scrollLocked) {
 		this.scrollLocked = scrollLocked;
 	}
 
 	/**
 	 * @return the xmlOverrideRegistry
 	 */
-	public boolean isXmlOverrideRegistry() {
+	public Boolean isXmlOverrideRegistry() {
 		return xmlOverrideRegistry;
 	}
 
@@ -429,7 +451,7 @@ public class Parameters implements GameLeftClickActionObservables {
 	 * @param xmlOverrideRegistry the xmlOverrideRegistry to set
 	 */
 	@XmlElement
-	public void setXmlOverrideRegistry(boolean xmlOverrideRegistry) {
+	public void setXmlOverrideRegistry(Boolean xmlOverrideRegistry) {
 		this.xmlOverrideRegistry = xmlOverrideRegistry;
 	}
 
@@ -459,7 +481,6 @@ public class Parameters implements GameLeftClickActionObservables {
 	
 	/**
 	 * Prepare a List<String> to display parameters data later
-	 * TODO: unfinished toStringList output
 	 * @return List<String>
 	 */
 	public List<String> toStringList() {
@@ -467,25 +488,32 @@ public class Parameters implements GameLeftClickActionObservables {
 		List<String> result = new Vector<String>();
 		
 		result.add("OS : " + (os != null ? (os.getPrefix() != null ? os.getPrefix().name() : "os.Prefix null") : "null"));
+		
 		result.add("localeChoice : " + (localeChoice != null ? localeChoice + ", " + localeChoice.getTranslation() : "null"));
 		result.add("lookAndFeelInfo : " + (lookAndFeelInfo != null ? lookAndFeelInfo.getName() : UIManager.getLookAndFeel().getName()));
 		result.add("UITexts : " + (UITexts != null ? UITexts : "null"));
 		result.add("messages : " + (messages != null ? messages : "null"));
 		result.add("resources : " + (resources != null ? resources : "null"));
+		
 		result.add("windowsDistribution : " + (windowsDistribution != null ? windowsDistribution : "null"));
 		result.add("steamExecutable : " + (steamExecutable != null ? steamExecutable : "null"));
+		
 		result.add("mainPlayerSteamId : " + (mainPlayerSteamId != null ? mainPlayerSteamId : "null"));
-		result.add("xmlOverrideRegistry : " + xmlOverrideRegistry);
-		result.add("defaultSteamLaunchMethod : " + (defaultSteamLaunchMethod != null ? defaultSteamLaunchMethod.name() : "null"));
+		
 		result.add("gameChoice : " + (gameChoice != null ? gameChoice.name() : "null"));
 		result.add("gameLeftClickAction : " + (gameLeftClickAction != null ? gameLeftClickAction.name() : "null"));
-		result.add("debug : " + debug);
-		result.add("checkCommunityOnStartup : " + checkCommunityOnStartup);
-		result.add("dumpMode : " + dumpMode);
-		result.add("useConsole : " + useConsole);
-		result.add("useDateTime : " + useDateTime);
-		result.add("scrollLocked : " + scrollLocked);
-		result.add("steamGroupsDisplayMode : " + steamGroupsDisplayMode);
+		result.add("defaultSteamLaunchMethod : " + (defaultSteamLaunchMethod != null ? defaultSteamLaunchMethod.name() : "null"));
+		result.add("steamGroupsDisplayMode : " + (steamGroupsDisplayMode != null ? steamGroupsDisplayMode : "null"));
+		result.add("steamFriendsDisplayMode : " + (steamFriendsDisplayMode != null ? steamFriendsDisplayMode : "null"));
+		result.add("displayTooltips : " + (displayTooltips != null ? displayTooltips : "null"));
+		
+		result.add("debug : " + (debug != null ? debug : "null"));
+		result.add("checkCommunityOnStartup : " + (checkCommunityOnStartup != null ? checkCommunityOnStartup : "null"));
+		result.add("dumpMode : " + (dumpMode != null ? dumpMode : "null"));
+		result.add("useConsole : " + (useConsole != null ? useConsole : "null"));
+		result.add("useDateTime : " + (useDateTime != null ? useDateTime : "null"));
+		result.add("scrollLocked : " + (scrollLocked != null ? scrollLocked : "null"));
+		result.add("xmlOverrideRegistry : " + (xmlOverrideRegistry != null ? xmlOverrideRegistry : "null"));
 		
 		if (steamGamesList != null) {
 			result.add("gamesList - steamID64 : " + steamGamesList.getSteamID64());
@@ -501,10 +529,42 @@ public class Parameters implements GameLeftClickActionObservables {
 		return result;
 	}
 	
+	/**
+	 * Copy only exposed member
+	 */
+	@Override
+	public Object clone() {
+		Parameters parameters = new Parameters();
+		parameters.setOs(os);
+		parameters.setLocaleChoice(localeChoice);
+		parameters.setLookAndFeelInfo(lookAndFeelInfo);
+		parameters.setUITexts(UITexts);
+		parameters.setMessages(messages);
+		parameters.setResources(resources);
+		parameters.setWindowsDistribution(windowsDistribution);
+		parameters.setSteamExecutable(steamExecutable);
+		parameters.setMainPlayerSteamId(mainPlayerSteamId);
+		parameters.setGameChoice(gameChoice);
+		parameters.setGameLeftClickAction(gameLeftClickAction);
+		parameters.setDefaultSteamLaunchMethod(defaultSteamLaunchMethod);
+		parameters.setSteamGroupsDisplayMode(steamGroupsDisplayMode);
+		parameters.setSteamFriendsDisplayMode(steamFriendsDisplayMode);
+		parameters.setDisplayTooltips(displayTooltips);
+		parameters.setDebug(debug);
+		parameters.setCheckCommunityOnStartup(checkCommunityOnStartup);
+		parameters.setDumpMode(dumpMode);
+		parameters.setUseConsole(useConsole);
+		parameters.setUseDateTime(useDateTime);
+		parameters.setScrollLocked(scrollLocked);
+		parameters.setXmlOverrideRegistry(xmlOverrideRegistry);
+		return parameters;
+	}
+	
 	/*/
 	 * (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
+	@Override
 	public String toString() {
 		StringBuilder string = new StringBuilder();
 		for (String line : toStringList())

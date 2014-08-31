@@ -97,8 +97,7 @@ public class SteamFriendsGameStatsReader extends SwingWorker<Boolean, String> {
 			librarian.getTee().writelnInfos("SteamFriendsGameStatsReader " + game.getName() + " cancelled before done");
 		} else {
 			try {
-				@SuppressWarnings("unused")
-				Boolean loaded = get();
+				get();
 				librarian.getView().translateLoadAllAchievements();
 //				if (librarian.isLoadAllAchievements())
 //					librarian.loadAllAchievements();

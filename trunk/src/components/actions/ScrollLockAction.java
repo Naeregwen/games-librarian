@@ -43,31 +43,15 @@ public class ScrollLockAction extends AbstractAction {
 			putValue(MNEMONIC_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "scrollLockMnemonic")).getKeyCode());
 		if (BundleManager.getUITexts(me, "scrollLockAccelerator") != null && !BundleManager.getUITexts(me, "scrollLockAccelerator").equals("")) // WindowBuilder
 			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "scrollLockAccelerator")));
-		if (me == null || me.getLibrarian() == null || !me.getLibrarian().getParameters().isScrollLocked()) { // WindowBuilder
-			putValue(NAME, BundleManager.getUITexts(me, "scrollLockStarMenutLabel"));
-			putValue(SMALL_ICON, GamesLibrary.lockStartIcon);
-			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "scrollLockStartToolTip"));
-		} else {
+		if (me == null || me.getLibrarian() == null || me.getLibrarian().getParameters().isScrollLocked()) { // WindowBuilder
 			putValue(NAME, BundleManager.getUITexts(me, "scrollLockStopMenuLabel"));
 			putValue(SMALL_ICON, GamesLibrary.lockStopIcon);
 			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "scrollLockStopToolTip"));
+		} else {
+			putValue(NAME, BundleManager.getUITexts(me, "scrollLockStarMenutLabel"));
+			putValue(SMALL_ICON, GamesLibrary.lockStartIcon);
+			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "scrollLockStartToolTip"));
 		}
-	}
-	
-	/**
-	 * Restore action properties according to parameters
-	 */
-	public void restore() {
-		translate();
-		Parameters parameters = me.getLibrarian().getParameters();
-		putValue(NAME, parameters.isScrollLocked() ? BundleManager.getUITexts(me, "scrollLockStopMenuLabel") : BundleManager.getUITexts(me, "scrollLockStarMenutLabel"));
-		putValue(SMALL_ICON, parameters.isScrollLocked() ? GamesLibrary.lockStopIcon : GamesLibrary.lockStartIcon);
-		putValue(SHORT_DESCRIPTION, parameters.isScrollLocked() ? 
-				BundleManager.getUITexts(me, "scrollLockStopToolTip") : 
-					BundleManager.getUITexts(me, "scrollLockStartToolTip"));
-		me.getLibrarian().getTee().writelnMessage(parameters.isScrollLocked() ? 
-				BundleManager.getMessages(me, "lockStopMessage") : 
-					BundleManager.getMessages(me, "lockStartMessage"));
 	}
 	
 	/* (non-Javadoc)
@@ -77,7 +61,10 @@ public class ScrollLockAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		Parameters parameters = me.getLibrarian().getParameters();
 		parameters.setScrollLocked(!parameters.isScrollLocked());
-		restore();
+		translate();
+		me.getLibrarian().getTee().writelnMessage(parameters.isScrollLocked() ? 
+				BundleManager.getMessages(me, "lockStopMessage") : 
+					BundleManager.getMessages(me, "lockStartMessage"));
 	}
 
 }

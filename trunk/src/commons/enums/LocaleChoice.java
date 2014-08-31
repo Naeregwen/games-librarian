@@ -4,7 +4,6 @@
 package commons.enums;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -208,34 +207,6 @@ public enum LocaleChoice {
 		return languages;
 	}
 
-	/**
-	 * Get all the language codes available for the passed bundle 
-	 * @param bundle the bundle name
-	 * @return a set of all the language codes available for this bundle
-	 */
-	@SuppressWarnings("unused")
-	private static Set<String> getAvailableResourceLanguagesDev(String bundle) {
-		
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		final String bundleName = bundle;
-		
-		File root = new File(loader.getResource(toDirectoryPath(i18nBundlePackage)).getFile());
-		File[] files = root.listFiles(new FilenameFilter() {
-		    public boolean accept(File dir, String name) {
-		        return name.matches(bundlePattern(bundleName));
-		    }
-		});
-
-		Set<String> languages = new TreeSet<String>();
-		for (File file : files) {
-			String language = file.getName().replaceAll("^" + bundleName + "(_)?|\\.properties$", "");
-			if (language.equals("")) language = defaultLanguageName;
-		    languages.add(language);
-		}	
-		
-		return languages;
-	}
-	
 	/**
 	 * Check differences between keys set of each available language for this bundle
 	 * <p>Warn: ResourceBundle.getBundle return a <code>Set</code> of all keys contained in this <code>ResourceBundle</code> and its parent bundles.</p>
