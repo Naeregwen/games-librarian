@@ -2613,10 +2613,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			else
 				parameters.setDumpMode(previousParameters.getDumpMode());
 		switch (parameters.getSteamGroupsDisplayMode()) {
-		case GRID:
+		case Grid:
 			view.steamGroupsDisplayModeGrid.setSelected(true);
 			break;
-		case LIST :
+		case List :
 			view.steamGroupsDisplayModeList.setSelected(true);
 			break;
 		}
@@ -2632,10 +2632,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			else
 				parameters.setSteamFriendsDisplayMode(previousParameters.getSteamFriendsDisplayMode());
 		switch (parameters.getSteamFriendsDisplayMode()) {
-		case GRID:
+		case Grid:
 			view.steamFriendsDisplayModeGrid.setSelected(true);
 			break;
-		case LIST :
+		case List :
 			view.steamFriendsDisplayModeList.setSelected(true);
 			break;
 		}

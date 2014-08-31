@@ -914,14 +914,14 @@ public class GamesLibrarian extends JFrame {
 		steamGroupsDisplayModeMenu.setIcon(GamesLibrary.groupsIcon);
 		profileMenu.add(steamGroupsDisplayModeMenu);
 		
-		steamGroupsDisplayModeListAction = new SteamGroupsDisplayModeAction(me, SteamGroupsDisplayMode.LIST); // WindowBuilder
-		steamGroupsDisplayModeGridAction = new SteamGroupsDisplayModeAction(me, SteamGroupsDisplayMode.GRID); // WindowBuilder
+		steamGroupsDisplayModeListAction = new SteamGroupsDisplayModeAction(me, SteamGroupsDisplayMode.List); // WindowBuilder
+		steamGroupsDisplayModeGridAction = new SteamGroupsDisplayModeAction(me, SteamGroupsDisplayMode.Grid); // WindowBuilder
 		steamGroupsDisplayModeActionGroup = new ActionGroup();
 		SteamGroupsDisplayModeAction steamGroupsDisplayModeAction = null;
 		for (SteamGroupsDisplayMode steamGroupsDisplayMode : SteamGroupsDisplayMode.values()) {
 			switch (steamGroupsDisplayMode) {
-			case LIST : steamGroupsDisplayModeAction = steamGroupsDisplayModeListAction; break;
-			case GRID : steamGroupsDisplayModeAction = steamGroupsDisplayModeGridAction; break;
+			case List : steamGroupsDisplayModeAction = steamGroupsDisplayModeListAction; break;
+			case Grid : steamGroupsDisplayModeAction = steamGroupsDisplayModeGridAction; break;
 			}
 			steamGroupsDisplayModeActionGroup.add(steamGroupsDisplayModeAction);
 			steamGroupsDisplayModeMenu.add(ActionGroupFactory.getRadioMenuItem(steamGroupsDisplayModeAction));
@@ -932,14 +932,14 @@ public class GamesLibrarian extends JFrame {
 		steamFriendsDisplayModeMenu.setIcon(GamesLibrary.friendsIcon);
 		profileMenu.add(steamFriendsDisplayModeMenu);
 		
-		steamFriendsDisplayModeListAction = new SteamFriendsDisplayModeAction(me, SteamFriendsDisplayMode.LIST); // WindowBuilder
-		steamFriendsDisplayModeGridAction = new SteamFriendsDisplayModeAction(me, SteamFriendsDisplayMode.GRID); // WindowBuilder
+		steamFriendsDisplayModeListAction = new SteamFriendsDisplayModeAction(me, SteamFriendsDisplayMode.List); // WindowBuilder
+		steamFriendsDisplayModeGridAction = new SteamFriendsDisplayModeAction(me, SteamFriendsDisplayMode.Grid); // WindowBuilder
 		steamFriendsDisplayModeActionGroup = new ActionGroup();
 		SteamFriendsDisplayModeAction steamFriendsDisplayModeAction = null;
 		for (SteamFriendsDisplayMode steamFriendsDisplayMode : SteamFriendsDisplayMode.values()) {
 			switch (steamFriendsDisplayMode) {
-			case LIST : steamFriendsDisplayModeAction = steamFriendsDisplayModeListAction; break;
-			case GRID : steamFriendsDisplayModeAction = steamFriendsDisplayModeGridAction; break;
+			case List : steamFriendsDisplayModeAction = steamFriendsDisplayModeListAction; break;
+			case Grid : steamFriendsDisplayModeAction = steamFriendsDisplayModeGridAction; break;
 			}
 			steamFriendsDisplayModeActionGroup.add(steamFriendsDisplayModeAction);
 			steamFriendsDisplayModeMenu.add(ActionGroupFactory.getRadioMenuItem(steamFriendsDisplayModeAction));
@@ -1757,7 +1757,7 @@ public class GamesLibrarian extends JFrame {
 		profileGroupsPane.setLayout(profileSteamGroupsTabCardLayout);
 		
 		steamGroupsScrollPane = new JScrollPane();
-		steamGroupsScrollPane.setName(SteamGroupsDisplayMode.LIST.name());
+		steamGroupsScrollPane.setName(SteamGroupsDisplayMode.List.name());
 		
 		WrapLayout profileGoupsPaneWrapLayout = new WrapLayout();
 		profileGoupsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
@@ -1775,15 +1775,15 @@ public class GamesLibrarian extends JFrame {
 		steamGroupsScrollPane.add(steamGroupsButtonsPane);
 		steamGroupsScrollPane.setViewportView(steamGroupsButtonsPane);
 		
-		profileGroupsPane.add(steamGroupsScrollPane, SteamGroupsDisplayMode.GRID.name());
+		profileGroupsPane.add(steamGroupsScrollPane, SteamGroupsDisplayMode.Grid.name());
 		
 		steamGroupsListScrollPane = new JScrollPane();
-		steamGroupsListScrollPane.setName(SteamGroupsDisplayMode.LIST.name());
+		steamGroupsListScrollPane.setName(SteamGroupsDisplayMode.List.name());
 		
-		profileGroupsPane.add(steamGroupsListScrollPane, SteamGroupsDisplayMode.LIST.name());
+		profileGroupsPane.add(steamGroupsListScrollPane, SteamGroupsDisplayMode.List.name());
 
 		// First visible Groups card pane
-		profileSteamGroupsTabCardLayout.show(profileGroupsPane, SteamGroupsDisplayMode.LIST.name());
+		profileSteamGroupsTabCardLayout.show(profileGroupsPane, SteamGroupsDisplayMode.List.name());
 	}
 	
 	/**
@@ -1798,7 +1798,7 @@ public class GamesLibrarian extends JFrame {
 		profileFriendsPane.setLayout(profileSteamFriendsTabCardLayout);
 		
 		steamFriendsScrollPane = new JScrollPane();
-		steamFriendsScrollPane.setName(SteamFriendsDisplayMode.GRID.name());
+		steamFriendsScrollPane.setName(SteamFriendsDisplayMode.Grid.name());
 		
 		WrapLayout profileFriendsPaneWrapLayout = new WrapLayout();
 		profileFriendsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
@@ -1825,15 +1825,15 @@ public class GamesLibrarian extends JFrame {
 		steamFriendsScrollPane.add(steamFriendsButtonsPane);
 		steamFriendsScrollPane.setViewportView(steamFriendsButtonsPane);
 		
-		profileFriendsPane.add(steamFriendsScrollPane, SteamFriendsDisplayMode.GRID.name());
+		profileFriendsPane.add(steamFriendsScrollPane, SteamFriendsDisplayMode.Grid.name());
 		
 		steamFriendsListScrollPane = new JScrollPane();
-		steamFriendsListScrollPane.setName(SteamFriendsDisplayMode.LIST.name());
+		steamFriendsListScrollPane.setName(SteamFriendsDisplayMode.List.name());
 		
-		profileFriendsPane.add(steamFriendsListScrollPane, SteamFriendsDisplayMode.LIST.name());
+		profileFriendsPane.add(steamFriendsListScrollPane, SteamFriendsDisplayMode.List.name());
 		
 		// First visible Friends card pane
-		profileSteamFriendsTabCardLayout.show(profileFriendsPane, SteamFriendsDisplayMode.GRID.name());
+		profileSteamFriendsTabCardLayout.show(profileFriendsPane, SteamFriendsDisplayMode.Grid.name());
 	}
 	
 	/**

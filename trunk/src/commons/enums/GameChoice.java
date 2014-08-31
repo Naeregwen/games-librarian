@@ -59,26 +59,4 @@ public enum GameChoice {
 		return icon;
 	}
 
-	/**
-	 * @return a list of acceptable string values for parsing
-	 */
-	public static String getAcceptableValues() {
-		StringBuilder acceptableValues = new StringBuilder("");
-		for (GameChoice gameChoice : GameChoice.values()) 
-			acceptableValues.append((acceptableValues.length() == 0 ? gameChoice : ", " + gameChoice) + ", " + gameChoice.ordinal());
-		return acceptableValues.toString();	
-	}
-	
-	/**
-	 * Return the GameChoice the most corresponding to passed value
-	 *  
-	 * @param value the value to make pass the test
-	 * @return GameChoice if found, null otherwise
-	 */
-	public static GameChoice getAcceptableValue (String value) {
-		for (GameChoice gameChoice : GameChoice.values())
-			if (gameChoice.toString().equalsIgnoreCase(value))
-				return gameChoice;
-		return null;
-	}
 }

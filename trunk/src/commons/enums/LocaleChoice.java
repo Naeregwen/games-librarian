@@ -85,29 +85,6 @@ public enum LocaleChoice {
 		return iconPath;
 	}
 
-	/**
-	 * @return a list of acceptable string values for parsing
-	 */
-	public static String getAcceptableValues() {
-		StringBuilder acceptableValues = new StringBuilder("");
-		for (LocaleChoice localeChoice : LocaleChoice.values()) 
-			acceptableValues.append((acceptableValues.length() == 0 ? localeChoice : ", " + localeChoice) + ", " + localeChoice.ordinal());
-		return acceptableValues.toString();	
-	}
-	
-	/**
-	 * Return the LocaleChoice the most corresponding to passed value
-	 *  
-	 * @param value the value to make pass the test
-	 * @return LocaleChoice if found, null otherwise
-	 */
-	public static LocaleChoice getAcceptableValue (String value) {
-		for (LocaleChoice localeChoice : LocaleChoice.values())
-			if (localeChoice.toString().equalsIgnoreCase(value))
-				return localeChoice;
-		return null;
-	}
-	
 	//
 	// Helpers to manage Locales <-> ResourcesBundles
 	//
