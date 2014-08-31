@@ -65,6 +65,7 @@ import components.buttons.observers.GameLeftClickActionObserver;
 public class Parameters implements GameLeftClickActionObservables {
 	
 	public static final String defaultConfigurationFilename = GamesLibrarian.class.getSimpleName() + ".xml";
+	public static final String defaultConfigurationShortFilename = "config.xml";
 	public static final LookAndFeelInfo[] lookAndFeelInfos = UIManager.getInstalledLookAndFeels();
 	
 	public static final LocaleChoice defaultLocaleChoice = LocaleChoice.values()[0];

@@ -2658,7 +2658,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			
 			// Continue updating Registry Options Fields
 			getGamerSteamIdTextField().setText(currentSteamProfile.getId());
-		}
+		} else
+			parameters.setMainPlayerSteamId(previousParameters.getMainPlayerSteamId());
 		
 		
 		//
@@ -3586,8 +3587,15 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		Parameters previousParameters = (Parameters) parameters.clone();
 		
 		// Read/Load local parameters if they exists and are readable
+		// Look for two different filenames
 		File configurationFile = new File(Parameters.defaultConfigurationFilename);
-		if (configurationFile.exists()) {
+		String configurationFilename = Parameters.defaultConfigurationFilename;
+		if (!configurationFile.exists() || !configurationFile.isFile() || !configurationFile.canRead()) {
+			configurationFile = new File(configurationFilename = Parameters.defaultConfigurationShortFilename);
+			if (!configurationFile.exists() || !configurationFile.isFile() || !configurationFile.canRead())
+				configurationFile = null;
+		}
+		if (configurationFile != null) {
 			String canonicalPath = null;
 			try {
 				canonicalPath = configurationFile.getCanonicalPath();
@@ -3599,7 +3607,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 				tee.writelnError(String.format(parameters.getMessages().getString("errorConfigurationFileIsUnreadable"), canonicalPath));
 				return false;
 			}
-			view.loadParametersAction.loadConfiguration(Parameters.defaultConfigurationFilename);
+			view.loadParametersAction.loadConfiguration(configurationFilename);
 		}
 
 		// Check if Steam Community is online
