@@ -615,6 +615,10 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		return statusIconURL;
 	}
 	
+	protected Object clone() {
+		return avatarFull;
+	}
+	
 	/**
 	 * Copy needed properties after XML parsing
 	 * @param steamProfile

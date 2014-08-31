@@ -59,7 +59,6 @@ import commons.api.SteamFriend;
 import commons.api.SteamGame;
 import commons.api.SteamGameStats;
 import commons.api.SteamGroup;
-import commons.api.SteamLaunchMethod;
 import commons.api.SteamProfile;
 import commons.api.parsers.SteamGameStatsParser;
 import commons.api.parsers.SteamProfileParser;
@@ -91,7 +90,6 @@ import commons.enums.TabEnum;
 import commons.layouts.WrapLayout;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.RollAction;
-import components.actions.ScrollLockAction;
 import components.actions.SteamFriendsDisplayModeAction;
 import components.actions.SteamGroupsDisplayModeAction;
 import components.buttons.GameLeftClickActionButton;
@@ -392,13 +390,6 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		return view.rollAction;
 	}
 	
-	/**
-	 * @return the scrollLockAction
-	 */
-	public ScrollLockAction getScrollLockAction() {
-		return view.scrollLockAction;
-	}
-
 	/**
 	 * @return consoleTextPane
 	 */
@@ -2025,7 +2016,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	/**
 	 * Update display of GameChoice
 	 */
-	protected void displayInitialGameChoice() {
+	protected void displayGameChoice() {
 		switch (parameters.getGameChoice()) {
 		case One: view.oneGameRadioButton.setSelected(true); break;
 		case Two: view.twoGamesRadioButton.setSelected(true); break;
@@ -2341,41 +2332,6 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	}
 	
 	//
-	// Update display of OptionsTab components
-	//
-	
-	/**
-	 * Update display of SteamLaunchMethod selector to reflect new SteamLaunchMethod selection
-	 */
-	public void updateDefaultSteamLaunchMethod() {
-		view.defaultSteamLaunchMethodComboBox.setSelectedItem(parameters.getDefaultSteamLaunchMethod());
-	}
-	
-	/**
-	 * Update display of DisplayToolTips selector to reflect new DisplayToolTips selection
-	 */
-	public void updateDisplayToolTips() {
-		if (parameters == null || parameters.getDisplayTooltips()) // WindowBuilder
-			view.displayTooltipsYesButton.setSelected(true);
-		else
-			view.displayTooltipsNoButton.setSelected(true);
-	}
-	
-	/**
-	 * Update display of DumpMode selector to reflect new DumpMode selection
-	 */
-	public void updateDumpMode() {
-		view.dumpModeComboBox.setSelectedItem(parameters.getDumpMode());
-	}
-	
-	/**
-	 * Update display of LocaleChoice selector to reflect new LocaleChoice
-	 */
-	public void updateLocaleChoice() {
-		view.localeChoiceComboBox.setSelectedItem(parameters.getLocaleChoice());
-	}
-	
-	//
 	// Update display for ToolTips
 	//
 
@@ -2530,6 +2486,268 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			tee.writelnError(message);
 		}
 	}
+
+	/**
+	 * Validate and complete all missing new application parameters with previousParameters set values.<br/>
+	 * Update all UI elements impacted by a new application parameters set coming from:
+	 * <ul>
+	 * <li>Setup set</li>
+	 * <li>Loaded set from a configuration file </li>
+	 * </ul> 
+	 * @param previousParameters prior parameters set used to complete new set
+	 * @param startup indicate if application is in startup state. This state needs special UI actions (developper's preferred L&F, initial configuration...)
+	 */
+	public void updateUI(Parameters previousParameters, boolean startup) {
+		
+		//
+		// Options Tab
+		//
+		
+		// Update localeChoice
+		if (parameters.getLocaleChoice() == null)
+			if (previousParameters.getLocaleChoice() == null) {
+				parameters.setLocaleChoice(Parameters.defaultLocaleChoice);
+				view.localeChoiceComboBox.setSelectedItem(parameters.getLocaleChoice());
+			} else
+				parameters.setLocaleChoice(previousParameters.getLocaleChoice());
+		else
+			view.localeChoiceComboBox.setSelectedItem(parameters.getLocaleChoice());
+		
+		// Update lookAndFeelInfo
+		// Note: when starting application, try Nimbus, a modern glassy L&F
+		if (startup || parameters.getLookAndFeelInfo() != null) {
+			int lookAndFeelInfoIndex = -1;
+		    for (LookAndFeelInfo lookAndFeelInfo : Parameters.lookAndFeelInfos) {
+		    	lookAndFeelInfoIndex++;
+		        if ((startup && "Nimbus".equals(lookAndFeelInfo.getName())) || (!startup && parameters.getLookAndFeelInfo().getName().equals(lookAndFeelInfo.getName()))) {
+		        	if (startup)
+		        		parameters.setLookAndFeelInfo(Parameters.lookAndFeelInfos[lookAndFeelInfoIndex]);
+		        	view.lookAndFeelInfoComboBox.setSelectedIndex(lookAndFeelInfoIndex);
+		            break;
+		        }
+		    }
+		} else
+			if (previousParameters.getLookAndFeelInfo() == null) {
+				parameters.setLookAndFeelInfo(Parameters.defaultLookAndFeelInfo);
+				view.lookAndFeelInfoComboBox.setSelectedItem(parameters.getLookAndFeelInfo());
+			} else
+				parameters.setLookAndFeelInfo(previousParameters.getLookAndFeelInfo());
+		
+		//
+		// Controls Tab
+		//
+		
+		// Update scrollLock
+		if (parameters.isScrollLocked() == null)
+			if (previousParameters.isScrollLocked() == null) {
+				parameters.setScrollLocked(Parameters.defaultScrollLocked);
+				view.scrollLockButton.setSelected(parameters.isScrollLocked());
+			} else
+				parameters.setScrollLocked(previousParameters.isScrollLocked());
+		else
+			view.scrollLockButton.setSelected(parameters.isScrollLocked());
+		
+		// Update debug
+		if (parameters.isDebug() == null)
+			if (previousParameters.isDebug() == null) {
+				parameters.setDebug(Parameters.defaultDebug);
+				view.debugButton.setSelected(parameters.isDebug());
+			} else
+				parameters.setDebug(previousParameters.isDebug());
+		else
+			view.debugButton.setSelected(parameters.isDebug());
+		if (parameters.isDebug())
+			tee.writeMessage(BundleManager.getMessages(me, parameters.getDefaultSteamLaunchMethod().getDefaultSelectionMessageKey()), true);
+		
+		//
+		// Options Tab
+		//
+		
+		// Update dumpMode
+		if (parameters.getDumpMode() == null)
+			if (previousParameters.getDumpMode() == null) {
+				parameters.setDumpMode(Parameters.defaultDumpMode);
+				view.dumpModeComboBox.setSelectedItem(parameters.getDumpMode());
+			} else
+				parameters.setDumpMode(previousParameters.getDumpMode());
+		else
+			view.dumpModeComboBox.setSelectedItem(parameters.getDumpMode());
+		
+		// Update registry options fields
+		if (parameters.getWindowsDistribution() == null)
+			if (previousParameters.getWindowsDistribution() == null) {
+				parameters.setWindowsDistribution(Parameters.defaultWindowsDistribution);
+				view.windowsDistributionTextField.setText(parameters.getWindowsDistribution());
+			} else
+				parameters.setWindowsDistribution(previousParameters.getWindowsDistribution());
+		else
+			view.windowsDistributionTextField.setText(parameters.getWindowsDistribution());
+		
+		if (parameters.getSteamExecutable() == null)
+			if (previousParameters.getSteamExecutable() == null) {
+				parameters.setSteamExecutable(Parameters.defaultSteamExecutable);
+				view.steamExecutableTextField.setText(parameters.getSteamExecutable());
+			} else
+				parameters.setSteamExecutable(previousParameters.getSteamExecutable());
+		else
+			view.steamExecutableTextField.setText(parameters.getSteamExecutable());
+		
+		//
+		// Profile Tab
+		//
+		
+		// Update steamGroupsSortMethod/steamFriendsSortMethod selectors
+		if (startup) {
+			view.steamGroupsSortMethodComboBox.setSelectedItem(SteamGroupsSortMethod.values()[0]);
+			view.steamFriendsSortMethodComboBox.setSelectedItem(SteamFriendsSortMethod.values()[0]);
+		}
+		
+		// Update steamGroupsDisplayMode selector 
+		if (startup)
+			parameters.setSteamGroupsDisplayMode(view.profileGroupsPane != null && getCurrentCard(view.profileGroupsPane).getName() != null ? // WindowBuilder
+					SteamGroupsDisplayMode.valueOf(getCurrentCard(view.profileGroupsPane).getName()) :
+						SteamGroupsDisplayMode.values()[0]);
+		if (parameters.getSteamGroupsDisplayMode() == null)
+			if (previousParameters.getSteamGroupsDisplayMode() == null)
+				parameters.setSteamGroupsDisplayMode(Parameters.defaultSteamGroupsDisplayMode);
+			else
+				parameters.setDumpMode(previousParameters.getDumpMode());
+		switch (parameters.getSteamGroupsDisplayMode()) {
+		case GRID:
+			view.steamGroupsDisplayModeGrid.setSelected(true);
+			break;
+		case LIST :
+			view.steamGroupsDisplayModeList.setSelected(true);
+			break;
+		}
+		
+		// Update steamFriendsDisplayMode selector 
+		if (startup)
+			parameters.setSteamFriendsDisplayMode(view.profileFriendsPane != null && getCurrentCard(view.profileFriendsPane).getName() != null ? // WindowBuilder
+					SteamFriendsDisplayMode.valueOf(getCurrentCard(view.profileFriendsPane).getName()) :
+						SteamFriendsDisplayMode.values()[0]);
+		if (parameters.getSteamFriendsDisplayMode() == null)
+			if (previousParameters.getSteamFriendsDisplayMode() == null)
+				parameters.setSteamFriendsDisplayMode(Parameters.defaultSteamFriendsDisplayMode);
+			else
+				parameters.setSteamFriendsDisplayMode(previousParameters.getSteamFriendsDisplayMode());
+		switch (parameters.getSteamFriendsDisplayMode()) {
+		case GRID:
+			view.steamFriendsDisplayModeGrid.setSelected(true);
+			break;
+		case LIST :
+			view.steamFriendsDisplayModeList.setSelected(true);
+			break;
+		}
+		
+		// Update currentSteamProfile and UI
+		if (parameters.getMainPlayerSteamId() != null && !parameters.getMainPlayerSteamId().equals("")) {
+			SteamProfile currentProfile = new SteamProfile();
+			if (Strings.fullNumericPattern.matcher(parameters.getMainPlayerSteamId()).matches())
+				currentProfile.setSteamID64(parameters.getMainPlayerSteamId());
+			else
+				currentProfile.setSteamID(parameters.getMainPlayerSteamId());
+			currentProfile.setLoadingSource(LoadingSource.Preloading);
+			updateProfileTab(currentProfile);
+			addProfile(currentProfile, true);
+			updateSelectedSteamProfile(currentProfile);
+			
+			//
+			// Options Tab
+			//
+			
+			// Continue updating Registry Options Fields
+			getGamerSteamIdTextField().setText(currentSteamProfile.getId());
+		}
+		
+		
+		//
+		// Controls Tab
+		//
+		
+		// Update gameChoice
+		if (parameters.getGameChoice() == null)
+			if (previousParameters.getGameChoice() == null) {
+				parameters.setGameChoice(Parameters.defaultGameChoice);
+				displayGameChoice();
+				displayLaunchButtons(parameters.getGameChoice());
+			} else
+				parameters.setGameChoice(previousParameters.getGameChoice());
+		else {
+			displayGameChoice();
+			displayLaunchButtons(parameters.getGameChoice());
+		}
+		
+		//
+		// Options Tab
+		//
+		
+		// Update defaultSteamLaunchMethod
+		if (parameters.getDefaultSteamLaunchMethod() == null)
+			if (previousParameters.getDefaultSteamLaunchMethod() == null) {
+				parameters.setDefaultSteamLaunchMethod(Parameters.defaultDefaultSteamLaunchMethod);
+				view.defaultSteamLaunchMethodComboBox.setSelectedItem(parameters.getDefaultSteamLaunchMethod());
+			} else
+				parameters.setDefaultSteamLaunchMethod(previousParameters.getDefaultSteamLaunchMethod());
+		else
+			view.defaultSteamLaunchMethodComboBox.setSelectedItem(parameters.getDefaultSteamLaunchMethod());
+		
+		// Update gameLeftClickAction
+		if (startup)
+			parameters.updateGameLeftClickActionObservers();
+		else
+			if (parameters.getGameLeftClickAction() == null)
+				if (previousParameters.getGameLeftClickAction() == null) {
+					parameters.setGameLeftClickAction(Parameters.defaultGameLeftClickAction);
+					view.gameLeftClickActionComboBox.setSelectedItem(parameters.getGameLeftClickAction());
+				} else
+					parameters.setGameLeftClickAction(previousParameters.getGameLeftClickAction());
+			else
+				view.gameLeftClickActionComboBox.setSelectedItem(parameters.getGameLeftClickAction());
+		
+		// Update displayTooltips
+		if (parameters.getDisplayTooltips() == null)
+			if (previousParameters.getDisplayTooltips() == null)
+				parameters.setDisplayTooltips(Parameters.defaultDisplayToolTips);
+			else
+				parameters.setDisplayTooltips(previousParameters.getDisplayTooltips());
+		if (parameters.getDisplayTooltips())
+			view.displayTooltipsYesButton.setSelected(true);
+		else
+			view.displayTooltipsNoButton.setSelected(true);
+		
+		// dumpMode already updated
+		// localeChoice already updated
+		// lookAndFeelInfo already updated
+		
+		//
+		// Library Tab
+		//
+		
+		// Update sortMethod/displayMode selectors
+		if (startup) {
+			view.librarySortMethodComboBox.setSelectedItem(SteamGamesSortMethod.values()[0]);
+			view.libraryDisplayModeComboBox.setSelectedItem(SteamGamesDisplayMode.values()[0]);
+		}
+		// Update Library Tab display
+		updateGamesLibraryTab();
+		
+		//
+		// Game Tab
+		//
+		// Update selectors
+		if (startup) {
+			view.steamAchievementsSortMethodComboBox.setSelectedItem(SteamAchievementsSortMethod.values()[0]);
+			view.steamAchievementsListsSortMethodComboBox.setSelectedItem(SteamAchievementsListsSortMethod.values()[0]);
+		}
+		// Update Game Tab display
+		clearGameTab();
+		
+		// Setup Profile visible pane at startup
+		if (startup)
+			view.profilePane.setSelectedComponent(view.profileSummaryPane);
+	}
+	
 	
 	//
 	// Threads management
@@ -3258,6 +3476,11 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
         SwingUtilities.updateComponentTreeUI(view);
 	}
 	
+	/**
+	 * Setup 
+	 * - Application parameters to default
+	 * - Runtime variables to default
+	 */
 	public void setup() {
 		
 		// Create a runtime parameters set
@@ -3271,40 +3494,63 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		else if (!osProperty.equals(OS.Prefix.Unknown.name())) parameters.getOs().setPrefix(OS.Prefix.Nix);
 		else parameters.getOs().setPrefix(OS.Prefix.Unknown);
 		
-		// Initialize I18n
+		// initialize I18n
+		// Reset I18n
 		resetResourcesBundles();
+		// Verify integrity of resources files (developper's help)
+		// TODO: Add a parameter to ignore this operation
+		// Problem : this operation must be done before reading parameters
 		if (LocaleChoice.usablesLanguages.isEmpty())
 			throw new RuntimeException("No usables languages. Unable to execute.");
 		parameters.setLocaleChoice(Locale.getDefault().getLanguage().equalsIgnoreCase("fr") ? LocaleChoice.fr_FR : LocaleChoice.en_US);
 		
-		// Setup default application parameters
-		parameters.setGameChoice(GameChoice.One);
-		parameters.setGameLeftClickAction(GameLeftClickAction.Select);
-		parameters.setDefaultSteamLaunchMethod(SteamLaunchMethod.SteamProtocol);
-		parameters.setSteamGroupsDisplayMode(SteamGroupsDisplayMode.values()[0]);
-		parameters.setSteamFriendsDisplayMode(SteamFriendsDisplayMode.values()[0]);
-		parameters.setDisplayTooltips(true);
+		// Setup application parameters to default
+		parameters.setLookAndFeelInfo(Parameters.defaultLookAndFeelInfo);
 		
-		parameters.setDebug(false);
-		parameters.setDumpMode(DumpMode.values()[0]);
-		parameters.setUseConsole(true);
-		parameters.setUseDateTime(true);
-		parameters.setScrollLocked(false);
-		parameters.setXmlOverrideRegistry(false);
+		parameters.setWindowsDistribution(Parameters.defaultWindowsDistribution);
+		parameters.setSteamExecutable(Parameters.defaultSteamExecutable);
+		
+		parameters.setMainPlayerSteamId(Parameters.defaultMainPlayerSteamId);
+		
+		parameters.setGameChoice(Parameters.defaultGameChoice);		
+		parameters.setGameLeftClickAction(Parameters.defaultGameLeftClickAction);
+		parameters.setDefaultSteamLaunchMethod(Parameters.defaultDefaultSteamLaunchMethod);
+		parameters.setSteamGroupsDisplayMode(Parameters.defaultSteamGroupsDisplayMode);
+		parameters.setSteamFriendsDisplayMode(Parameters.defaultSteamFriendsDisplayMode);
+		parameters.setDisplayTooltips(Parameters.defaultDisplayToolTips);
+		
+		parameters.setDebug(Parameters.defaultDebug);
+		parameters.setCheckCommunityOnStartup(Parameters.defaultCheckCommunityOnStartup);
+		parameters.setDumpMode(Parameters.defaultDumpMode);
+		parameters.setUseConsole(Parameters.defaultUseConsole);
+		parameters.setUseDateTime(Parameters.defaultUseDateTime);
+		parameters.setScrollLocked(Parameters.defaultScrollLocked);
+		parameters.setXmlOverrideRegistry(Parameters.defaultXmlOverrideRegistry);
 		
 		// Create empty profiles list
 		profiles = new HashMap<String, SteamProfile> ();
 		
-		// Initialize runtime status
+		// Setup runtime status to default
 		steamGamesListReading = false;
 		steamGameStatsReading = false;
 		steamProfileReading = false;
 		steamFriendsListReading = false;
 		steamFriendsGameListsReading = false;
 		steamFriendGameStatsReading = false;
-		
 	}
 	
+	/**
+	 * Application parameters are now set to default.<br/>
+	 * UI should be almost ready.
+	 * Finish UI construction with top level graphics elements.<br/>
+	 * Make application configuration with OS elements
+	 * <ul>
+	 * <li>Registry (for Windows, where we could find interesting configuration data on Steam),</li>
+	 * <li>Configuration(s) file(s)</li>
+	 * </ul>
+	 * 
+	 * @return Startup status indicating if application should continue execution or stop after startup, due to misconfiguration of OS elements
+	 */
 	public boolean startup() {
 		
 		// Create Tee
@@ -3327,7 +3573,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		// Create empty currentSteamProfile
 		currentSteamProfile = new SteamProfile();
 		
-		// Read data from registry
+		// Read data from Windows registry
 		view.resetOptionsAction.readRegitryOptions();
 		if (parameters.getMainPlayerSteamId() != null) {
 			if (Strings.fullNumericPattern.matcher(parameters.getMainPlayerSteamId()).matches())
@@ -3335,6 +3581,9 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			else
 				currentSteamProfile.setSteamID(parameters.getMainPlayerSteamId());
 		}
+		
+		// Preserve old set to complete missing parameters
+		Parameters previousParameters = (Parameters) parameters.clone();
 		
 		// Read/Load local parameters if they exists and are readable
 		File configurationFile = new File(Parameters.defaultConfigurationFilename);
@@ -3352,119 +3601,13 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			}
 			view.loadParametersAction.loadConfiguration(Parameters.defaultConfigurationFilename);
 		}
-		
-		// Set locale
-		view.localeChoiceComboBox.setSelectedItem(parameters.getLocaleChoice());
-		
-		// Set dumpMode
-		view.dumpModeComboBox.setSelectedItem(parameters.getDumpMode());
-		
-		// Check and display some status
-		if (parameters.isDebug())
-			tee.writeMessage(parameters.getDefaultSteamLaunchMethod().equals(SteamLaunchMethod.SteamExecutable) ? 
-				parameters.getMessages().getString(SteamLaunchMethod.SteamExecutable.getDefaultSelectionMessageKey()) : 
-					parameters.getMessages().getString(SteamLaunchMethod.SteamProtocol.getDefaultSelectionMessageKey()), true);
-		
+
 		// Check if Steam Community is online
 		if (parameters.isCheckCommunityOnStartup() && !checkSteamCommunity(DisplayMode.verbose))
 			return false;
-		
-		//
-		// Controls Tab : Update display
-		//
-		displayLaunchButtons(parameters.getGameChoice());
-		displayInitialGameChoice();
-		
-		//
-		// Library Tab : Update display
-		//
-		updateGamesLibraryTab();
-		
-		// Setup selectors
-		view.libraryDisplayModeComboBox.setSelectedItem(SteamGamesDisplayMode.values()[0]);
-		view.librarySortMethodComboBox.setSelectedItem(SteamGamesSortMethod.values()[0]);
-		
-		//
-		// Game Tab
-		//
-		parameters.updateGameLeftClickActionObservers();
-		
-		// Setup selectors
-		view.steamAchievementsSortMethodComboBox.setSelectedItem(SteamAchievementsSortMethod.values()[0]);
-		view.steamAchievementsListsSortMethodComboBox.setSelectedItem(SteamAchievementsListsSortMethod.values()[0]);
-		
-		//
-		// Profile Tab
-		//
-		// Setup selectors
-		view.steamGroupsSortMethodComboBox.setSelectedItem(SteamGroupsSortMethod.values()[0]);
-		view.steamFriendsSortMethodComboBox.setSelectedItem(SteamFriendsSortMethod.values()[0]);
-		
-		// Setup parameters/SteamGroupsDisplayMode selector 
-		parameters.setSteamGroupsDisplayMode(view.profileGroupsPane != null && getCurrentCard(view.profileGroupsPane).getName() != null ? // WindowBuilder
-				SteamGroupsDisplayMode.valueOf(getCurrentCard(view.profileGroupsPane).getName()) :
-					SteamGroupsDisplayMode.values()[0]);
-		switch (parameters.getSteamGroupsDisplayMode()) {
-		case GRID:
-			view.steamGroupsDisplayModeGrid.setSelected(true);
-			break;
-		case LIST :
-			view.steamGroupsDisplayModeList.setSelected(true);
-			break;
-		}
-		
-		// Setup state of SteamFriendsDisplayMode selector 
-		parameters.setSteamFriendsDisplayMode(view.profileFriendsPane != null && getCurrentCard(view.profileFriendsPane).getName() != null ? // WindowBuilder
-				SteamFriendsDisplayMode.valueOf(getCurrentCard(view.profileFriendsPane).getName()) :
-					SteamFriendsDisplayMode.values()[0]);
-		switch (parameters.getSteamFriendsDisplayMode()) {
-		case GRID:
-			view.steamFriendsDisplayModeGrid.setSelected(true);
-			break;
-		case LIST :
-			view.steamFriendsDisplayModeList.setSelected(true);
-			break;
-		}
-		
-		// Setup visible pane at startup
-		view.profilePane.setSelectedComponent(view.profileSummaryPane);
-		
-		//
-		// Options Tab : Update display
-		//
-		updateDefaultSteamLaunchMethod();
-		updateDisplayToolTips();
-		// DumpMode already setup
-		// LocaleChoice already setup
-		
-		// Setup state of lookAndFeel selector
-		// Set Look and feel, look for parameters
-		boolean lookAndFeelInstalled = false;
-		if (parameters.getLookAndFeelInfo() != null) {
-			int lookAndFeelInfoIndex = -1;
-		    for (LookAndFeelInfo lookAndFeelInfo : Parameters.lookAndFeelInfos) {
-		    	lookAndFeelInfoIndex++;
-		        if (parameters.getLookAndFeelInfo().getName().equals(lookAndFeelInfo.getName())) {
-		        	view.lookAndFeelInfoComboBox.setSelectedIndex(lookAndFeelInfoIndex);
-		        	setLookAndFeel(lookAndFeelInfo);
-		        	lookAndFeelInstalled = true;
-		            break;
-		        }
-		    }
-		}
-		
-		// Then try Nimbus, a modern glassy L&F
-	    if (!lookAndFeelInstalled) {
-	    	int lookAndFeelInfoIndex = -1;
-	    	for (LookAndFeelInfo lookAndFeelInfo : Parameters.lookAndFeelInfos) {
-	    		lookAndFeelInfoIndex++;
-		        if ("Nimbus".equals(lookAndFeelInfo.getName())) {
-		        	view.lookAndFeelInfoComboBox.setSelectedIndex(lookAndFeelInfoIndex);
-		        	setLookAndFeel(lookAndFeelInfo);
-		            break;
-		        }
-	    	}
-	    }
+				
+		// update UI according to new parameters
+		updateUI(previousParameters, true);
 		
 		return true;
 	}

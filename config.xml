@@ -1,0 +1,43 @@
+<parameters>
+   <localeChoice>fr_FR</localeChoice>
+   <lookAndFeelInfo>Nimbus</lookAndFeelInfo>
+   <gameChoice>One</gameChoice>
+   <windowsDistribution>Windows 7 Home Premium</windowsDistribution>
+   <steamExecutable>G:\Games\steam.exe</steamExecutable>
+   <gamerSteamId></gamerSteamId>
+   <xmlOverrideRegistry>false</xmlOverrideRegistry>
+   <defaultSteamLaunchMethod>SteamExecutable</defaultSteamLaunchMethod>
+   <gameLeftClickAction>Select</gameLeftClickAction>
+   <checkCommunityOnStartup>false</checkCommunityOnStartup>
+   <dumpMode>XML</dumpMode>
+   <useConsole>true</useConsole>
+   <useDateTime>true</useDateTime>
+   <scrollLocked>false</scrollLocked>
+   <gamesList>
+      <!--Do not prevail on gamerSteamId-->
+      <steamID64/>
+      <steamID/>
+      <games>
+         <game>
+            <appID>2760</appID>
+            <name>Neverwinter Nights 2: Platinum</name>
+            <logo>http://media.steampowered.com/steamcommunity/public/images/apps/2760/db7da9c6a09918155ecadc39fe8978463ddeadc0.jpg</logo>
+            <storeLink>http://store.steampowered.com/app/2760</storeLink>
+            <hoursLast2Weeks>72.3</hoursLast2Weeks>
+            <hoursOnRecord>163.3</hoursOnRecord>
+            <steamLaunchMethod>SteamExecutable</steamLaunchMethod>
+         </game>
+         <game>
+            <appID>8980</appID>
+            <name>Borderlands</name>
+            <logo>/images/icons/cog.png</logo>
+            <storeLink>http://store.steampowered.com/app/8980</storeLink>
+            <hoursLast2Weeks>7.5</hoursLast2Weeks>
+            <hoursOnRecord>33.0</hoursOnRecord>
+            <statsLink>Borderlands</statsLink>
+            <globalStatsLink>http://steamcommunity.com/stats/Borderlands/achievements/</globalStatsLink>
+            <steamLaunchMethod>SteamExecutable</steamLaunchMethod>
+         </game>
+      </games>
+   </gamesList>
+</parameters>

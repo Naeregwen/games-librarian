@@ -98,7 +98,6 @@ public class DefaultTableHeaderCellRenderer extends DefaultTableCellRenderer {
 	 *            the column index.
 	 * @return the sort icon, or null if the column is unsorted.
 	 */
-	@SuppressWarnings("incomplete-switch")
 	protected Icon getIcon(JTable table, int column) {
 		SortKey sortKey = getSortKey(table, column);
 		if (sortKey != null && table.convertColumnIndexToView(sortKey.getColumn()) == column) {
@@ -107,6 +106,8 @@ public class DefaultTableHeaderCellRenderer extends DefaultTableCellRenderer {
 				return UIManager.getIcon("Table.ascendingSortIcon");
 			case DESCENDING:
 				return UIManager.getIcon("Table.descendingSortIcon");
+			default:
+				break;
 			}
 		}
 		return null;
