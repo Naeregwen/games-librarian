@@ -46,6 +46,7 @@ public class SaveParametersAction extends AbstractAction {
 	private static final long serialVersionUID = -2263273566679369655L;
 
 	WindowBuilderMask me;
+	String previousFilename;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
@@ -124,9 +125,9 @@ public class SaveParametersAction extends AbstractAction {
 		}
 
 		// Confirm operation
-		String filename = librarian.confirmSaveConfigurationFile(Parameters.defaultConfigurationFilename);
-		if (filename == null)
-			return;
+		String filename = librarian.confirmSaveConfigurationFile(previousFilename != null ? previousFilename : Parameters.defaultConfigurationFilename);
+		if (filename == null) return;
+		previousFilename = filename;
 
 		try {
 

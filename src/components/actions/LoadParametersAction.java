@@ -29,7 +29,8 @@ public class LoadParametersAction extends AbstractAction {
 	private static final long serialVersionUID = -6764755728240241613L;
 
 	WindowBuilderMask me;
-
+	String previousFilename;
+	
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
 	 */
@@ -77,8 +78,9 @@ public class LoadParametersAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Confirm operation
-		String filename = me.getLibrarian().confirmLoadConfigurationFile(Parameters.defaultConfigurationFilename);
+		String filename = me.getLibrarian().confirmLoadConfigurationFile(previousFilename != null ? previousFilename : Parameters.defaultConfigurationFilename);
 		if (filename == null) return;
+		previousFilename = filename;
 		// Preserve old set to complete missing parameters
 		Parameters previousParameters = (Parameters) me.getLibrarian().getParameters().clone();
 		// Process operation
