@@ -15,9 +15,9 @@ import components.actions.interfaces.EnumAction;
 public class EnumSelectionStateAdapter<ComboBoxItemType> implements ActionListener, PropertyChangeListener {
 
 	private ActionGroup actionsGroup;
-	private JComboBox<ComboBoxItemType> comboBox;
+	private JComboBox<? extends ComboBoxItemType> comboBox;
 	
-	public EnumSelectionStateAdapter(ActionGroup actionsGroup, JComboBox<ComboBoxItemType> comboBox) {
+	public EnumSelectionStateAdapter(ActionGroup actionsGroup, JComboBox<? extends ComboBoxItemType> comboBox) {
 		this.actionsGroup = actionsGroup;
 		this.comboBox = comboBox;			
 	}
@@ -28,6 +28,7 @@ public class EnumSelectionStateAdapter<ComboBoxItemType> implements ActionListen
 		comboBox.addActionListener(this);
 	}
 	
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(ActionConstants.SELECTED_KEY)) {
 			Boolean newSelectedState = (Boolean) evt.getNewValue();

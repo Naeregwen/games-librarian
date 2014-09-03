@@ -1370,7 +1370,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		
 		// Main Tab
 		view.gamerProfileIconFull.clearImage();
-		view.gamerProfileRealname.setText("");
+		view.gamerProfileRealName.setText("");
 		view.gamerProfileLocation.setText("");
 		view.gamerProfileCustomURL.setText("");
 		view.gamerProfileSummary.setText("");
@@ -1577,7 +1577,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		updateProfileStatusTabTitle();
 
 		// Main data : Update Profile Main Tab content
-		if (steamProfile.getRealname() != null) view.gamerProfileRealname.setText(steamProfile.getRealname());
+		if (steamProfile.getRealname() != null) view.gamerProfileRealName.setText(steamProfile.getRealname());
 		if (steamProfile.getLocation() != null) view.gamerProfileLocation.setText(steamProfile.getLocation());
 		if (steamProfile.getCustomURL() != null) view.gamerProfileCustomURL.setText(steamProfile.getCustomURL());
 		if (steamProfile.getSummary() != null) view.gamerProfileSummary.setText(steamProfile.getSummary());
@@ -2546,7 +2546,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 				parameters.setScrollLocked(previousParameters.isScrollLocked());
 		else
 			view.scrollLockButton.setSelected(parameters.isScrollLocked());
-		
+
 		// Update debug
 		if (parameters.isDebug() == null)
 			if (previousParameters.isDebug() == null) {
@@ -2736,11 +2736,13 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		//
 		// Game Tab
 		//
+		
 		// Update selectors
 		if (startup) {
 			view.steamAchievementsSortMethodComboBox.setSelectedItem(SteamAchievementsSortMethod.values()[0]);
 			view.steamAchievementsListsSortMethodComboBox.setSelectedItem(SteamAchievementsListsSortMethod.values()[0]);
 		}
+		
 		// Update Game Tab display
 		clearGameTab();
 		
@@ -3417,7 +3419,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		}
 		
 		// Account main Sub Tab
-		view.realnameLabel.setText(UITexts.getString("accountRealname"));
+		view.realNameLabel.setText(UITexts.getString("accountRealname"));
 		view.locationLabel.setText(UITexts.getString("accountLocation"));
 		view.customURLLabel.setText(UITexts.getString("accountCustomURL"));
 		view.summaryLabel.setText(UITexts.getString("accountSummary"));

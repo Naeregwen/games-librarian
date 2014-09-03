@@ -44,13 +44,13 @@ public class DebugAction extends AbstractAction {
 			putValue(Action.MNEMONIC_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "debugMnemonic")).getKeyCode());
 		if (BundleManager.getUITexts(me, "debugAccelerator") != null && !BundleManager.getUITexts(me, "debugAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "debugAccelerator")));
-		if (me == null || me.getLibrarian() == null || !me.getLibrarian().getParameters().isDebug()) { // WindowBuilder 
+		if (me == null || me.getLibrarian() == null || me.getLibrarian().getParameters().isDebug()) { // WindowBuilder 
 			putValue(NAME, BundleManager.getUITexts(me, "debugOffMenuLabel"));
-			putValue(SMALL_ICON, GamesLibrary.debugOffIcon);
+			putValue(SMALL_ICON, GamesLibrary.debugStopIcon);
 			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "debugOffToolTip"));
 		} else {
 			putValue(NAME, BundleManager.getUITexts(me, "debugOnMenuLabel"));
-			putValue(SMALL_ICON, GamesLibrary.debugOnIcon);
+			putValue(SMALL_ICON, GamesLibrary.debugStartIcon);
 			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "debugOnToolTip"));
 		}
 	}

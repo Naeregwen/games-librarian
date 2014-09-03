@@ -57,11 +57,16 @@ public class GamesLibrary {
 	
 	public static final ImageIcon defaultSteamLaunchMethodIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/bullet_lightning.png"));
 	
+	public static final ImageIcon debugIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/bug.png"));
+	public static final ImageIcon debugStartIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/bug_start.png"));
+	public static final ImageIcon debugStopIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/bug_stop.png"));
+	
+	public static final ImageIcon dumpModeIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/script.png"));
+	
 	public static final ImageIcon displayToolTipsIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/comments.png"));
 	public static final ImageIcon displayToolTipsYesIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/comments_add.png"));
 	public static final ImageIcon displayToolTipsNoIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/comments_delete.png"));
 	
-	public static final ImageIcon dumpModeIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/script.png"));
 	public static final ImageIcon localeChoiceIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/flag_france.png"));
 	public static final ImageIcon lookAndFeelIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/java.png"));
 	
@@ -74,8 +79,6 @@ public class GamesLibrary {
 	public static final ImageIcon gogIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/gog/gog-icon-16.png"));
 	public static final ImageIcon steamIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/steam/steam-icon-16.png"));
 	public static final ImageIcon clearConsoleIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/application_clear.png"));
-	public static final ImageIcon debugOffIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/bug_delete.png"));
-	public static final ImageIcon debugOnIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/bug_add.png"));
 	public static final ImageIcon loadParametersIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/disk_upload.png"));
 	public static final ImageIcon lockStartIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/lock_open.png"));
 	public static final ImageIcon lockStopIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/lock.png"));

@@ -155,7 +155,7 @@ public class ContextualParser<Context extends Enum<Context>> extends DefaultHand
 		super.startElement(uri, localName, qName, attributes);
 		// Reset characters container
 		characters = "";
-		// Trace start
+		// Trace start element and context
 		if (parameters.isDebug()) trace("startElement qName : ", qName);
 	}
 	
@@ -166,6 +166,7 @@ public class ContextualParser<Context extends Enum<Context>> extends DefaultHand
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		super.endElement(uri, localName, qName);
+		// Trace end element and context
 		if (parameters.isDebug()) trace("endElement qName   : ", qName);
 	}
 }
