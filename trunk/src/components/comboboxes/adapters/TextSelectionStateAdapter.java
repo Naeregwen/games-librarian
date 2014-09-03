@@ -15,9 +15,9 @@ import components.comboboxes.interfaces.TextAction;
 public class TextSelectionStateAdapter<ComboBoxItemType> implements ActionListener, PropertyChangeListener {
 
 	private ActionGroup actionsGroup;
-	private JComboBox<ComboBoxItemType> comboBox;
+	private JComboBox<? extends ComboBoxItemType> comboBox;
 	
-	public TextSelectionStateAdapter(ActionGroup actionsGroup, JComboBox<ComboBoxItemType> comboBox) {
+	public TextSelectionStateAdapter(ActionGroup actionsGroup, JComboBox<? extends ComboBoxItemType> comboBox) {
 		this.actionsGroup = actionsGroup;
 		this.comboBox = comboBox;			
 	}
@@ -32,7 +32,8 @@ public class TextSelectionStateAdapter<ComboBoxItemType> implements ActionListen
 		if (evt.getPropertyName().equals(ActionConstants.SELECTED_KEY)) {
 			Boolean newSelectedState = (Boolean) evt.getNewValue();
 			if (newSelectedState) {
-				TextAction<?> action = (TextAction<?>) evt.getSource();
+				@SuppressWarnings("unchecked")
+				TextAction<? extends ComboBoxItemType> action = (TextAction<? extends ComboBoxItemType>) evt.getSource();
 				for (int index = 0; index < comboBox.getItemCount(); index++) {
 					if (action.getObject().equals(comboBox.getItemAt(index))) {
 						comboBox.setSelectedIndex(index);

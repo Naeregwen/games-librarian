@@ -274,7 +274,7 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 				parameters.setDisplayTooltips(parseBooleanAlternatives(characters, qName));
 
 		} else if (qName.equalsIgnoreCase("debug")) {
-			// useConsole
+			// debug
 			if (checkContextAndStay(qName, ParametersContexts.Parameters))
 				parameters.setDebug(parseBooleanAlternatives(characters, qName));
 

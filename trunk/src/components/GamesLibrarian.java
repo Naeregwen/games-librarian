@@ -380,8 +380,8 @@ public class GamesLibrarian extends JFrame {
 	
 	IconPane gamerProfileIconFull;
 	
-	Label realnameLabel;
-	JTextField gamerProfileRealname;
+	Label realNameLabel;
+	JTextField gamerProfileRealName;
 	Label locationLabel;
 	JTextField gamerProfileLocation;
 	Label customURLLabel;
@@ -481,17 +481,17 @@ public class GamesLibrarian extends JFrame {
 	Label gameLeftClickActionOptionLabel;
 	GameLeftClickActionComboBox gameLeftClickActionComboBox;
 	
+	Label dumpModeLabel;
+	DumpModeComboBox dumpModeComboBox;
+	
 	JLabel displayToolTipsLabel;
 	JToggleButton displayTooltipsYesButton;
 	JToggleButton displayTooltipsNoButton;
 	
-	Label dumpModeLabel;
-	DumpModeComboBox dumpModeComboBox;
-	
 	Label localeChoiceLabel;
 	LocaleChoiceComboBox localeChoiceComboBox;
 	
-	Label LookAndFeelLabel;
+	Label lookAndFeelLabel;
 	LookAndFeelInfoComboBox lookAndFeelInfoComboBox;
 
 	//
@@ -520,10 +520,10 @@ public class GamesLibrarian extends JFrame {
 	GotoAction gotoGameAction;
 	GotoAction gotoProfileAction;
 	GotoAction gotoOptionsAction;
-	GotoAction gotoSummaryAction;
-	GotoAction gotoStatusAction;
-	GotoAction gotoGroupsAction;
-	GotoAction gotoFriendsAction;
+	GotoAction gotoProfileSummaryAction;
+	GotoAction gotoProfileStatusAction;
+	GotoAction gotoProfileGroupsAction;
+	GotoAction gotoProfileFriendsAction;
 	
 	// Controls Menu
 	
@@ -619,16 +619,16 @@ public class GamesLibrarian extends JFrame {
 	SteamExecutableAction steamExecutableAction;
 	private JMenuItem steamExecutableMenuItem;
 	
-	private JMenu displayToolTipsMenu;
-	private ActionGroup displayToolTipsActionGroup;
-	DisplayToolTipsAction displayToolTipsYesAction;
-	DisplayToolTipsAction displayToolTipsNoAction;
-
 	private JMenu defaultSteamLaunchMethodMenu;
 	private ActionGroup defaultSteamLaunchMethodActionGroup;
 	
 	private JMenu dumpModeMenu;
 	private ActionGroup dumpModeActionGroup;
+	
+	private JMenu displayToolTipsMenu;
+	private ActionGroup displayToolTipsActionGroup;
+	DisplayToolTipsAction displayToolTipsYesAction;
+	DisplayToolTipsAction displayToolTipsNoAction;
 	
 	private JMenu localeChoiceMenu;
 	private ActionGroup localeChoiceActionGroup;
@@ -709,10 +709,12 @@ public class GamesLibrarian extends JFrame {
 		//
 		// Goto Menu
 		//
+		
 		gotoMenu = new JMenu(BundleManager.getUITexts(me, "gotoMenuLabel"));
 		gotoMenu.setIcon(GamesLibrary.gotoMenuIcon);
 		mainMenuBar.add(gotoMenu);
 		
+		// gotoMenuItems
 		gotoControlsAction = new GotoAction(me, LibrarianTab.Controls);
 		gotoLibraryAction = new GotoAction(me, LibrarianTab.Library);
 		gotoGameAction = new GotoAction(me, LibrarianTab.Game);
@@ -723,20 +725,20 @@ public class GamesLibrarian extends JFrame {
 		gotoMenu.add(gotoLibraryAction);
 		gotoMenu.add(gotoGameAction);
 		
-		// Goto Profile SubTabs Menu
-		JMenu profileSubMenu = new JMenu(gotoProfileAction);
+		// gotoProfileSubTabSubMenu
+		JMenu gotoProfileSubTabSubMenu = new JMenu(gotoProfileAction);
 		
-		JMenuItem gotoSummaryMenuItem = new JMenuItem(gotoSummaryAction = new GotoAction(me, ProfileTab.Summary));
-		JMenuItem gotoStatusMenuItem = new JMenuItem(gotoStatusAction = new GotoAction(me, ProfileTab.Status));
-		JMenuItem gotoGroupsMenuItem = new JMenuItem(gotoGroupsAction = new GotoAction(me, ProfileTab.Groups));
-		JMenuItem gotoFriendsMenuItem = new JMenuItem(gotoFriendsAction = new GotoAction(me, ProfileTab.Friends));
+		JMenuItem gotoProfileSummaryMenuItem = new JMenuItem(gotoProfileSummaryAction = new GotoAction(me, ProfileTab.Summary));
+		JMenuItem gotoProfileStatusMenuItem = new JMenuItem(gotoProfileStatusAction = new GotoAction(me, ProfileTab.Status));
+		JMenuItem gotoProfileGroupsMenuItem = new JMenuItem(gotoProfileGroupsAction = new GotoAction(me, ProfileTab.Groups));
+		JMenuItem gotoProfileFriendsMenuItem = new JMenuItem(gotoProfileFriendsAction = new GotoAction(me, ProfileTab.Friends));
 		
-		profileSubMenu.add(gotoSummaryMenuItem);
-		profileSubMenu.add(gotoStatusMenuItem);
-		profileSubMenu.add(gotoGroupsMenuItem);
-		profileSubMenu.add(gotoFriendsMenuItem);
+		gotoProfileSubTabSubMenu.add(gotoProfileSummaryMenuItem);
+		gotoProfileSubTabSubMenu.add(gotoProfileStatusMenuItem);
+		gotoProfileSubTabSubMenu.add(gotoProfileGroupsMenuItem);
+		gotoProfileSubTabSubMenu.add(gotoProfileFriendsMenuItem);
 		
-		gotoMenu.add(profileSubMenu);
+		gotoMenu.add(gotoProfileSubTabSubMenu);
 		gotoMenu.add(gotoOptionsAction);
 		
 		//
@@ -756,6 +758,7 @@ public class GamesLibrarian extends JFrame {
 		gameChoiceMenu.setIcon(GamesLibrary.gameChoiceIcon);
 		controlsMenu.add(gameChoiceMenu);
 		
+		// gameChoiceMenuItems
 		oneGameChoiceAction = new GameChoiceAction(me, GameChoice.One);
 		twoGamesChoiceAction = new GameChoiceAction(me, GameChoice.Two);
 		threeGamesChoiceAction = new GameChoiceAction(me, GameChoice.Three);
@@ -973,6 +976,18 @@ public class GamesLibrarian extends JFrame {
 			defaultSteamLaunchMethodMenu.add(ActionGroupFactory.getRadioMenuItem(defaultSteamLaunchMethodAction));
 		}
 		
+		// dumpModeMenu
+		dumpModeMenu = new JMenu(BundleManager.getUITexts(me, "dumpModeMenuLabel"));
+		dumpModeMenu.setIcon(GamesLibrary.dumpModeIcon);
+		optionsMenu.add(dumpModeMenu);
+		
+		dumpModeActionGroup = new ActionGroup();
+		for (DumpMode dumpMode : DumpMode.values()) {
+			DumpModeAction dumpModeAction = new DumpModeAction(me, dumpMode);
+			dumpModeActionGroup.add(dumpModeAction);
+			dumpModeMenu.add(ActionGroupFactory.getRadioMenuItem(dumpModeAction));
+		}
+		
 		// displayToolTipsMenu
 		displayToolTipsMenu = new JMenu(BundleManager.getUITexts(me, "displayToolTipsMenuLabel"));
 		displayToolTipsMenu.setIcon(GamesLibrary.displayToolTipsIcon);
@@ -988,18 +1003,6 @@ public class GamesLibrarian extends JFrame {
 		displayToolTipsMenu.add(ActionGroupFactory.getRadioMenuItem(displayToolTipsYesAction));
 		displayToolTipsMenu.add(ActionGroupFactory.getRadioMenuItem(displayToolTipsNoAction));
 
-		// dumpModeMenu
-		dumpModeMenu = new JMenu(BundleManager.getUITexts(me, "dumpModeMenuLabel"));
-		dumpModeMenu.setIcon(GamesLibrary.dumpModeIcon);
-		optionsMenu.add(dumpModeMenu);
-		
-		dumpModeActionGroup = new ActionGroup();
-		for (DumpMode dumpMode : DumpMode.values()) {
-			DumpModeAction dumpModeAction = new DumpModeAction(me, dumpMode);
-			dumpModeActionGroup.add(dumpModeAction);
-			dumpModeMenu.add(ActionGroupFactory.getRadioMenuItem(dumpModeAction));
-		}
-		
 		// localeChoiceMenu
 		localeChoiceMenu = new JMenu(BundleManager.getUITexts(me, "localeChoiceMenuLabel"));
 		localeChoiceMenu.setIcon(GamesLibrary.localeChoiceIcon);
@@ -1073,10 +1076,10 @@ public class GamesLibrarian extends JFrame {
 		gotoProfileAction.translate();
 		gotoOptionsAction.translate();
 		
-		gotoSummaryAction.translate();
-		gotoStatusAction.translate();
-		gotoGroupsAction.translate();
-		gotoFriendsAction.translate();
+		gotoProfileSummaryAction.translate();
+		gotoProfileStatusAction.translate();
+		gotoProfileGroupsAction.translate();
+		gotoProfileFriendsAction.translate();
 
 		// Controls Menu
 		
@@ -1161,13 +1164,13 @@ public class GamesLibrarian extends JFrame {
 		for (Action action : defaultSteamLaunchMethodActionGroup.getActions())
 			((DefaultSteamLaunchMethodAction) action).translate();
 		
-		displayToolTipsMenu.setText(BundleManager.getUITexts(me, "displayToolTipsMenuLabel"));
-		for (Action action : displayToolTipsActionGroup.getActions())
-			((DisplayToolTipsAction) action).translate();
-		
 		dumpModeMenu.setText(BundleManager.getUITexts(me, "dumpModeMenuLabel"));
 		for (Action action : dumpModeActionGroup.getActions())
 			((DumpModeAction) action).translate();
+		
+		displayToolTipsMenu.setText(BundleManager.getUITexts(me, "displayToolTipsMenuLabel"));
+		for (Action action : displayToolTipsActionGroup.getActions())
+			((DisplayToolTipsAction) action).translate();
 		
 		localeChoiceMenu.setText(BundleManager.getUITexts(me, "localeChoiceMenuLabel"));
 		for (Action action : localeChoiceActionGroup.getActions())
@@ -1196,6 +1199,7 @@ public class GamesLibrarian extends JFrame {
 	 * Create the Controls Tab
 	 */
 	private void createControlsTab() {
+
 		gamesLibrarianControls = new JPanel();
 		gamesLibrarianControls.setName("controlsTab");
 		
@@ -1297,12 +1301,14 @@ public class GamesLibrarian extends JFrame {
 		
 		viewParametersButton = new JButton(viewParametersAction);
 		gamesLibrarianControls.add(viewParametersButton, "cell 0 8 2 1,alignx left,aligny top");
+		
 	}
 	
 	/**
 	 * Create the Library Tab
 	 */
 	private void createLibraryTab() {
+
 		gamesLibrarianLibrary = new JPanel();
 		gamesLibrarianLibrary.setName("libraryTab");
 		
@@ -1435,12 +1441,14 @@ public class GamesLibrarian extends JFrame {
 		
 		// First visible card panel
 		libraryPaneCardLayout.show(libraryPane, SteamGamesDisplayMode.LaunchPane.name());
+		
 	}
 		
 	/**
 	 * Create the Game Tab
 	 */
 	private void createGameTab() {
+		
 		gamesLibrarianGame = new JPanel();
 		gamesLibrarianGame.setName("gameTab");
 		
@@ -1554,111 +1562,142 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianGame.add(friendsWithSameGameScrollPane, "cell 3 4 1 2,grow");
 		
 		steamAchievementsScrollPane = new JScrollPane();
-		gamesLibrarianGame.add(steamAchievementsScrollPane, "cell 0 6 4 1,grow");
+		gamesLibrarianGame.add(steamAchievementsScrollPane, "cell 0 6 4 1,grow");		
 	}
 	
 	/**
 	 * Create the Profile Summary Sub Tab
 	 */
 	private void createProfileSummarySubTab() {
+		
+		// Main pane
 		profileSummaryPane = new JPanel();
 		profileSummaryPane.setName("profileSummaryTab");
 		profileSummaryPane.setLayout(new MigLayout("", "[][][][grow]", "[][][][][][][][grow]"));
+		
 		profilePane.addTab(BundleManager.getUITexts(me, profileSummaryPane.getName() + "Title"), null, profileSummaryPane, null);
 		
+		// gamerProfileIconFull
 		gamerProfileIconFull = new IconPane(me);
 		gamerProfileIconFull.setMinimumSize(new Dimension(Steam.avatarFullIconWidth, Steam.avatarFullIconHeight));
-		profileSummaryPane.add(gamerProfileIconFull, "cell 0 0 1 4,alignx center");
-		
 		gamerProfileIconFull.setPreferredSize(new Dimension(Steam.avatarFullIconWidth, Steam.avatarFullIconHeight));
 		gamerProfileIconFull.setLayout(new BorderLayout(0, 0));
-
-		realnameLabel = new Label(me, "accountRealname");
-		profileSummaryPane.add(realnameLabel, "cell 1 0,alignx trailing");
 		
-		gamerProfileRealname = new JTextField();
-		profileSummaryPane.add(gamerProfileRealname, "cell 2 0 2 1,growx");
-		gamerProfileRealname.setEditable(false);
-		gamerProfileRealname.setColumns(10);
+		profileSummaryPane.add(gamerProfileIconFull, "cell 0 0 1 4,alignx center");
 		
+		// realName
+		realNameLabel = new Label(me, "accountRealname");
+		profileSummaryPane.add(realNameLabel, "cell 1 0,alignx trailing");
+		
+		gamerProfileRealName = new JTextField();
+		gamerProfileRealName.setEditable(false);
+		gamerProfileRealName.setColumns(10);
+		
+		profileSummaryPane.add(gamerProfileRealName, "cell 2 0 2 1,growx");
+		
+		// location
 		locationLabel = new Label(me, "accountLocation");
+		
 		profileSummaryPane.add(locationLabel, "cell 1 1,alignx trailing");
 		
 		gamerProfileLocation = new JTextField();
-		profileSummaryPane.add(gamerProfileLocation, "cell 2 1 2 1,growx");
 		gamerProfileLocation.setEditable(false);
 		gamerProfileLocation.setColumns(10);
 		
+		profileSummaryPane.add(gamerProfileLocation, "cell 2 1 2 1,growx");
+		
+		// customURL
 		customURLLabel = new Label(me, "accountCustomURL");
+		
 		profileSummaryPane.add(customURLLabel, "cell 1 2,alignx trailing");
 		
 		gamerProfileCustomURL = new JTextField();
 		gamerProfileCustomURL.setEditable(false);
-		profileSummaryPane.add(gamerProfileCustomURL, "cell 2 2 2 1,growx");
 		gamerProfileCustomURL.setColumns(10);
+
+		profileSummaryPane.add(gamerProfileCustomURL, "cell 2 2 2 1,growx");
 		
+		// summary
 		summaryLabel = new Label(me, "accountSummary");
+		
 		profileSummaryPane.add(summaryLabel, "cell 1 3,alignx trailing,aligny top");
 		
-		gamerProfileSummaryScrollPane = new JScrollPane();
-		profileSummaryPane.add(gamerProfileSummaryScrollPane, "cell 2 3 2 1,grow");
-		
 		gamerProfileSummary = new JEditorPane();
-		gamerProfileSummaryScrollPane.setViewportView(gamerProfileSummary);
 		gamerProfileSummary.setContentType("text/html");
 		gamerProfileSummary.setEditable(false);
 		
+		gamerProfileSummaryScrollPane = new JScrollPane();
+		gamerProfileSummaryScrollPane.setViewportView(gamerProfileSummary);
+		
+		profileSummaryPane.add(gamerProfileSummaryScrollPane, "cell 2 3 2 1,grow");
+		
+		// memberSince
 		memberSinceLabel = new Label(me, "accountMemberSince");
+		
 		profileSummaryPane.add(memberSinceLabel, "cell 0 4,alignx trailing");
 		
 		gamerProfileMemberSince = new JTextField();
-		profileSummaryPane.add(gamerProfileMemberSince, "cell 1 4,growx");
 		gamerProfileMemberSince.setEditable(false);
 		gamerProfileMemberSince.setColumns(10);
 		
-		headlineLabel = new Label(me, "accountHeadline");
-		profileSummaryPane.add(headlineLabel, "cell 2 4");
+		profileSummaryPane.add(gamerProfileMemberSince, "cell 1 4,growx");
 		
-		gamerProfileHeadlineScrollPane = new JScrollPane();
-		profileSummaryPane.add(gamerProfileHeadlineScrollPane, "cell 3 4 1 3,grow");
+		// headline
+		headlineLabel = new Label(me, "accountHeadline");
+		
+		profileSummaryPane.add(headlineLabel, "cell 2 4");
 		
 		gamerProfileHeadline = new JTextPane();
 		gamerProfileHeadline.setEditable(false);
+		
+		gamerProfileHeadlineScrollPane = new JScrollPane();
 		gamerProfileHeadlineScrollPane.setViewportView(gamerProfileHeadline);
 		
+		profileSummaryPane.add(gamerProfileHeadlineScrollPane, "cell 3 4 1 3,grow");
+		
+		// steamRating
 		steamRatingLabel = new Label(me, "accoutSteamRating");
+		
 		profileSummaryPane.add(steamRatingLabel, "cell 0 5,alignx trailing");
 		
 		gamerProfileSteamRating = new JTextField();
-		profileSummaryPane.add(gamerProfileSteamRating, "cell 1 5,growx");
 		gamerProfileSteamRating.setEditable(false);
 		gamerProfileSteamRating.setColumns(10);
 		
+		profileSummaryPane.add(gamerProfileSteamRating, "cell 1 5,growx");
+		
+		// hoursPlayedLastTwoWeeks
 		hoursPlayedLastTwoWeeksLabel = new Label(me, "accountHoursPlayedLastTwoWeeks");
+		
 		profileSummaryPane.add(hoursPlayedLastTwoWeeksLabel, "cell 0 6,alignx trailing");
 		
 		gamerProfileHoursPlayedLast2Weeks = new JTextField();
-		profileSummaryPane.add(gamerProfileHoursPlayedLast2Weeks, "cell 1 6,growx");
 		gamerProfileHoursPlayedLast2Weeks.setEditable(false);
 		gamerProfileHoursPlayedLast2Weeks.setColumns(10);
 		
+		profileSummaryPane.add(gamerProfileHoursPlayedLast2Weeks, "cell 1 6,growx");
+		
+		// mostPlayedGamesPane
 		WrapLayout mostPlayedGamesPaneLayout = new WrapLayout();
 		mostPlayedGamesPaneLayout.setVgap(1);
 		mostPlayedGamesPaneLayout.setHgap(1);
 		mostPlayedGamesPaneLayout.setAlignment(FlowLayout.LEFT);
+		
 		mostPlayedGamesPane = new JPanel();
 		mostPlayedGamesPane.setLayout(mostPlayedGamesPaneLayout);
 		
 		mostPlayedGamesScrollPane = new JScrollPane();
-		profileSummaryPane.add(mostPlayedGamesScrollPane, "cell 0 7 4 1,grow");
-		
 		mostPlayedGamesScrollPane.setViewportView(mostPlayedGamesPane);
+		
+		profileSummaryPane.add(mostPlayedGamesScrollPane, "cell 0 7 4 1,grow");
 		
 		// Design
 		mostPlayedGameLauncher1 = new MostPlayedGameLauncher(me);
 		mostPlayedGamesPane.add(mostPlayedGameLauncher1);
+		
 		mostPlayedGameLauncher2 = new MostPlayedGameLauncher(me);
 		mostPlayedGamesPane.add(mostPlayedGameLauncher2);
+		
 		mostPlayedGameLauncher3 = new MostPlayedGameLauncher(me);
 		mostPlayedGamesPane.add(mostPlayedGameLauncher3);
 	}
@@ -1667,100 +1706,137 @@ public class GamesLibrarian extends JFrame {
 	 * Create the Profile Status Sub Tab
 	 */
 	private void createProfileStatusSubTab() {
+		
+		// Main pane
 		profileStatusPane = new JPanel();
 		profileStatusPane.setName("profileStatusTab");
 		profileStatusPane.setLayout(new MigLayout("", "[][grow][][grow]", "[][][][][]"));
+		
 		profilePane.addTab(BundleManager.getUITexts(me, profileStatusPane.getName() + "Title"), null, profileStatusPane, null);
 		
+		// gamerProfileAccountGamerSteamId64
 		gamerProfileAccountGamerSteamId64Label = new Label(me, "accountSteamID64");
+		
 		profileStatusPane.add(gamerProfileAccountGamerSteamId64Label, "cell 0 0,alignx trailing");
 		
 		gamerProfileAccountGamerSteamId64 = new JTextField();
 		gamerProfileAccountGamerSteamId64.setEditable(false);
-		profileStatusPane.add(gamerProfileAccountGamerSteamId64, "cell 1 0,growx");
 		gamerProfileAccountGamerSteamId64.setColumns(10);
 		
+		profileStatusPane.add(gamerProfileAccountGamerSteamId64, "cell 1 0,growx");
+		
+		// gamerProfileAccountOnlineState
 		gamerProfileAccountOnlineStateLabel = new Label(me, "accountOnlineState");
+		
 		profileStatusPane.add(gamerProfileAccountOnlineStateLabel, "cell 2 0,alignx trailing");
 		
 		gamerProfileAccountOnlineState = new JTextField();
 		gamerProfileAccountOnlineState.setEditable(false);
-		profileStatusPane.add(gamerProfileAccountOnlineState, "cell 3 0,growx");
 		gamerProfileAccountOnlineState.setColumns(10);
 		
+		profileStatusPane.add(gamerProfileAccountOnlineState, "cell 3 0,growx");
+		
+		// gamerProfileAccountGamerSteamId
 		gamerProfileAccountGamerSteamIdLabel = new Label(me, "accountGamerSteamID");
+		
 		profileStatusPane.add(gamerProfileAccountGamerSteamIdLabel, "cell 0 1,alignx trailing");
 		
 		gamerProfileAccountGamerSteamId = new JTextField();
 		gamerProfileAccountGamerSteamId.setEditable(false);
-		profileStatusPane.add(gamerProfileAccountGamerSteamId, "cell 1 1,growx");
 		gamerProfileAccountGamerSteamId.setColumns(10);
 		
+		profileStatusPane.add(gamerProfileAccountGamerSteamId, "cell 1 1,growx");
+		
+		// gamerProfileAccountStateMessage
 		gamerProfileAccountStateMessageLabel = new Label(me, "accountStateMessage");
+		
 		profileStatusPane.add(gamerProfileAccountStateMessageLabel, "flowx,cell 2 1,alignx trailing");
 		
 		gamerProfileAccountStateMessage = new JTextField();
 		gamerProfileAccountStateMessage.setEditable(false);
-		profileStatusPane.add(gamerProfileAccountStateMessage, "cell 3 1,growx");
 		gamerProfileAccountStateMessage.setColumns(10);
 		
+		profileStatusPane.add(gamerProfileAccountStateMessage, "cell 3 1,growx");
+		
+		// gamerProfileAccountPrivacyState
 		gamerProfileAccountPrivacyStateLabel = new Label(me, "accountPrivacystate");
+		
 		profileStatusPane.add(gamerProfileAccountPrivacyStateLabel, "cell 0 2,alignx trailing");
 		
 		gamerProfileAccountPrivacyState = new JTextField();
 		gamerProfileAccountPrivacyState.setEditable(false);
-		profileStatusPane.add(gamerProfileAccountPrivacyState, "cell 1 2,growx");
 		gamerProfileAccountPrivacyState.setColumns(10);
 		
+		profileStatusPane.add(gamerProfileAccountPrivacyState, "cell 1 2,growx");
+		
+		// gamerProfileAccountVisibilityState
 		gamerProfileAccountVisibilityStateLabel = new Label(me, "accountVisibilityState");
+		
 		profileStatusPane.add(gamerProfileAccountVisibilityStateLabel, "cell 2 2,alignx trailing");
 		
 		gamerProfileAccountVisibilityState = new JTextField();
 		gamerProfileAccountVisibilityState.setEditable(false);
-		profileStatusPane.add(gamerProfileAccountVisibilityState, "cell 3 2,growx");
 		gamerProfileAccountVisibilityState.setColumns(10);
 		
+		profileStatusPane.add(gamerProfileAccountVisibilityState, "cell 3 2,growx");
+		
+		// gamerProfileAccountVacBanned
 		gamerProfileAccountVacBannedLabel = new Label(me, "accountVACBanned");
+		
 		profileStatusPane.add(gamerProfileAccountVacBannedLabel, "cell 0 3,alignx trailing");
 		
 		gamerProfileAccountVacBanned = new JTextField();
 		gamerProfileAccountVacBanned.setEditable(false);
-		profileStatusPane.add(gamerProfileAccountVacBanned, "cell 1 3,growx");
 		gamerProfileAccountVacBanned.setColumns(10);
 		
+		profileStatusPane.add(gamerProfileAccountVacBanned, "cell 1 3,growx");
+		
+		// gamerProfileAccountTradeBanState
 		gamerProfileAccountTradeBanStateLabel = new Label(me, "accountTradeBanState");
+		
 		profileStatusPane.add(gamerProfileAccountTradeBanStateLabel, "cell 2 3,alignx trailing");
 		
 		gamerProfileAccountTradeBanState = new JTextField();
 		gamerProfileAccountTradeBanState.setEditable(false);
-		profileStatusPane.add(gamerProfileAccountTradeBanState, "cell 3 3,growx");
 		gamerProfileAccountTradeBanState.setColumns(10);
 		
+		profileStatusPane.add(gamerProfileAccountTradeBanState, "cell 3 3,growx");
+		
+		// gamerProfileAccountLimitedAccount
 		gamerProfileAccountLimitedAccountLabel = new Label(me, "accountLimitedAccount");
+		
 		profileStatusPane.add(gamerProfileAccountLimitedAccountLabel, "cell 0 4,alignx trailing");
 		
 		gamerProfileAccountLimitedAccount = new JTextField();
 		gamerProfileAccountLimitedAccount.setEditable(false);
-		profileStatusPane.add(gamerProfileAccountLimitedAccount, "cell 1 4,growx");
 		gamerProfileAccountLimitedAccount.setColumns(10);
+		
+		profileStatusPane.add(gamerProfileAccountLimitedAccount, "cell 1 4,growx");
 	}
 	
 	/**
 	 * Create the Profile Groups Sub Tab
 	 */
 	private void createProfileGroupsSubTab() {
+		
+		profileSteamGroupsTabCardLayout = new CardLayout(0, 0);
+		
+		// Main pane
 		profileGroupsPane = new JPanel();
 		profileGroupsPane.setName("profileGroupsTab");
-		profilePane.addTab(BundleManager.getUITexts(me, profileGroupsPane.getName() + "Title"), null, profileGroupsPane, null);
-
-		profileSteamGroupsTabCardLayout = new CardLayout(0, 0);
 		profileGroupsPane.setLayout(profileSteamGroupsTabCardLayout);
 		
+		profilePane.addTab(BundleManager.getUITexts(me, profileGroupsPane.getName() + "Title"), null, profileGroupsPane, null);
+
+		// steamGroupsScrollPane
 		steamGroupsScrollPane = new JScrollPane();
-		steamGroupsScrollPane.setName(SteamGroupsDisplayMode.List.name());
+		steamGroupsScrollPane.setName(SteamGroupsDisplayMode.Grid.name());
+		
+		profileGroupsPane.add(steamGroupsScrollPane, SteamGroupsDisplayMode.Grid.name());
 		
 		WrapLayout profileGoupsPaneWrapLayout = new WrapLayout();
 		profileGoupsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
+		
 		steamGroupsButtonsPane = new JPanel();
 		steamGroupsButtonsPane.setLayout(profileGoupsPaneWrapLayout);
 		
@@ -1775,8 +1851,7 @@ public class GamesLibrarian extends JFrame {
 		steamGroupsScrollPane.add(steamGroupsButtonsPane);
 		steamGroupsScrollPane.setViewportView(steamGroupsButtonsPane);
 		
-		profileGroupsPane.add(steamGroupsScrollPane, SteamGroupsDisplayMode.Grid.name());
-		
+		// steamGroupsListScrollPane
 		steamGroupsListScrollPane = new JScrollPane();
 		steamGroupsListScrollPane.setName(SteamGroupsDisplayMode.List.name());
 		
@@ -1790,18 +1865,25 @@ public class GamesLibrarian extends JFrame {
 	 * Create the Profile Friends Sub Tab
 	 */
 	private void createProfileFriendsSubTab() {
+		
+		profileSteamFriendsTabCardLayout = new CardLayout(0, 0);
+		
+		// Main pane
 		profileFriendsPane = new JPanel();
 		profileFriendsPane.setName("profileFriendsTab");
-		profilePane.addTab(BundleManager.getUITexts(me, profileFriendsPane.getName() + "Title"), null, profileFriendsPane, null);
-
-		profileSteamFriendsTabCardLayout = new CardLayout(0, 0);
 		profileFriendsPane.setLayout(profileSteamFriendsTabCardLayout);
 		
+		profilePane.addTab(BundleManager.getUITexts(me, profileFriendsPane.getName() + "Title"), null, profileFriendsPane, null);
+
+		// steamFriendsScrollPane
 		steamFriendsScrollPane = new JScrollPane();
 		steamFriendsScrollPane.setName(SteamFriendsDisplayMode.Grid.name());
 		
+		profileFriendsPane.add(steamFriendsScrollPane, SteamFriendsDisplayMode.Grid.name());
+		
 		WrapLayout profileFriendsPaneWrapLayout = new WrapLayout();
 		profileFriendsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
+		
 		steamFriendsButtonsPane = new JPanel();
 		steamFriendsButtonsPane.setLayout(profileFriendsPaneWrapLayout);
 		
@@ -1825,8 +1907,7 @@ public class GamesLibrarian extends JFrame {
 		steamFriendsScrollPane.add(steamFriendsButtonsPane);
 		steamFriendsScrollPane.setViewportView(steamFriendsButtonsPane);
 		
-		profileFriendsPane.add(steamFriendsScrollPane, SteamFriendsDisplayMode.Grid.name());
-		
+		// steamFriendsListScrollPane
 		steamFriendsListScrollPane = new JScrollPane();
 		steamFriendsListScrollPane.setName(SteamFriendsDisplayMode.List.name());
 		
@@ -1840,27 +1921,37 @@ public class GamesLibrarian extends JFrame {
 	 * Create the Profile Tab
 	 */
 	private void createProfileTab() {
-		// Create the Main Pane components
+		
+		// Main pane
 		gamesLibrarianProfile = new JPanel();
 		gamesLibrarianProfile.setName("profileTab");
-		
-		mainPane.addTab(BundleManager.getUITexts(me, "profileTabTitle"), null, gamesLibrarianProfile, null);
 		gamesLibrarianProfile.setLayout(new MigLayout("", "[grow]", "[][][grow]"));
 		
+		mainPane.addTab(BundleManager.getUITexts(me, "profileTabTitle"), null, gamesLibrarianProfile, null);
+		
+		// Commands pane
 		profileCommandsPane = new JPanel();
 		profileCommandsPane.setBorder(new LineBorder(Color.GRAY));
-		gamesLibrarianProfile.add(profileCommandsPane, "cell 0 0,grow");
 		profileCommandsPane.setLayout(new MigLayout("", "[][][][][][][][][][][][][grow]", "[][]"));
 		
+		gamesLibrarianProfile.add(profileCommandsPane, "cell 0 0,grow");
+		
+		// currentProfileTitle
 		currentProfileTitleLabel = new TitleLabel(me, "currentProfileTitleLabelEmpty");
+		
 		profileCommandsPane.add(currentProfileTitleLabel, "cell 0 0 13 1,alignx left,aligny center");
 		
+		// loadProfileButton
 		loadProfileButton = new JButton(loadProfileAction);
+		
 		profileCommandsPane.add(loadProfileButton, "cell 0 1");
 		
+		// addProfileButton
 		addProfileButton = new JButton(addProfileAction);
+		
 		profileCommandsPane.add(addProfileButton, "cell 1 1");
 		
+		// knownProfilesComboBox
 		previousKnownProfileButton = new PreviousSteamProfileButton(me);
 		profileCommandsPane.add(previousKnownProfileButton, "cell 2 1");
 		
@@ -1870,6 +1961,7 @@ public class GamesLibrarian extends JFrame {
 		nextKnownProfileButton = new NextSteamProfileButton(me);
 		profileCommandsPane.add(nextKnownProfileButton, "cell 4 1");
 		
+		// steamGroupsSortMethodComboBox
 		steamGroupsSortMethodLabel = new Label(me, "steamGroupsSortMethodLabel");
 		profileCommandsPane.add(steamGroupsSortMethodLabel, "cell 5 1,alignx trailing");
 		
@@ -1879,11 +1971,12 @@ public class GamesLibrarian extends JFrame {
 		steamGroupsSortMethodComboBox = new SteamGroupsSortMethodComboBox(me);
 		profileCommandsPane.add(steamGroupsSortMethodComboBox, "cell 7 1,growx");
 		
-		new EnumSelectionStateAdapter<SteamGroupsSortMethod>(steamGroupsSortMethodActionGroup, steamGroupsSortMethodComboBox).configure();
-		
 		nextSteamGroupSortMethodButton = new NextSteamGroupSortMethodButton(me);
 		profileCommandsPane.add(nextSteamGroupSortMethodButton, "cell 8 1");
 		
+		new EnumSelectionStateAdapter<SteamGroupsSortMethod>(steamGroupsSortMethodActionGroup, steamGroupsSortMethodComboBox).configure();
+
+		// steamFriendsSortMethodComboBox
 		steamFriendsSortMethodLabel = new Label(me, "steamFriendsSortMethodLabel");
 		profileCommandsPane.add(steamFriendsSortMethodLabel, "cell 9 1,alignx trailing");
 		
@@ -1893,51 +1986,70 @@ public class GamesLibrarian extends JFrame {
 		steamFriendsSortMethodComboBox = new SteamFriendsSortMethodComboBox(me);
 		profileCommandsPane.add(steamFriendsSortMethodComboBox, "cell 11 1,growx");
 		
-		new EnumSelectionStateAdapter<SteamFriendsSortMethod>(steamFriendsSortMethodActionGroup, steamFriendsSortMethodComboBox).configure();
-		
 		nextSteamFriendSortMethodButton = new NextSteamFriendSortMethodButton(me);
 		profileCommandsPane.add(nextSteamFriendSortMethodButton, "cell 12 1");
 		
+		new EnumSelectionStateAdapter<SteamFriendsSortMethod>(steamFriendsSortMethodActionGroup, steamFriendsSortMethodComboBox).configure();
+		
+		// profileOptionsPane
 		profileOptionsPane = new JPanel();
 		profileOptionsPane.setBorder(new LineBorder(Color.GRAY));
 		profileOptionsPane.setLayout(new MigLayout("", "[][][][][][][][][grow]", "[]"));
 		
 		gamesLibrarianProfile.add(profileOptionsPane, "cell 0 1,grow");
 		
+		// profileLeftClickAction
 		profileLeftClickActionLabel = new Label(me, "leftClickActionLabel");
+		
 		profileOptionsPane.add(profileLeftClickActionLabel, "cell 0 0");
 		
 		ButtonGroup profileLeftClickActionButtonGroup = new ButtonGroup();
 		
 		profileLeftClickSelectButton = new GameLeftClickActionButton(me, "leftClickActionSelect", GameLeftClickAction.Select);
 		profileLeftClickSelectButton.addItemListener(new GameLeftClickActionButtonListener(me));
-		profileOptionsPane.add(profileLeftClickSelectButton, "cell 1 0");
+		
 		profileLeftClickActionButtonGroup.add(profileLeftClickSelectButton);
+
+		profileOptionsPane.add(profileLeftClickSelectButton, "cell 1 0");
 		
 		profileLeftClickLaunchButton = new GameLeftClickActionButton(me, "leftClickActionLaunch", GameLeftClickAction.Launch);
 		profileLeftClickLaunchButton.addItemListener(new GameLeftClickActionButtonListener(me));
-		profileOptionsPane.add(profileLeftClickLaunchButton, "cell 2 0");
+		
 		profileLeftClickActionButtonGroup.add(profileLeftClickLaunchButton);
+
+		profileOptionsPane.add(profileLeftClickLaunchButton, "cell 2 0");
+		
+		//steamGroupsDisplayMode
+		steamGroupsDisplayModeLabel = new Label(me, "steamGroupsDisplayModeLabel");
+		
+		profileOptionsPane.add(steamGroupsDisplayModeLabel, "cell 3 0");
 		
 		ButtonGroup steamGroupsDisplayModeButtonGroup = new ButtonGroup();
 		
-		steamGroupsDisplayModeLabel = new Label(me, "steamGroupsDisplayModeLabel");
-		profileOptionsPane.add(steamGroupsDisplayModeLabel, "cell 3 0");
 		steamGroupsDisplayModeList = (JToggleButton) ActionGroupFactory.getToggleButton(steamGroupsDisplayModeListAction);
+		
 		profileOptionsPane.add(steamGroupsDisplayModeList, "cell 4 0");
 		steamGroupsDisplayModeButtonGroup.add(steamGroupsDisplayModeList);
+		
 		steamGroupsDisplayModeGrid = (JToggleButton) ActionGroupFactory.getToggleButton(steamGroupsDisplayModeGridAction);
+		
 		profileOptionsPane.add(steamGroupsDisplayModeGrid, "cell 5 0");
 		steamGroupsDisplayModeButtonGroup.add(steamGroupsDisplayModeGrid);
 		
+		// steamFriendsDisplayMode
+		steamFriendsDisplayModeLabel = new Label(me, "steamFriendsDisplayModeLabel");
+
+		profileOptionsPane.add(steamFriendsDisplayModeLabel, "cell 6 0");
+		
 		ButtonGroup steamFriendsDisplayModeButtonGroup = new ButtonGroup();
 		
-		steamFriendsDisplayModeLabel = new Label(me, "steamFriendsDisplayModeLabel");
-		profileOptionsPane.add(steamFriendsDisplayModeLabel, "cell 6 0");
 		steamFriendsDisplayModeList = (JToggleButton) ActionGroupFactory.getToggleButton(steamFriendsDisplayModeListAction);
+		
 		profileOptionsPane.add(steamFriendsDisplayModeList, "cell 7 0");
 		steamFriendsDisplayModeButtonGroup.add(steamFriendsDisplayModeList);
+		
 		steamFriendsDisplayModeGrid = (JToggleButton) ActionGroupFactory.getToggleButton(steamFriendsDisplayModeGridAction);
+		
 		profileOptionsPane.add(steamFriendsDisplayModeGrid, "cell 8 0");
 		steamFriendsDisplayModeButtonGroup.add(steamFriendsDisplayModeGrid);
 		
@@ -1961,25 +2073,35 @@ public class GamesLibrarian extends JFrame {
 	 * Create the Options Tab
 	 */
 	private void createOptionsTab() {
+		
+		// Main pane
 		gamesLibrarianOptions = new JPanel();
 		gamesLibrarianOptions.setName("optionsTab");
+		gamesLibrarianOptions.setLayout(new MigLayout("", "[][][][grow]", "[][][][][][][][][]"));
 		
 		mainPane.addTab(BundleManager.getUITexts(me, "optionsTabTitle"), null, gamesLibrarianOptions, null);
-		gamesLibrarianOptions.setLayout(new MigLayout("", "[][][][grow]", "[][][][][][][][][]"));
+
+		// windowsDistribution
 		windowsDistributionLabel = new Label(me, "windowsDistributionLabel");
-		gamesLibrarianOptions.add(windowsDistributionLabel, "cell 0 0,alignx trailing");
 		
-		resetOptionsButton = new JButton(resetOptionsAction);
-		gamesLibrarianOptions.add(resetOptionsButton, "cell 1 0 2 1");
+		gamesLibrarianOptions.add(windowsDistributionLabel, "cell 0 0,alignx trailing");
 		
 		windowsDistributionTextField = new JTextField();
 		windowsDistributionTextField.setToolTipText(BundleManager.getUITexts(me, "windowsDistributionTextFieldToolTip"));
 		windowsDistributionTextField.setEditable(false);
 		windowsDistributionTextField.setColumns(10);
 		windowsDistributionLabel.setLabelFor(windowsDistributionTextField);
+		
 		gamesLibrarianOptions.add(windowsDistributionTextField, "cell 3 0,growx");
 		
+		// resetOptions
+		resetOptionsButton = new JButton(resetOptionsAction);
+		
+		gamesLibrarianOptions.add(resetOptionsButton, "cell 1 0 2 1");
+		
+		// steamExecutable
 		steamExecutableLabel = new Label(me, "steamExecutableOptionLabel");
+		
 		gamesLibrarianOptions.add(steamExecutableLabel, "cell 0 1,alignx trailing");
 		
 		steamExecutableButton = new JButton(steamExecutableAction);
@@ -1990,9 +2112,12 @@ public class GamesLibrarian extends JFrame {
 		steamExecutableTextField.setEditable(false);
 		steamExecutableTextField.setColumns(10);
 		steamExecutableLabel.setLabelFor(steamExecutableTextField);
+		
 		gamesLibrarianOptions.add(steamExecutableTextField, "cell 3 1,growx");
 		
+		// gamerSteamId
 		gamerSteamIdLabel = new Label(me, "gamerSteamIdLabel");
+		
 		gamesLibrarianOptions.add(gamerSteamIdLabel, "cell 0 2,alignx trailing");
 		
 		gamerSteamIdTextField = new JTextField();
@@ -2001,42 +2126,55 @@ public class GamesLibrarian extends JFrame {
 		gamerSteamIdTextField.setColumns(10);
 		gamesLibrarianOptions.add(gamerSteamIdTextField, "cell 1 2 3 1,growx");
 		
+		// defaultSteamLaunchMethod
 		defaultSteamLaunchMethodLabel = new Label(me, "defaultSteamLaunchMethodLabel");
+		
 		gamesLibrarianOptions.add(defaultSteamLaunchMethodLabel, "cell 0 3,alignx trailing");
 		
 		defaultSteamLaunchMethodComboBox = new SteamLaunchMethodComboBox(me, null, SteamLaunchMethodComboBox.Type.DefaultMethod);
 		defaultSteamLaunchMethodComboBox.setToolTipText(BundleManager.getUITexts(me, "defaultSteamLaunchMethodComboBoxTootlTip"));
+		
 		gamesLibrarianOptions.add(defaultSteamLaunchMethodComboBox, "cell 1 3 3 1");
 		
 		new EnumSelectionStateAdapter<SteamLaunchMethod>(defaultSteamLaunchMethodActionGroup, defaultSteamLaunchMethodComboBox).configure();
 		
+		// gameLeftClickAction
 		gameLeftClickActionOptionLabel = new Label(me, "gameLeftClickActionLabel");
+		
 		gamesLibrarianOptions.add(gameLeftClickActionOptionLabel, "cell 0 4,alignx trailing");
 		
 		gameLeftClickActionComboBox = new GameLeftClickActionComboBox(me);
 		gameLeftClickActionComboBox.setToolTipText(BundleManager.getUITexts(me, "gameLeftClickActionToolTip"));
+		
 		gamesLibrarianOptions.add(gameLeftClickActionComboBox, "cell 1 4 3 1");
 		
-		displayToolTipsLabel = new Label(me, "displayToolTipsLabel");
-		gamesLibrarianOptions.add(displayToolTipsLabel, "cell 0 5,alignx trailing");
-		
-		ButtonGroup displayTooltipsButtonGroup = new ButtonGroup();
-		displayTooltipsYesButton = (JToggleButton) ActionGroupFactory.getToggleButton(displayToolTipsYesAction);
-		gamesLibrarianOptions.add(displayTooltipsYesButton, "cell 1 5");
-		displayTooltipsButtonGroup.add(displayTooltipsYesButton);
-		displayTooltipsNoButton = (JToggleButton) ActionGroupFactory.getToggleButton(displayToolTipsNoAction);
-		gamesLibrarianOptions.add(displayTooltipsNoButton, "cell 2 5");
-		displayTooltipsButtonGroup.add(displayTooltipsNoButton);
-		
+		// dumpMode
 		dumpModeLabel = new Label(me, "dumpModeLabel");
-		gamesLibrarianOptions.add(dumpModeLabel, "cell 0 6,alignx trailing");
+		gamesLibrarianOptions.add(dumpModeLabel, "cell 0 5,alignx trailing");
 		
 		dumpModeComboBox = new DumpModeComboBox(me);
 		dumpModeComboBox.setToolTipText(BundleManager.getUITexts(me, "dumpModeToolTip"));
-		gamesLibrarianOptions.add(dumpModeComboBox, "cell 1 6 3 1");
+		gamesLibrarianOptions.add(dumpModeComboBox, "cell 1 5 3 1");
 		
 		new EnumSelectionStateAdapter<DumpMode>(dumpModeActionGroup, dumpModeComboBox).configure();
 		
+		// displayTooltips
+		displayToolTipsLabel = new Label(me, "displayToolTipsLabel");
+		gamesLibrarianOptions.add(displayToolTipsLabel, "cell 0 6,alignx trailing");
+
+		ButtonGroup displayTooltipsButtonGroup = new ButtonGroup();
+		
+		displayTooltipsYesButton = (JToggleButton) ActionGroupFactory.getToggleButton(displayToolTipsYesAction);
+		
+		gamesLibrarianOptions.add(displayTooltipsYesButton, "cell 1 6");
+		displayTooltipsButtonGroup.add(displayTooltipsYesButton);
+		
+		displayTooltipsNoButton = (JToggleButton) ActionGroupFactory.getToggleButton(displayToolTipsNoAction);
+		
+		gamesLibrarianOptions.add(displayTooltipsNoButton, "cell 2 6");
+		displayTooltipsButtonGroup.add(displayTooltipsNoButton);
+		
+		// localeChoice
 		localeChoiceLabel = new Label(me, "localeChoiceLabel");
 		gamesLibrarianOptions.add(localeChoiceLabel, "cell 0 7,alignx trailing");
 		
@@ -2046,8 +2184,9 @@ public class GamesLibrarian extends JFrame {
 		
 		new EnumSelectionStateAdapter<LocaleChoice>(localeChoiceActionGroup, localeChoiceComboBox).configure();
 		
-		LookAndFeelLabel = new Label(me, "lookAndFeelLabel");
-		gamesLibrarianOptions.add(LookAndFeelLabel, "cell 0 8,alignx trailing");
+		// lookAndFeel
+		lookAndFeelLabel = new Label(me, "lookAndFeelLabel");
+		gamesLibrarianOptions.add(lookAndFeelLabel, "cell 0 8,alignx trailing");
 		
 		lookAndFeelInfoComboBox = new LookAndFeelInfoComboBox(me);
 		gamesLibrarianOptions.add(lookAndFeelInfoComboBox, "cell 1 8 3 1");
