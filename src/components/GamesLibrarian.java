@@ -67,6 +67,7 @@ import components.actions.ExitAction;
 import components.actions.GameChoiceAction;
 import components.actions.GotoAction;
 import components.actions.LoadAllAchievementsAction;
+import components.actions.LoadAllGamesStatsAction;
 import components.actions.LoadGameStatsAction;
 import components.actions.LoadLibraryAction;
 import components.actions.LoadParametersAction;
@@ -265,7 +266,7 @@ public class GamesLibrarian extends JFrame {
 	
 	JTextPane consoleTextPane;
 
-	// Library Main Pane
+	// Library Main pane
 	
 	JTabbedPane libraryMainPane;
 	CardLayout libraryPaneCardLayout;
@@ -307,7 +308,7 @@ public class GamesLibrarian extends JFrame {
 
 	// Library Statistics Pane
 	
-	JPanel libraryStatisticsPane;
+	JPanel libraryStatisticsMainPane;
 	
 	JLabel libraryTotalGamesLabel;
 	JTextField libraryTotalGamesTextField;
@@ -328,6 +329,20 @@ public class GamesLibrarian extends JFrame {
 	JLabel libraryTotalHoursLast2WeeksLabel;
 	JTextField libraryTotalHoursLast2WeeksTextField;
 	JLabel libraryTotalHoursLast2WeeksFormattedLabel;
+	
+	private JButton loadAllGamesStatsButton;
+	
+	private JLabel libraryTotalGamesWithErroredStatsLabel;
+	JTextField libraryTotalGamesWithErroredStatsTextField;
+	
+	private JLabel libraryTotalAchievementsLabel;
+	JTextField libraryTotalAchievementsTextField;
+	
+	private JLabel libraryTotalUnlockedAchievementsLabel;
+	JTextField libraryTotalUnlockedAchievementsTextField;
+	
+	private JLabel libraryPercentageAchievedLabel;
+	JTextField libraryPercentageAchievedTextField;
 	
 	// Game Tab
 	
@@ -595,6 +610,9 @@ public class GamesLibrarian extends JFrame {
 	LoadLibraryAction loadLibraryAction;
 	private JMenuItem loadLibraryMenuItem;
 
+	LoadAllGamesStatsAction loadAllGamesStatsAction;
+	private JMenuItem loadAllGamesStatsMenuItem;
+	
 	private JMenu librarySortMethodMenu;
 	private ActionGroup librarySortMethodActionGroup;
 	
@@ -735,6 +753,8 @@ public class GamesLibrarian extends JFrame {
 		saveParametersAction = new SaveParametersAction(me);
 		saveParametersMenuItem = fileMenu.add(saveParametersAction);
 		
+		fileMenu.addSeparator();
+		
 		// exitMenuItem
 		exitAction = new ExitAction(me);
 		exitMenuItem = fileMenu.add(exitAction);
@@ -826,9 +846,13 @@ public class GamesLibrarian extends JFrame {
 		gameChoiceMenu.add(twoGamesChoiceMenuItem);
 		gameChoiceMenu.add(threeGamesChoiceMenuItem);
 
+		controlsMenu.addSeparator();
+		
 		// refreshGamesListMenuItem
 		refreshGamesListAction = new RefreshGamesListAction(me);
 		refreshGamesListMenuItem = controlsMenu.add(refreshGamesListAction);
+		
+		controlsMenu.addSeparator();
 		
 		// scrollLockMenuItem
 		scrollLockAction = new ScrollLockAction(me);
@@ -857,6 +881,11 @@ public class GamesLibrarian extends JFrame {
 		// loadLibraryMenuItem
 		loadLibraryAction = new LoadLibraryAction(me);
 		loadLibraryMenuItem = libraryMenu.add(loadLibraryAction);
+		
+		loadAllGamesStatsAction = new LoadAllGamesStatsAction(me);
+		loadAllGamesStatsMenuItem = libraryMenu.add(loadAllGamesStatsAction);
+		
+		libraryMenu.addSeparator();
 		
 		// libraryDisplayModeMenu
 		libraryDisplayModeMenu = new JMenu(BundleManager.getUITexts(me, "libraryDisplayModeMenuLabel"));
@@ -898,6 +927,8 @@ public class GamesLibrarian extends JFrame {
 		loadAllAchievementsAction = new LoadAllAchievementsAction(me);
 		loadAllAchievementsMenuItem = gameMenu.add(loadAllAchievementsAction);
 		
+		gameMenu.addSeparator();
+		
 		// achievementsSortMethodMenu
 		steamAchievementsSortMethodMenu = new JMenu(BundleManager.getUITexts(me, "steamAchievementsSortMethodMenuLabel"));
 		steamAchievementsSortMethodMenu.setIcon(GamesLibrary.librarySortMethod);
@@ -938,6 +969,8 @@ public class GamesLibrarian extends JFrame {
 		addProfileAction = new AddProfileAction(me);
 		addProfileMenuItem = profileMenu.add(addProfileAction);
 		
+		profileMenu.addSeparator();
+		
 		// steamGroupsSortMethodMenu
 		steamGroupsSortMethodMenu = new JMenu(BundleManager.getUITexts(me, "steamGroupsSortMethodMenuLabel"));
 		steamGroupsSortMethodMenu.setIcon(GamesLibrary.librarySortMethod);
@@ -961,6 +994,8 @@ public class GamesLibrarian extends JFrame {
 			steamFriendsSortMethodActionGroup.add(steamFriendsSortMethodAction);
 			steamFriendsSortMethodMenu.add(ActionGroupFactory.getRadioMenuItem(steamFriendsSortMethodAction));
 		}
+		
+		profileMenu.addSeparator();
 		
 		// steamGroupsDisplayModeMenu
 		steamGroupsDisplayModeMenu = new JMenu(BundleManager.getUITexts(me, "steamGroupsDisplayModeMenuLabel"));
@@ -1014,6 +1049,8 @@ public class GamesLibrarian extends JFrame {
 		steamExecutableAction = new SteamExecutableAction(me);
 		steamExecutableMenuItem = optionsMenu.add(steamExecutableAction);
 
+		optionsMenu.addSeparator();
+		
 		// defaultSteamLaunchMethodMenu
 		defaultSteamLaunchMethodMenu = new JMenu(BundleManager.getUITexts(me, "defaultSteamLaunchMethodMenuLabel"));
 		defaultSteamLaunchMethodMenu.setIcon(GamesLibrary.defaultSteamLaunchMethodIcon);
@@ -1053,6 +1090,8 @@ public class GamesLibrarian extends JFrame {
 		displayToolTipsMenu.add(ActionGroupFactory.getRadioMenuItem(displayToolTipsYesAction));
 		displayToolTipsMenu.add(ActionGroupFactory.getRadioMenuItem(displayToolTipsNoAction));
 
+		optionsMenu.addSeparator();
+		
 		// localeChoiceMenu
 		localeChoiceMenu = new JMenu(BundleManager.getUITexts(me, "localeChoiceMenuLabel"));
 		localeChoiceMenu.setIcon(GamesLibrary.localeChoiceIcon);
@@ -1093,7 +1132,7 @@ public class GamesLibrarian extends JFrame {
 			loadParametersMenuItem, saveParametersMenuItem, exitMenuItem, 
 			rollMenuItem, oneGameChoiceMenuItem, twoGamesChoiceMenuItem, threeGamesChoiceMenuItem,
 			refreshGamesListMenuItem, scrollLockMenuItem, debugMenuItem, clearConsoleMenuItem, viewParametersMenuItem,
-			loadLibraryMenuItem,
+			loadLibraryMenuItem, loadAllGamesStatsMenuItem,
 			loadGameStatsMenuItem, loadAllAchievementsMenuItem,
 			loadProfileMenuItem, addProfileMenuItem,
 			resetOptionsMenuItem, steamExecutableMenuItem,
@@ -1159,6 +1198,7 @@ public class GamesLibrarian extends JFrame {
 		libraryMenu.setText(BundleManager.getUITexts(me, "libraryMenuLabel"));
 		
 		loadLibraryAction.translate();
+		loadAllGamesStatsAction.translate();
 		
 		librarySortMethodMenu.setText(BundleManager.getUITexts(me, "librarySortMethodMenuLabel"));
 		for (Action action : librarySortMethodActionGroup.getActions())
@@ -1477,80 +1517,125 @@ public class GamesLibrarian extends JFrame {
 		
 		if (librarian != null)
 			librarian.updateSteamGamesTable(launchButtons);
-
 	}
 	
 	/**
-	 * Create the Library Statistics Sub Tab
+	 * Create the Library Statistics Main Tab
 	 */
-	private void createLibraryStatisticsTab() {
+	private void createLibraryStatisticsMainTab() {
 		
-		// libraryStatisticsPane
-		libraryStatisticsPane = new JPanel();
-		libraryStatisticsPane.setName("libraryStatisticsTab");
-		libraryStatisticsPane.setLayout(new MigLayout("", "[][][][][][][][]", "[][][][][][]"));
+		// Main pane
+		libraryStatisticsMainPane = new JPanel();
+		libraryStatisticsMainPane.setName("libraryStatisticsMainTab");
+		libraryStatisticsMainPane.setLayout(new MigLayout("", "[][][]", "[][][][][][][][][][]"));
 		
-		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsTabTitle")), GamesLibrary.libraryStatisticsMenuIcon, libraryStatisticsPane, null);
+		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsMainTabTitle")), GamesLibrary.libraryStatisticsMenuIcon, libraryStatisticsMainPane, null);
 		
 		// libraryTotalGames
 		libraryTotalGamesLabel = new Label(me, "libraryTotalGamesLabel");
-		libraryStatisticsPane.add(libraryTotalGamesLabel, "cell 0 0,alignx trailing");
+		libraryStatisticsMainPane.add(libraryTotalGamesLabel, "cell 0 0,alignx trailing");
 		
 		libraryTotalGamesTextField = new JTextField();
+		libraryTotalGamesTextField.setEditable(false);
 		libraryTotalGamesTextField.setColumns(10);
 		
-		libraryStatisticsPane.add(libraryTotalGamesTextField, "flowx,cell 1 0,growx");
+		libraryStatisticsMainPane.add(libraryTotalGamesTextField, "flowx,cell 1 0,growx");
 		
 		// libraryTotalGamesWithStats
 		libraryTotalGamesWithStatsLabel = new Label(me, "libraryTotalGamesWithStatsLabel");
-		libraryStatisticsPane.add(libraryTotalGamesWithStatsLabel, "cell 0 1,alignx trailing");
+		libraryStatisticsMainPane.add(libraryTotalGamesWithStatsLabel, "cell 0 1,alignx trailing");
 		
 		libraryTotalGamesWithStatsTextField = new JTextField();
+		libraryTotalGamesWithStatsTextField.setEditable(false);
 		libraryTotalGamesWithStatsTextField.setColumns(10);
 		
-		libraryStatisticsPane.add(libraryTotalGamesWithStatsTextField, "cell 1 1");
+		libraryStatisticsMainPane.add(libraryTotalGamesWithStatsTextField, "cell 1 1");
+		
+		// loadAllGameStatsButton
+		loadAllGamesStatsButton = new JButton(loadAllGamesStatsAction);
+		libraryStatisticsMainPane.add(loadAllGamesStatsButton, "cell 2 1");
 		
 		// libraryTotalGamesWithGlobalStats
 		libraryTotalGamesWithGlobalStatsLabel = new Label(me, "libraryTotalGamesWithGlobalStatsLabel");
-		libraryStatisticsPane.add(libraryTotalGamesWithGlobalStatsLabel, "cell 0 2,alignx trailing");
+		libraryStatisticsMainPane.add(libraryTotalGamesWithGlobalStatsLabel, "cell 0 2,alignx trailing");
 		
 		libraryTotalGamesWithGlobalStatsTextField = new JTextField();
+		libraryTotalGamesWithGlobalStatsTextField.setEditable(false);
 		libraryTotalGamesWithGlobalStatsTextField.setColumns(10);
 		
-		libraryStatisticsPane.add(libraryTotalGamesWithGlobalStatsTextField, "cell 1 2,growx");
+		libraryStatisticsMainPane.add(libraryTotalGamesWithGlobalStatsTextField, "cell 1 2,growx");
 		
 		// libraryTotalGamesWithStoreLink
 		libraryTotalGamesWithStoreLinkLabel = new Label(me, "libraryTotalGamesWithStoreLinkLabel");
-		libraryStatisticsPane.add(libraryTotalGamesWithStoreLinkLabel, "cell 0 3,alignx trailing");
+		libraryStatisticsMainPane.add(libraryTotalGamesWithStoreLinkLabel, "cell 0 3,alignx trailing");
 		
 		libraryTotalGamesWithStoreLinkTextField = new JTextField();
+		libraryTotalGamesWithStoreLinkTextField.setEditable(false);
 		libraryTotalGamesWithStoreLinkTextField.setColumns(10);
 		
-		libraryStatisticsPane.add(libraryTotalGamesWithStoreLinkTextField, "cell 1 3,growx");
+		libraryStatisticsMainPane.add(libraryTotalGamesWithStoreLinkTextField, "cell 1 3,growx");
 		
 		// libraryTotalWastedHours
 		libraryTotalWastedHoursLabel = new Label(me, "libraryTotalWastedHoursLabel");
-		libraryStatisticsPane.add(libraryTotalWastedHoursLabel, "cell 0 4,alignx trailing");
+		libraryStatisticsMainPane.add(libraryTotalWastedHoursLabel, "cell 0 4,alignx trailing");
 		
 		libraryTotalWastedHoursTextField = new JTextField();
+		libraryTotalWastedHoursTextField.setEditable(false);
 		libraryTotalWastedHoursTextField.setColumns(10);
 		
-		libraryStatisticsPane.add(libraryTotalWastedHoursTextField, "cell 1 4,growx");
+		libraryStatisticsMainPane.add(libraryTotalWastedHoursTextField, "cell 1 4,growx");
 		
 		libraryTotalWastedHoursFormattedLabel = new JLabel("");
-		libraryStatisticsPane.add(libraryTotalWastedHoursFormattedLabel, "cell 2 4 6 1");
+		libraryStatisticsMainPane.add(libraryTotalWastedHoursFormattedLabel, "cell 2 4");
 		
 		// libraryTotalHoursLast2Week
 		libraryTotalHoursLast2WeeksLabel = new Label(me, "libraryTotalHoursLast2WeeksLabel");
-		libraryStatisticsPane.add(libraryTotalHoursLast2WeeksLabel, "cell 0 5,alignx trailing");
+		libraryStatisticsMainPane.add(libraryTotalHoursLast2WeeksLabel, "cell 0 5,alignx trailing");
 		
 		libraryTotalHoursLast2WeeksTextField = new JTextField();
+		libraryTotalHoursLast2WeeksTextField.setEditable(false);
 		libraryTotalHoursLast2WeeksTextField.setColumns(10);
 		
-		libraryStatisticsPane.add(libraryTotalHoursLast2WeeksTextField, "cell 1 5,growx");
+		libraryStatisticsMainPane.add(libraryTotalHoursLast2WeeksTextField, "cell 1 5,growx");
 		
 		libraryTotalHoursLast2WeeksFormattedLabel = new JLabel("");
-		libraryStatisticsPane.add(libraryTotalHoursLast2WeeksFormattedLabel, "cell 2 5 6 1");
+		libraryStatisticsMainPane.add(libraryTotalHoursLast2WeeksFormattedLabel, "cell 2 5");
+		
+		// libraryTotalGamesWithErroredStats
+		libraryTotalGamesWithErroredStatsLabel = new JLabel("libraryTotalGamesWithErroredStats");
+		libraryStatisticsMainPane.add(libraryTotalGamesWithErroredStatsLabel, "cell 0 6,alignx trailing");
+		
+		libraryTotalGamesWithErroredStatsTextField = new JTextField();
+		libraryTotalGamesWithErroredStatsTextField.setEditable(false);
+		libraryTotalGamesWithErroredStatsTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryTotalGamesWithErroredStatsTextField, "cell 1 6,growx");
+		
+		// libraryTotalAchievements
+		libraryTotalAchievementsLabel = new JLabel("libraryTotalAchievements");
+		libraryStatisticsMainPane.add(libraryTotalAchievementsLabel, "cell 0 7,alignx trailing");
+		
+		libraryTotalAchievementsTextField = new JTextField();
+		libraryTotalAchievementsTextField.setEditable(false);
+		libraryTotalAchievementsTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryTotalAchievementsTextField, "cell 1 7,growx");
+		
+		// libraryTotalUnlockedAchievements
+		libraryTotalUnlockedAchievementsLabel = new JLabel("libraryTotalUnlockedAchievements");
+		libraryStatisticsMainPane.add(libraryTotalUnlockedAchievementsLabel, "cell 0 8,alignx trailing");
+		
+		libraryTotalUnlockedAchievementsTextField = new JTextField();
+		libraryTotalUnlockedAchievementsTextField.setEditable(false);
+		libraryTotalUnlockedAchievementsTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryTotalUnlockedAchievementsTextField, "cell 1 8,growx");
+		
+		// libraryPercentageAchieved
+		libraryPercentageAchievedLabel = new JLabel("libraryPercentageAchieved");
+		libraryStatisticsMainPane.add(libraryPercentageAchievedLabel, "cell 0 9,alignx trailing");
+		
+		libraryPercentageAchievedTextField = new JTextField();
+		libraryPercentageAchievedTextField.setEditable(false);
+		libraryPercentageAchievedTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryPercentageAchievedTextField, "cell 1 9,growx");
 	}
 	
 	/**
@@ -1641,8 +1726,8 @@ public class GamesLibrarian extends JFrame {
 		// Create the Library Sub Tab
 		createLibraryTab();
 		
-		// Create the Library Statistics Sub Tab
-		createLibraryStatisticsTab();
+		// Create the Library Statistics Main Tab
+		createLibraryStatisticsMainTab();
 		
 		// First visible card panel
 		libraryPaneCardLayout.show(libraryPane, SteamGamesDisplayMode.LaunchPane.name());
@@ -2420,7 +2505,7 @@ public class GamesLibrarian extends JFrame {
 		// Create the Main Menu
 		createMainMenu();
 		
-		// Create the Main Pane
+		// Create the Main pane
 		mainPane = new JTabbedPane(JTabbedPane.TOP);
 		mainPane.setBorder(new EmptyBorder(2, 1, 1, 0));
 		setContentPane(mainPane);

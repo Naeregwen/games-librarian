@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
 	"gameIcon",
 	"gameLogo",
 	"gameLogoSmall",
+	"appID",
 	"steamID64",
 	"playerSteamID",
 	"customURL",
@@ -38,6 +39,7 @@ public class SteamGameStats {
 	String gameIcon;
 	String gameLogo;
 	String gameLogoSmall;
+	String appID; // Needed to attach a SteamGameStats to SteamGame. Builded by SteamGameStatsParser during SteamGameStats parsing
 	String steamID64;
 	String playerSteamID; // Custom for SteamAchievementsTable columns management
 	String customURL;
@@ -176,6 +178,21 @@ public class SteamGameStats {
 	@XmlElement
 	public void setGameLogoSmall(String gameLogoSmall) {
 		this.gameLogoSmall = gameLogoSmall;
+	}
+
+	/**
+	 * @return the appID
+	 */
+	public String getAppID() {
+		return appID;
+	}
+
+	/**
+	 * @param appID the appID to set
+	 */
+	@XmlElement
+	public void setAppID(String appID) {
+		this.appID = appID;
 	}
 
 	/**
