@@ -74,6 +74,7 @@ import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
 import commons.enums.LaunchType;
 import commons.enums.LibrarianTab;
+import commons.enums.LibraryTab;
 import commons.enums.LocaleChoice;
 import commons.enums.OnlineState;
 import commons.enums.PrivacyState;
@@ -1297,6 +1298,20 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		// Empty steamGamesTable
 		if (steamGamesTable != null) view.gamesLibraryListScrollPane.remove(steamGamesTable);
 	}
+	
+	/**
+	 * Clear TextFields
+	 */
+	void cleanLibraryStatisticsPane() {
+		
+		view.libraryTotalGamesTextField.setText("");
+		view.libraryTotalGamesWithStatsTextField.setText("");
+		view.libraryTotalGamesWithGlobalStatsTextField.setText("");
+		view.libraryTotalGamesWithStoreLinkTextField.setText("");
+		
+		view.libraryTotalWastedHoursTextField.setText("");
+		view.libraryTotalHoursLast2WeeksTextField.setText("");
+	}
 
 	/**
 	 * Remove steamAchievementsTable from steamAchievementsScrollPane
@@ -1485,8 +1500,75 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			view.libraryScrollPane.getVerticalScrollBar().setUnitIncrement(maxHeight + ((WrapLayout)view.buttonsLibraryPane.getLayout()).getVgap());
 		}
 		
-		// Update LibraryTab Title Label
-		updateLibraryTitleLabel();
+		// Update LibraryMainTab Title Label
+		updateLibraryMainTitleLabel();
+	}
+	
+	/**
+	 * Update display of libraryStatistics Tab
+	 */
+	public void updateLibraryStatisticsTab() {
+		
+		// Clear first
+		cleanLibraryStatisticsPane();
+		
+		// Compute library statistics
+		if (parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamGames() != null) {
+			
+			Integer totalGames = 0;
+			Integer totalGamesWithStats = 0;
+			Integer totalGamesWithGlobalStats = 0;
+			Integer totalGamesWithStoreLink = 0;
+			
+			Double totalWastedHours = 0d;
+			Double totalHoursLast2Weeks = 0d;
+			
+			List<SteamGame> gamesList = parameters.getSteamGamesList().getSteamGames();
+			totalGames = gamesList.size();
+			Iterator<SteamGame> gameIterator = gamesList.iterator();
+			while (gameIterator.hasNext()) {
+				SteamGame game = gameIterator.next();
+				if (game.getStatsLink() != null && game.getStatsLink().startsWith(Steam.steamCommunityShortURL))
+					totalGamesWithStats++;
+				if (game.getGlobalStatsLink() != null && game.getGlobalStatsLink().startsWith(Steam.steamCommunityShortURL))
+					totalGamesWithGlobalStats++;
+				if (game.getStoreLink() != null && game.getStoreLink().startsWith(Steam.steamCommunityShortURL))
+					totalGamesWithStoreLink++;
+				if (game.getHoursOnRecord() != null && !game.getHoursOnRecord().trim().equals("")) {
+					try {
+						Double hoursOnRecord = Double.parseDouble(game.getHoursOnRecord());
+						totalWastedHours += hoursOnRecord;
+					} catch (NumberFormatException e) {
+						tee.printStackTrace(e);
+					}
+				}
+				if (game.getHoursLast2Weeks() != null && !game.getHoursLast2Weeks().trim().equals("")) {
+					try {
+						Double hoursLast2Weeks = Double.parseDouble(game.getHoursLast2Weeks());
+						totalHoursLast2Weeks += hoursLast2Weeks;
+					} catch (NumberFormatException e) {
+						tee.printStackTrace(e);
+					}
+				}
+			}
+			
+			// Display results
+			view.libraryTotalGamesTextField.setText(totalGames.toString());
+			view.libraryTotalGamesWithStatsTextField.setText(totalGamesWithStats.toString());
+			view.libraryTotalGamesWithGlobalStatsTextField.setText(totalGamesWithGlobalStats.toString());
+			view.libraryTotalGamesWithStoreLinkTextField.setText(totalGamesWithStoreLink.toString());
+			
+			// Translate duration labels
+			translateDurationLabels(totalWastedHours, totalHoursLast2Weeks);
+		}
+	}
+	
+	/**
+	 * Update display of all Library Tabs
+	 */
+	public void updateAllLibraryTabs() {
+		updateGamesLibraryTab();
+		updateLibraryStatisticsTab();
 	}
 	
 	/**
@@ -1561,6 +1643,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	 */
 	public void updateProfileTab(SteamProfile steamProfile) {
 		
+		// Clear first
 		clearProfileTab(false);
 		
 		// Update current profile
@@ -1631,10 +1714,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		String steamId = currentSteamProfile != null && currentSteamProfile.getId() != null ?  SteamProfile.htmlIdToText(currentSteamProfile.getId()) : "";
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (currentSteamProfile != null && currentSteamProfile.getId() != null) {
-			view.profilePane.setTitleAt(index, setTabTitle(String.format(UITexts.getString("profileSummaryTabTitleWithName"), steamId)));
+			view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileSummaryTabTitleWithName"), steamId)));
 			view.profilePane.setIconAt(index, getOnlineStateIcon());
 		} else
-			view.profilePane.setTitleAt(index, setTabTitle(UITexts.getString("profileSummaryTabTitle")));
+			view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("profileSummaryTabTitle")));
 	}
 	
 	/**
@@ -1648,9 +1731,9 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		String steamId = currentSteamProfile != null && currentSteamProfile.getId() != null ? SteamProfile.htmlIdToText(currentSteamProfile.getId()) : "";
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (currentSteamProfile != null && currentSteamProfile.getId() != null)
-			view.profilePane.setTitleAt(index, setTabTitle(String.format(UITexts.getString("profileStatusTabTitleWithName"), steamId)));
+			view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileStatusTabTitleWithName"), steamId)));
 		else
-			view.profilePane.setTitleAt(index, setTabTitle(UITexts.getString("profileStatusTabTitle")));
+			view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("profileStatusTabTitle")));
 		view.profilePane.setIconAt(index, getPrivacyStateIcon());
 	}
 
@@ -1790,31 +1873,47 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	// Update Tab titles
 	//
 	
-	private String setTabTitle(String title) {
-		return "<html><div style='padding: 2px'>" + title + "</div></html>";
-	}
-	
 	/**
-	 * Update title of LibraryTab
+	 * Update title of 
+	 * <ul>
+	 * <li>Library Main Tab</li>
+	 * <li>Library Tab</li>
+	 * </ul>
 	 */
-	public void updateLibraryTabTitle() {
+	public void updateLibraryMainTabTitle() {
+		
+		// Get libraryMainTab index
+		int index = getTabComponentIndexByName(view.mainPane, "libraryMainTab");
+		if (index < 0 || index >= view.mainPane.getTabCount()) return;
 		
 		// Get libraryTab index
-		int index = getTabComponentIndexByName(view.mainPane, "libraryTab");
-		if (index < 0 || index >= view.mainPane.getTabCount()) return;
+		int lbraryTabIndex = getTabComponentIndexByName(view.libraryMainPane, "libraryTab");
+		if (lbraryTabIndex < 0 || lbraryTabIndex >= view.libraryMainPane.getTabCount()) return;
+		
 		// Update Tab title
 		String steamId = SteamProfile.htmlIdToText(currentSteamProfile.getId());
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (steamGamesListReading) {
+			String title = GamesLibrarian.getTabTitle(UITexts.getString("libraryMainTabTitle"));
 			view.mainPane.setIconAt(index, GamesLibrary.ajaxLoaderIcon);
-			view.mainPane.setTitleAt(index, setTabTitle(UITexts.getString("libraryTabTitle")));
+			view.mainPane.setTitleAt(index, title);
+			view.libraryMainPane.setIconAt(lbraryTabIndex, GamesLibrary.ajaxLoaderIcon);
+			view.libraryMainPane.setTitleAt(lbraryTabIndex, title);
 		} else {
 			view.mainPane.setIconAt(index, null);
-			if (parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamGames() != null)
-				view.mainPane.setTitleAt(index, setTabTitle(String.format(UITexts.getString("libraryTabTitleWithNumber"), steamId, parameters.getSteamGamesList().getSteamGames().size())));
-			else
-				view.mainPane.setTitleAt(index, setTabTitle(UITexts.getString("libraryTabTitle")));
+			view.libraryMainPane.setIconAt(lbraryTabIndex, GamesLibrary.libraryMenuIcon);
+			if (parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamGames() != null) {
+				String title = GamesLibrarian.getTabTitle(String.format(UITexts.getString("libraryMainTabTitleWithNumber"), steamId, parameters.getSteamGamesList().getSteamGames().size()));
+				view.mainPane.setTitleAt(index, title);
+				view.libraryMainPane.setTitleAt(lbraryTabIndex, title);
+			} else {
+				String title = GamesLibrarian.getTabTitle(UITexts.getString("libraryMainTabTitle"));
+				view.mainPane.setTitleAt(index, title);
+				view.libraryMainPane.setTitleAt(lbraryTabIndex, title);
+			}
 		}
+		
+		
 	}
 	
 	/**
@@ -1835,10 +1934,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 				if (lastSteamGameWithStats != null && game.getAppID() != null && game.getAppID().equalsIgnoreCase(lastSteamGameWithStats.getAppID())) {
 					int friendsWithSameGame = view.friendsWithSameGamePane.getComponents().length;
 					view.mainPane.setTitleAt(index, friendsWithSameGame <= 1 ? 
-							setTabTitle(String.format(UITexts.getString("gameTabTitleWithNameAndFriend"), game.getName(), steamId, friendsWithSameGame)) 
-							: setTabTitle(String.format(UITexts.getString("gameTabTitleWithNameAndFriends"), game.getName(), steamId, friendsWithSameGame)));	
+							GamesLibrarian.getTabTitle(String.format(UITexts.getString("gameTabTitleWithNameAndFriend"), game.getName(), steamId, friendsWithSameGame)) 
+							: GamesLibrarian.getTabTitle(String.format(UITexts.getString("gameTabTitleWithNameAndFriends"), game.getName(), steamId, friendsWithSameGame)));	
 				} else {
-					view.mainPane.setTitleAt(index, setTabTitle(String.format(UITexts.getString("gameTabTitleWithName"), game.getName(), steamId)));
+					view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("gameTabTitleWithName"), game.getName(), steamId)));
 				}
 				if (game.getIcon() != null && !game.getIcon().isEmpty()) { 
 					URL urlIcon;
@@ -1851,7 +1950,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 					}
 				}
 			} else
-				view.mainPane.setTitleAt(index, setTabTitle(UITexts.getString("gameTabTitle")));
+				view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("gameTabTitle")));
 			view.mainPane.setIconAt(index, null);
 		}
 	}
@@ -1876,14 +1975,14 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		String steamId = currentSteamProfile != null && currentSteamProfile.getId() != null ? SteamProfile.htmlIdToText(currentSteamProfile.getId()) : "";
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (steamProfileReading || steamFriendsListReading) {
-			view.mainPane.setTitleAt(index, setTabTitle(String.format(parameters.getUITexts().getString("currentProfileTitleLabelReading"), steamId)));
+			view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(parameters.getUITexts().getString("currentProfileTitleLabelReading"), steamId)));
 			view.mainPane.setIconAt(index, GamesLibrary.ajaxLoaderIcon);
 		} else {
 			if (currentSteamProfile != null && steamId!= null && !steamId.trim().equals("")) {
-				view.mainPane.setTitleAt(index, setTabTitle(String.format(UITexts.getString("profileTabTitleWithName"), steamId)));
+				view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileTabTitleWithName"), steamId)));
 				view.mainPane.setIconAt(index, getOnlineStateIcon());
 			} else {
-				view.mainPane.setTitleAt(index, setTabTitle(UITexts.getString("profileTabTitle")));
+				view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("profileTabTitle")));
 				view.mainPane.setIconAt(index, null);				
 			}
 		}
@@ -1895,7 +1994,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		if (index < 0 || index >= view.profilePane.getTabCount()) return;
 		// Update Tab title
 		ResourceBundle UITexts = parameters.getUITexts();
-		view.profilePane.setTitleAt(index, setTabTitle(UITexts.getString("profileGroupsTabTitle")));
+		view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("profileGroupsTabTitle")));
 	}
 	
 	/**
@@ -1909,9 +2008,9 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		String steamId = SteamProfile.htmlIdToText(currentSteamProfile.getId());
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (currentSteamProfile != null && currentSteamProfile.getSteamGroups().size() >= 0)
-			view.profilePane.setTitleAt(index, setTabTitle(String.format(UITexts.getString("profileGroupsTabTitleWithNumber"), steamId, currentSteamProfile.getSteamGroups().size())));
+			view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileGroupsTabTitleWithNumber"), steamId, currentSteamProfile.getSteamGroups().size())));
 		else
-			view.profilePane.setTitleAt(index, setTabTitle(UITexts.getString("profileGroupsTabTitle")));
+			view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("profileGroupsTabTitle")));
 		view.profilePane.setIconAt(index, GamesLibrary.groupsIcon);
 	}
 	
@@ -1932,15 +2031,15 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			} else
 				view.profilePane.setIconAt(index, GamesLibrary.friendsIcon);
 			if (steamFriendsListReading)
-				view.profilePane.setTitleAt(index, setTabTitle(String.format(UITexts.getString("profileFriendsTabTitleWithNumber"), steamId, view.profileFriendsPane.getComponentCount())));
+				view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileFriendsTabTitleWithNumber"), steamId, view.profileFriendsPane.getComponentCount())));
 			else
-				view.profilePane.setTitleAt(index, setTabTitle(UITexts.getString("profileFriendsTabTitle")));
+				view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("profileFriendsTabTitle")));
 		} else {
 			view.profilePane.setIconAt(index, GamesLibrary.friendsIcon);
 			if (currentSteamProfile != null && currentSteamProfile.getSteamFriends().size() >= 0)
-				view.profilePane.setTitleAt(index, setTabTitle(String.format(UITexts.getString("profileFriendsTabTitleWithNumber"), steamId, currentSteamProfile.getSteamFriends().size())));
+				view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileFriendsTabTitleWithNumber"), steamId, currentSteamProfile.getSteamFriends().size())));
 			else
-				view.profilePane.setTitleAt(index, setTabTitle(UITexts.getString("profileFriendsTabTitle")));
+				view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("profileFriendsTabTitle")));
 		}
 	}
 	
@@ -1951,7 +2050,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	/**
 	 * Update display of libraryTitleLabel
 	 */
-	private void updateLibraryTitleLabel() {
+	private void updateLibraryMainTitleLabel() {
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamGames() != null && currentSteamProfile != null) {
 			// Update library title label
@@ -2255,6 +2354,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	public JPanel getMainTabFromEnum(TabEnum tabEnum) {
 		if (tabEnum instanceof ProfileTab)
 			return view.gamesLibrarianProfile;
+		else if (tabEnum instanceof LibraryTab)
+			return view.gamesLibrarianLibrary;
 		return null;
 	}
 
@@ -2266,6 +2367,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	public JTabbedPane getSubTabFromEnum(TabEnum tabEnum) {
 		if (tabEnum instanceof ProfileTab)
 			return view.profilePane;
+		else if (tabEnum instanceof LibraryTab)
+			return view.libraryMainPane;
 		return null;
 	}
 
@@ -2289,6 +2392,11 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			case Groups: return view.profileGroupsPane;
 			case Friends: return view.profileFriendsPane;
 			}
+		else if (tabEnum instanceof LibraryTab)
+			switch ((LibraryTab)tabEnum) {
+			case LibraryGamesList: return view.libraryPane;
+			case LibraryStatistics: return view.libraryStatisticsPane;
+			}
 		return null;
 	}
 	
@@ -2297,7 +2405,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	 * @param tab
 	 */
 	public void displayMainTab(TabEnum tabEnum) {
-		JPanel tab = tabEnum instanceof ProfileTab ? getMainTabFromEnum(tabEnum) : getTabFromEnum(tabEnum);
+		JPanel tab = tabEnum instanceof LibrarianTab ? getTabFromEnum(tabEnum) : getMainTabFromEnum(tabEnum);
 		if (tab == null) return;
 		if (!view.mainPane.getSelectedComponent().equals(tab))
 			view.mainPane.setSelectedComponent(tab);
@@ -2731,7 +2839,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			view.libraryDisplayModeComboBox.setSelectedItem(SteamGamesDisplayMode.values()[0]);
 		}
 		// Update Library Tab display
-		updateGamesLibraryTab();
+		updateAllLibraryTabs();
 		
 		//
 		// Game Tab
@@ -2891,10 +2999,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		
 		// Clear gameList
 		parameters.setSteamGamesList(null);
-		updateGamesLibraryTab();
+		updateAllLibraryTabs();
 		// Read gameList
 		steamGamesListReading = true;
-		updateLibraryTabTitle();
+		updateLibraryMainTabTitle();
 		
 		(steamGamesListReader = new SteamGamesListReader(this)).execute();
 		
@@ -3311,6 +3419,46 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	}
 	
 	/**
+	 * Translate duration Labels
+	 */
+	private void translateDurationLabels(Double totalWastedHours, Double totalHoursLast2Weeks) {
+		
+		int totalHours = (int) totalWastedHours.doubleValue();
+		double totalMinutesDecimal = ((totalWastedHours - totalHours) * 60d);
+		int totalMinutes = (int) totalMinutesDecimal;
+		int totalSeconds = (int) ((totalMinutesDecimal - totalMinutes) * 60d);
+		
+		long totalWastedMilliseconds = (totalHours * 3600 + totalMinutes * 60 + totalSeconds) * 1000L;
+		
+		totalHours = (int) totalHoursLast2Weeks.doubleValue();
+		totalMinutesDecimal = ((totalHoursLast2Weeks - totalHours) * 60d);
+		totalMinutes = (int) totalMinutesDecimal;
+		totalSeconds = (int) ((totalMinutesDecimal - totalMinutes) * 60d);
+		
+		long totalMillisecondsLast2Weeks = (totalHours * 3600 + totalMinutes * 60 + totalSeconds) * 1000L;
+		
+		HashMap<String,String> tokens = new HashMap<String,String>();
+		tokens.put("year", BundleManager.getResources(me, "year"));
+		tokens.put("years", BundleManager.getResources(me, "years"));
+		tokens.put("month", BundleManager.getResources(me, "month"));
+		tokens.put("months", BundleManager.getResources(me, "months"));
+		tokens.put("day", BundleManager.getResources(me, "day"));
+		tokens.put("days", BundleManager.getResources(me, "days"));
+		tokens.put("hour", BundleManager.getResources(me, "hour"));
+		tokens.put("hours", BundleManager.getResources(me, "hours"));
+		tokens.put("minute", BundleManager.getResources(me, "minute"));
+		tokens.put("minutes", BundleManager.getResources(me, "minutes"));
+
+		view.libraryTotalWastedHoursTextField.setText(String.format(BundleManager.getResources(me, "decimalTimeFormat"), totalWastedHours));
+		if (totalWastedMilliseconds > 0)
+			view.libraryTotalWastedHoursFormattedLabel.setText(Strings.translateDuration(Strings.formatDurationWords(totalWastedMilliseconds, true, true), tokens));
+		
+		view.libraryTotalHoursLast2WeeksTextField.setText(String.format(BundleManager.getResources(me, "decimalTimeFormat"), totalHoursLast2Weeks));
+		if (totalMillisecondsLast2Weeks > 0)
+			view.libraryTotalHoursLast2WeeksFormattedLabel.setText(Strings.translateDuration(Strings.formatDurationWords(totalMillisecondsLast2Weeks, true, true), tokens));
+	}
+	
+	/**
 	 * Translate the application
 	 */
 	private void translate() {
@@ -3321,13 +3469,13 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		view.translateActionsAndMenus();
 		
 		//
-		// Tabs titles
+		// Main Tabs titles
 		//
 		int index = 0;
 		for (Component component : view.mainPane.getComponents()) {
 			if (component != null && component instanceof JPanel && component.getName() != null) 
-				if (component.getName().equals("libraryTab"))
-					updateLibraryTabTitle();
+				if (component.getName().equals("libraryMainTab"))
+					updateLibraryMainTabTitle();
 				else if (component.getName().equals("profileTab"))
 					updateProfileTabTitle();
 				else if (component.getName().equals("gameTab"))
@@ -3348,7 +3496,16 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		//
 		// Library Tab
 		//
-		updateLibraryTitleLabel();
+		updateLibraryMainTitleLabel();
+		
+		// Library Sub Tab titles
+		index = 0;
+		for (Component component : view.libraryMainPane.getComponents()) {
+			if (component != null && component instanceof JPanel && component.getName() != null) 
+				if (!component.getName().equals("libraryTab")) // Already done in updateLibraryMainTabTitle()
+					view.libraryMainPane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString(((JPanel) component).getName() + "Title")));
+			index += 1;
+		}
 		
 		view.librarySortMethodLabel.setText(UITexts.getString("librarySortMethodLabel"));
 		updateLibrarySortMethodTooltips();
@@ -3364,6 +3521,18 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			while (buttons.hasMoreElements())
 				((LaunchButton) buttons.nextElement()).updateIconAndTooltip();
 		}
+		
+		//
+		// Library Statistics Tab
+		//
+		view.libraryTotalGamesLabel.setText(UITexts.getString("libraryTotalGamesLabel"));
+		view.libraryTotalGamesWithStatsLabel.setText(UITexts.getString("libraryTotalGamesWithStatsLabel"));
+		view.libraryTotalGamesWithGlobalStatsLabel.setText(UITexts.getString("libraryTotalGamesWithGlobalStatsLabel"));
+		view.libraryTotalGamesWithStoreLinkLabel.setText(UITexts.getString("libraryTotalGamesWithStoreLinkLabel"));
+		view.libraryTotalWastedHoursLabel.setText(UITexts.getString("libraryTotalWastedHoursLabel"));
+		view.libraryTotalHoursLast2WeeksLabel.setText(UITexts.getString("libraryTotalHoursLast2WeeksLabel"));
+		
+		updateLibraryStatisticsTab();
 		
 		//
 		// Game Tab
@@ -3403,7 +3572,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		
 		view.profileLeftClickActionLabel.setText(UITexts.getString("leftClickActionLabel"));
 
-		// Sub Tab titles
+		// Profile Sub Tab titles
 		index = 0;
 		for (Component component : view.profilePane.getComponents()) {
 			if (component != null && component instanceof JPanel && component.getName() != null) 
@@ -3414,7 +3583,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 				else if (component.getName().equals("profileFriendsTab") && currentSteamProfile != null && currentSteamProfile.getSteamFriends().size() > 0)
 					updateProfileFriendsTabTitle();
 				else
-					view.profilePane.setTitleAt(index, UITexts.getString(((JPanel) component).getName() + "Title"));
+					view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString(((JPanel) component).getName() + "Title")));
 			index += 1;
 		}
 		

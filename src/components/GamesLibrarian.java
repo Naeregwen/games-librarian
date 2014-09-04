@@ -44,6 +44,7 @@ import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
 import commons.enums.LaunchType;
 import commons.enums.LibrarianTab;
+import commons.enums.LibraryTab;
 import commons.enums.LocaleChoice;
 import commons.enums.ProfileTab;
 import commons.enums.SteamAchievementsListsSortMethod;
@@ -263,6 +264,11 @@ public class GamesLibrarian extends JFrame {
 	JButton viewParametersButton;
 	
 	JTextPane consoleTextPane;
+
+	// Library Main Pane
+	
+	JTabbedPane libraryMainPane;
+	CardLayout libraryPaneCardLayout;
 	
 	// Library Tab
 	
@@ -298,6 +304,30 @@ public class GamesLibrarian extends JFrame {
 	LaunchButton launchButton4;
 	LaunchButton launchButton5;
 	LaunchButton launchButton6;	
+
+	// Library Statistics Pane
+	
+	JPanel libraryStatisticsPane;
+	
+	JLabel libraryTotalGamesLabel;
+	JTextField libraryTotalGamesTextField;
+	
+	JLabel libraryTotalGamesWithStatsLabel;
+	JTextField libraryTotalGamesWithStatsTextField;
+	
+	JLabel libraryTotalGamesWithGlobalStatsLabel;
+	JTextField libraryTotalGamesWithGlobalStatsTextField;
+	
+	JLabel libraryTotalGamesWithStoreLinkLabel;
+	JTextField libraryTotalGamesWithStoreLinkTextField;
+	
+	JLabel libraryTotalWastedHoursLabel;
+	JTextField libraryTotalWastedHoursTextField;
+	JLabel libraryTotalWastedHoursFormattedLabel;
+	
+	JLabel libraryTotalHoursLast2WeeksLabel;
+	JTextField libraryTotalHoursLast2WeeksTextField;
+	JLabel libraryTotalHoursLast2WeeksFormattedLabel;
 	
 	// Game Tab
 	
@@ -336,7 +366,9 @@ public class GamesLibrarian extends JFrame {
 
 	JScrollPane steamAchievementsScrollPane;
 	
-	// Profile Tab
+	// Profile Main Tab
+	
+	JTabbedPane profilePane;
 	
 	JPanel profileCommandsPane;
 	
@@ -370,7 +402,6 @@ public class GamesLibrarian extends JFrame {
 
 	// Profile Sub Tab
 	
-	JTabbedPane profilePane;
 	JPanel profileSummaryPane;
 	JPanel profileStatusPane;
 	JPanel profileGroupsPane;
@@ -524,6 +555,8 @@ public class GamesLibrarian extends JFrame {
 	GotoAction gotoProfileStatusAction;
 	GotoAction gotoProfileGroupsAction;
 	GotoAction gotoProfileFriendsAction;
+	GotoAction gotoLibraryGamesListAction;
+	GotoAction gotoLibraryStatisticsAction;
 	
 	// Controls Menu
 	
@@ -721,13 +754,28 @@ public class GamesLibrarian extends JFrame {
 		gotoProfileAction = new GotoAction(me, LibrarianTab.Profile);
 		gotoOptionsAction = new GotoAction(me, LibrarianTab.Options);
 		
+		// gotoControls
 		gotoMenu.add(gotoControlsAction);
-		gotoMenu.add(gotoLibraryAction);
+		
+		// gotoLibrary
+		JMenu gotoLibrarySubTabSubMenu = new JMenu(gotoLibraryAction);
+		
+		// gotoLibrary Sub Items
+		JMenuItem gotoLibraryGamesListMenuItem = new JMenuItem(gotoLibraryGamesListAction = new GotoAction(me, LibraryTab.LibraryGamesList));
+		JMenuItem gotoLibraryStatisticsMenuItem = new JMenuItem(gotoLibraryStatisticsAction = new GotoAction(me, LibraryTab.LibraryStatistics));
+		
+		gotoLibrarySubTabSubMenu.add(gotoLibraryGamesListMenuItem);
+		gotoLibrarySubTabSubMenu.add(gotoLibraryStatisticsMenuItem);
+		
+		gotoMenu.add(gotoLibrarySubTabSubMenu);
+		
+		// gotoGame
 		gotoMenu.add(gotoGameAction);
 		
-		// gotoProfileSubTabSubMenu
+		// gotoProfile
 		JMenu gotoProfileSubTabSubMenu = new JMenu(gotoProfileAction);
 		
+		// gotoProfile Sub Items
 		JMenuItem gotoProfileSummaryMenuItem = new JMenuItem(gotoProfileSummaryAction = new GotoAction(me, ProfileTab.Summary));
 		JMenuItem gotoProfileStatusMenuItem = new JMenuItem(gotoProfileStatusAction = new GotoAction(me, ProfileTab.Status));
 		JMenuItem gotoProfileGroupsMenuItem = new JMenuItem(gotoProfileGroupsAction = new GotoAction(me, ProfileTab.Groups));
@@ -739,6 +787,8 @@ public class GamesLibrarian extends JFrame {
 		gotoProfileSubTabSubMenu.add(gotoProfileFriendsMenuItem);
 		
 		gotoMenu.add(gotoProfileSubTabSubMenu);
+		
+		// gotoOptions
 		gotoMenu.add(gotoOptionsAction);
 		
 		//
@@ -1076,6 +1126,9 @@ public class GamesLibrarian extends JFrame {
 		gotoProfileAction.translate();
 		gotoOptionsAction.translate();
 		
+		gotoLibraryGamesListAction.translate();
+		gotoLibraryStatisticsAction.translate();
+		
 		gotoProfileSummaryAction.translate();
 		gotoProfileStatusAction.translate();
 		gotoProfileGroupsAction.translate();
@@ -1196,6 +1249,16 @@ public class GamesLibrarian extends JFrame {
 	}
 	
 	/**
+	 * Produce an HTML formatted tab title from passed title
+	 * Made static to be supported by WindowBuilder
+	 * @param title string to format
+	 * @return an HTML formatted string
+	 */
+	static String getTabTitle(String title) {
+		return "<html><div style='padding: 2px'>" + title + "</div></html>";
+	}
+	
+	/**
 	 * Create the Controls Tab
 	 */
 	private void createControlsTab() {
@@ -1205,7 +1268,7 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianControls.setName("controlsTab");
 		gamesLibrarianControls.setLayout(new MigLayout("", "[][][grow]", "[][][][][][][][][grow]"));
 		
-		mainPane.addTab(BundleManager.getUITexts(me, "controlsTabTitle"), null, gamesLibrarianControls, null);
+		mainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "controlsTabTitle")), null, gamesLibrarianControls, null);
 
 		// rollButton
 		rollButton = new JButton(rollAction);
@@ -1338,16 +1401,169 @@ public class GamesLibrarian extends JFrame {
 	}
 	
 	/**
-	 * Create the Library Tab
+	 * Create the Library Sub Tab
 	 */
 	private void createLibraryTab() {
 		
+		libraryPaneCardLayout = new CardLayout(0, 0);
+		
+		// Main pane
+		libraryPane = new JPanel();
+		libraryPane.setName("libraryTab");
+		libraryPane.setLayout(libraryPaneCardLayout);
+		
+		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryMainTabTitle")), GamesLibrary.libraryMenuIcon, libraryPane, null);
+		
+		// libraryPane
+		WrapLayout libraryPaneWrapLayout = new WrapLayout();
+		libraryPaneWrapLayout.setAlignment(FlowLayout.LEFT);
+		
+		buttonsLibraryPane = new JPanel();
+		buttonsLibraryPane.setLayout(libraryPaneWrapLayout);
+		
+		libraryScrollPane = new JScrollPane();
+		libraryScrollPane.add(buttonsLibraryPane);
+		libraryScrollPane.setViewportView(buttonsLibraryPane);
+		
+		gamesLibraryButtonGroup = new ButtonGroup();
+		List<LaunchButton> launchButtons = new Vector<LaunchButton>();
+		
+		launchButton1 = new LaunchButton(me, "", LaunchType.library, null, null);
+		launchButton1.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		
+		buttonsLibraryPane.add(launchButton1);
+		gamesLibraryButtonGroup.add(launchButton1);
+		launchButtons.add(launchButton1);
+		
+		launchButton2 = new LaunchButton(me, "", LaunchType.library, null, null);
+		launchButton2.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		
+		buttonsLibraryPane.add(launchButton2);
+		gamesLibraryButtonGroup.add(launchButton2);
+		launchButtons.add(launchButton2);
+		
+		launchButton3 = new LaunchButton(me, "", LaunchType.library, null, null);
+		launchButton3.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		
+		buttonsLibraryPane.add(launchButton3);
+		gamesLibraryButtonGroup.add(launchButton3);
+		launchButtons.add(launchButton3);
+		
+		launchButton4 = new LaunchButton(me, "", LaunchType.library, null, null);
+		launchButton4.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		
+		buttonsLibraryPane.add(launchButton4);
+		gamesLibraryButtonGroup.add(launchButton4);
+		launchButtons.add(launchButton4);
+		
+		launchButton5 = new LaunchButton(me, "", LaunchType.library, null, null);
+		launchButton5.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		
+		buttonsLibraryPane.add(launchButton5);
+		gamesLibraryButtonGroup.add(launchButton5);
+		launchButtons.add(launchButton5);
+		
+		launchButton6 = new LaunchButton(me, "", LaunchType.library, null, null);
+		launchButton6.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		
+		buttonsLibraryPane.add(launchButton6);
+		gamesLibraryButtonGroup.add(launchButton6);
+		launchButtons.add(launchButton6);
+		
+		libraryPane.add(libraryScrollPane, SteamGamesDisplayMode.LaunchPane.name());
+		
+		gamesLibraryListScrollPane = new JScrollPane();
+		libraryPane.add(gamesLibraryListScrollPane, SteamGamesDisplayMode.ConfigurationPane.name());
+		
+		if (librarian != null)
+			librarian.updateSteamGamesTable(launchButtons);
+
+	}
+	
+	/**
+	 * Create the Library Statistics Sub Tab
+	 */
+	private void createLibraryStatisticsTab() {
+		
+		// libraryStatisticsPane
+		libraryStatisticsPane = new JPanel();
+		libraryStatisticsPane.setName("libraryStatisticsTab");
+		libraryStatisticsPane.setLayout(new MigLayout("", "[][][][][][][][]", "[][][][][][]"));
+		
+		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsTabTitle")), GamesLibrary.libraryStatisticsMenuIcon, libraryStatisticsPane, null);
+		
+		// libraryTotalGames
+		libraryTotalGamesLabel = new Label(me, "libraryTotalGamesLabel");
+		libraryStatisticsPane.add(libraryTotalGamesLabel, "cell 0 0,alignx trailing");
+		
+		libraryTotalGamesTextField = new JTextField();
+		libraryTotalGamesTextField.setColumns(10);
+		
+		libraryStatisticsPane.add(libraryTotalGamesTextField, "flowx,cell 1 0,growx");
+		
+		// libraryTotalGamesWithStats
+		libraryTotalGamesWithStatsLabel = new Label(me, "libraryTotalGamesWithStatsLabel");
+		libraryStatisticsPane.add(libraryTotalGamesWithStatsLabel, "cell 0 1,alignx trailing");
+		
+		libraryTotalGamesWithStatsTextField = new JTextField();
+		libraryTotalGamesWithStatsTextField.setColumns(10);
+		
+		libraryStatisticsPane.add(libraryTotalGamesWithStatsTextField, "cell 1 1");
+		
+		// libraryTotalGamesWithGlobalStats
+		libraryTotalGamesWithGlobalStatsLabel = new Label(me, "libraryTotalGamesWithGlobalStatsLabel");
+		libraryStatisticsPane.add(libraryTotalGamesWithGlobalStatsLabel, "cell 0 2,alignx trailing");
+		
+		libraryTotalGamesWithGlobalStatsTextField = new JTextField();
+		libraryTotalGamesWithGlobalStatsTextField.setColumns(10);
+		
+		libraryStatisticsPane.add(libraryTotalGamesWithGlobalStatsTextField, "cell 1 2,growx");
+		
+		// libraryTotalGamesWithStoreLink
+		libraryTotalGamesWithStoreLinkLabel = new Label(me, "libraryTotalGamesWithStoreLinkLabel");
+		libraryStatisticsPane.add(libraryTotalGamesWithStoreLinkLabel, "cell 0 3,alignx trailing");
+		
+		libraryTotalGamesWithStoreLinkTextField = new JTextField();
+		libraryTotalGamesWithStoreLinkTextField.setColumns(10);
+		
+		libraryStatisticsPane.add(libraryTotalGamesWithStoreLinkTextField, "cell 1 3,growx");
+		
+		// libraryTotalWastedHours
+		libraryTotalWastedHoursLabel = new Label(me, "libraryTotalWastedHoursLabel");
+		libraryStatisticsPane.add(libraryTotalWastedHoursLabel, "cell 0 4,alignx trailing");
+		
+		libraryTotalWastedHoursTextField = new JTextField();
+		libraryTotalWastedHoursTextField.setColumns(10);
+		
+		libraryStatisticsPane.add(libraryTotalWastedHoursTextField, "cell 1 4,growx");
+		
+		libraryTotalWastedHoursFormattedLabel = new JLabel("");
+		libraryStatisticsPane.add(libraryTotalWastedHoursFormattedLabel, "cell 2 4 6 1");
+		
+		// libraryTotalHoursLast2Week
+		libraryTotalHoursLast2WeeksLabel = new Label(me, "libraryTotalHoursLast2WeeksLabel");
+		libraryStatisticsPane.add(libraryTotalHoursLast2WeeksLabel, "cell 0 5,alignx trailing");
+		
+		libraryTotalHoursLast2WeeksTextField = new JTextField();
+		libraryTotalHoursLast2WeeksTextField.setColumns(10);
+		
+		libraryStatisticsPane.add(libraryTotalHoursLast2WeeksTextField, "cell 1 5,growx");
+		
+		libraryTotalHoursLast2WeeksFormattedLabel = new JLabel("");
+		libraryStatisticsPane.add(libraryTotalHoursLast2WeeksFormattedLabel, "cell 2 5 6 1");
+	}
+	
+	/**
+	 * Create the Library Main Tab
+	 */
+	private void createLibraryMainTab() {
+		
 		// Main pane
 		gamesLibrarianLibrary = new JPanel();
-		gamesLibrarianLibrary.setName("libraryTab");
+		gamesLibrarianLibrary.setName("libraryMainTab");
 		gamesLibrarianLibrary.setLayout(new MigLayout("", "[grow]", "[][][grow]"));
 		
-		mainPane.addTab(BundleManager.getUITexts(me, "libraryTabTitle"), null, gamesLibrarianLibrary, null);
+		mainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryMainTabTitle")), null, gamesLibrarianLibrary, null);
 		
 		// Commands pane
 		libraryCommandsPane = new JPanel();
@@ -1418,81 +1634,20 @@ public class GamesLibrarian extends JFrame {
 		libraryOptionsPane.add(libraryLeftClickLaunchButton, "cell 2 0");
 		libraryLeftClickActionButtonGroup.add(libraryLeftClickLaunchButton);
 		
-		// libraryPane
-		WrapLayout libraryPaneWrapLayout = new WrapLayout();
-		libraryPaneWrapLayout.setAlignment(FlowLayout.LEFT);
+		// libraryMainPane
+		libraryMainPane = new JTabbedPane(JTabbedPane.TOP);
+		gamesLibrarianLibrary.add(libraryMainPane, "cell 0 2,grow");
 		
-		buttonsLibraryPane = new JPanel();
-		buttonsLibraryPane.setLayout(libraryPaneWrapLayout);
+		// Create the Library Sub Tab
+		createLibraryTab();
 		
-		libraryScrollPane = new JScrollPane();
-		libraryScrollPane.add(buttonsLibraryPane);
-		libraryScrollPane.setViewportView(buttonsLibraryPane);
-		
-		gamesLibraryButtonGroup = new ButtonGroup();
-		List<LaunchButton> launchButtons = new Vector<LaunchButton>();
-		
-		launchButton1 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton1.setIcon(GamesLibrary.gameImageUnavailableIcon);
-		
-		buttonsLibraryPane.add(launchButton1);
-		gamesLibraryButtonGroup.add(launchButton1);
-		launchButtons.add(launchButton1);
-		
-		launchButton2 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton2.setIcon(GamesLibrary.gameImageUnavailableIcon);
-		
-		buttonsLibraryPane.add(launchButton2);
-		gamesLibraryButtonGroup.add(launchButton2);
-		launchButtons.add(launchButton2);
-		
-		launchButton3 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton3.setIcon(GamesLibrary.gameImageUnavailableIcon);
-		
-		buttonsLibraryPane.add(launchButton3);
-		gamesLibraryButtonGroup.add(launchButton3);
-		launchButtons.add(launchButton3);
-		
-		launchButton4 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton4.setIcon(GamesLibrary.gameImageUnavailableIcon);
-		
-		buttonsLibraryPane.add(launchButton4);
-		gamesLibraryButtonGroup.add(launchButton4);
-		launchButtons.add(launchButton4);
-		
-		launchButton5 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton5.setIcon(GamesLibrary.gameImageUnavailableIcon);
-		
-		buttonsLibraryPane.add(launchButton5);
-		gamesLibraryButtonGroup.add(launchButton5);
-		launchButtons.add(launchButton5);
-		
-		launchButton6 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton6.setIcon(GamesLibrary.gameImageUnavailableIcon);
-		
-		buttonsLibraryPane.add(launchButton6);
-		gamesLibraryButtonGroup.add(launchButton6);
-		launchButtons.add(launchButton6);
-		
-		CardLayout libraryPaneCardLayout = new CardLayout(0, 0);
-		libraryPane = new JPanel();
-		libraryPane.setLayout(libraryPaneCardLayout);
-		
-		gamesLibrarianLibrary.add(libraryPane, "cell 0 2,grow");
-		
-		libraryPane.add(libraryScrollPane, SteamGamesDisplayMode.LaunchPane.name());
-		
-		gamesLibraryListScrollPane = new JScrollPane();
-		libraryPane.add(gamesLibraryListScrollPane, SteamGamesDisplayMode.ConfigurationPane.name());
-
-		if (librarian != null)
-			librarian.updateSteamGamesTable(launchButtons);
+		// Create the Library Statistics Sub Tab
+		createLibraryStatisticsTab();
 		
 		// First visible card panel
 		libraryPaneCardLayout.show(libraryPane, SteamGamesDisplayMode.LaunchPane.name());
-		
 	}
-		
+	
 	/**
 	 * Create the Game Tab
 	 */
@@ -1503,7 +1658,7 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianGame.setName("gameTab");
 		gamesLibrarianGame.setLayout(new MigLayout("", "[][][][grow]", "[][][][][][][grow]"));
 		
-		mainPane.addTab(BundleManager.getUITexts(me, "gameTabTitle"), null, gamesLibrarianGame, null);
+		mainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "gameTabTitle")), null, gamesLibrarianGame, null);
 
 		// Commands pane
 		gameCommandsPane = new JPanel();
@@ -1646,7 +1801,7 @@ public class GamesLibrarian extends JFrame {
 		profileSummaryPane.setName("profileSummaryTab");
 		profileSummaryPane.setLayout(new MigLayout("", "[][][][grow]", "[][][][][][][][grow]"));
 		
-		profilePane.addTab(BundleManager.getUITexts(me, profileSummaryPane.getName() + "Title"), null, profileSummaryPane, null);
+		profilePane.addTab(getTabTitle(BundleManager.getUITexts(me, profileSummaryPane.getName() + "Title")), null, profileSummaryPane, null);
 		
 		// gamerProfileIconFull
 		gamerProfileIconFull = new IconPane(me);
@@ -1776,7 +1931,7 @@ public class GamesLibrarian extends JFrame {
 		profileStatusPane.setName("profileStatusTab");
 		profileStatusPane.setLayout(new MigLayout("", "[][grow][][grow]", "[][][][][]"));
 		
-		profilePane.addTab(BundleManager.getUITexts(me, profileStatusPane.getName() + "Title"), null, profileStatusPane, null);
+		profilePane.addTab(getTabTitle(BundleManager.getUITexts(me, profileStatusPane.getName() + "Title")), null, profileStatusPane, null);
 		
 		// gamerProfileAccountGamerSteamId64
 		gamerProfileAccountGamerSteamId64Label = new Label(me, "accountSteamID64");
@@ -1881,7 +2036,7 @@ public class GamesLibrarian extends JFrame {
 		profileGroupsPane.setName("profileGroupsTab");
 		profileGroupsPane.setLayout(profileSteamGroupsTabCardLayout);
 		
-		profilePane.addTab(BundleManager.getUITexts(me, profileGroupsPane.getName() + "Title"), null, profileGroupsPane, null);
+		profilePane.addTab(getTabTitle(BundleManager.getUITexts(me, profileGroupsPane.getName() + "Title")), null, profileGroupsPane, null);
 
 		// steamGroupsScrollPane
 		steamGroupsScrollPane = new JScrollPane();
@@ -1931,7 +2086,7 @@ public class GamesLibrarian extends JFrame {
 		profileFriendsPane.setName("profileFriendsTab");
 		profileFriendsPane.setLayout(profileSteamFriendsTabCardLayout);
 		
-		profilePane.addTab(BundleManager.getUITexts(me, profileFriendsPane.getName() + "Title"), null, profileFriendsPane, null);
+		profilePane.addTab(getTabTitle(BundleManager.getUITexts(me, profileFriendsPane.getName() + "Title")), null, profileFriendsPane, null);
 
 		// steamFriendsScrollPane
 		steamFriendsScrollPane = new JScrollPane();
@@ -1986,7 +2141,7 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianProfile.setName("profileTab");
 		gamesLibrarianProfile.setLayout(new MigLayout("", "[grow]", "[][][grow]"));
 		
-		mainPane.addTab(BundleManager.getUITexts(me, "profileTabTitle"), null, gamesLibrarianProfile, null);
+		mainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "profileTabTitle")), null, gamesLibrarianProfile, null);
 		
 		// Commands pane
 		profileCommandsPane = new JPanel();
@@ -2132,7 +2287,7 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianOptions.setName("optionsTab");
 		gamesLibrarianOptions.setLayout(new MigLayout("", "[][][][grow]", "[][][][][][][][][]"));
 		
-		mainPane.addTab(BundleManager.getUITexts(me, "optionsTabTitle"), null, gamesLibrarianOptions, null);
+		mainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "optionsTabTitle")), null, gamesLibrarianOptions, null);
 
 		// windowsDistribution
 		windowsDistributionLabel = new Label(me, "windowsDistributionLabel");
@@ -2274,7 +2429,7 @@ public class GamesLibrarian extends JFrame {
 		createControlsTab();
 		
 		// Create the Library Tab
-		createLibraryTab();
+		createLibraryMainTab();
 		
 		// Create the Game Tab
 		createGameTab();
