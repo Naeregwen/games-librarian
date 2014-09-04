@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import commons.ColoredTee;
+import commons.api.Steam;
 import commons.api.SteamAchievement;
 import commons.api.SteamAchievementsList;
 import commons.api.SteamGameStats;
@@ -117,7 +118,10 @@ public class SteamGameStatsParser extends DefaultHandler {
 		} else if (qName.equalsIgnoreCase("gameName")) {
 			if (steamGameStats != null) steamGameStats.setGameName(characters);
 		} else if (qName.equalsIgnoreCase("gameLink")) {
-			if (steamGameStats != null) steamGameStats.setGameLink(characters);
+			if (steamGameStats != null) {
+				steamGameStats.setGameLink(characters);
+				steamGameStats.setAppID(characters.replaceFirst(Steam.steamCommunityAppURL, ""));
+			}
 		} else if (qName.equalsIgnoreCase("gameIcon")) {
 			if (steamGameStats != null) steamGameStats.setGameIcon(characters);
 		} else if (qName.equalsIgnoreCase("gameLogo")) {

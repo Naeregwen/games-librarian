@@ -42,6 +42,16 @@ public class SteamGamesList {
 	}
 	
 	/**
+	 * Initialization based on another profile  
+	 */
+	public SteamGamesList(SteamProfile steamProfile) {
+		steamID64 = steamProfile.getSteamID64();
+		steamID = steamProfile.getSteamID();
+		loadingSource = steamProfile.getLoadingSource();
+		steamGames = steamProfile.getSteamGames();
+	}
+	
+	/**
 	 * @return the steamID64
 	 */
 	public String getSteamID64() {

@@ -97,6 +97,9 @@ public class SteamGamesListReader extends SwingWorker<SteamGamesList, String> {
 					parameters.setSteamGamesList(steamGamesList);
 					if (steamGamesList != null && steamGamesList.getSteamGames() != null && steamGamesList.getSteamGames().size() > 0) {
 						librarian.getTee().writelnInfos(parameters.summarizeGamesList());
+						// Replace currentSteamProfile.steamGames by parameters.steamGamesList.steamGames
+						librarian.replaceSteamGamesList();
+
 					} else {
 						librarian.readError();
 					}
