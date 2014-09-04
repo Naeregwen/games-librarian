@@ -51,7 +51,7 @@ public class SteamAchievementIconTableCellRenderer extends DefaultTableCellRende
         	if (steamAchievement.getUnlockTimestamp() != null && !steamAchievement.getUnlockTimestamp().trim().equals(""))
         		setText("<html><div style='font-size: 1.1em; font-weight: bold'>"+steamAchievement.getName()+"</div><div style='font-size: 1em'>"+steamAchievement.getDescription()+"</div>"
         				+ String.format(parameters.getUITexts().getString("unlockedAchievement"), 
-        				(new SimpleDateFormat(parameters.getUITexts().getString("simpleDateFormat")))
+        				(new SimpleDateFormat(parameters.getResources().getString("simpleDateFormat")))
         				.format(new Date(SteamAchievement.steamStampToEpochStamp((steamAchievement.getUnlockTimestamp())))))
         				+ "</html>");
         	else

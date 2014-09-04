@@ -91,7 +91,7 @@ public class SteamGamesListReader extends SwingWorker<SteamGamesList, String> {
 			} else {
 				SteamGamesList steamGamesList = get();
 				if (steamGamesList == null) {
-					librarian.updateLibraryTabTitle();
+					librarian.updateLibraryMainTabTitle();
 				} else {
 					Parameters parameters = librarian.getParameters();
 					parameters.setSteamGamesList(steamGamesList);
@@ -100,12 +100,12 @@ public class SteamGamesListReader extends SwingWorker<SteamGamesList, String> {
 					} else {
 						librarian.readError();
 					}
-					librarian.updateLibraryTabTitle();
-					librarian.updateGamesLibraryTab();
+					librarian.updateLibraryMainTabTitle();
+					librarian.updateAllLibraryTabs();
 				}
 			}
 		} catch (InterruptedException | ExecutionException e) {
-			librarian.updateLibraryTabTitle();
+			librarian.updateLibraryMainTabTitle();
 			librarian.getTee().printStackTrace(e);
 		}
 	}	

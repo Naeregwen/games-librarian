@@ -42,6 +42,7 @@ public class GamesLibrary {
 	public static final ImageIcon profileMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/user_blue.png"));
 	public static final ImageIcon optionsMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/cog.png"));
 	
+	public static final ImageIcon libraryStatisticsMenuIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/chart_bar.png"));
 	public static final ImageIcon libraryDisplayMode = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/layout.png"));
 	public static final ImageIcon librarySortMethod = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/table_sort.png"));
 	

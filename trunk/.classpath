@@ -7,5 +7,6 @@
 	<classpathentry kind="var" path="HTTPCOMPONENTS-HTTPCLIENT-4.3.4"/>
 	<classpathentry kind="var" path="MIGLAYOUT-1.5"/>
 	<classpathentry kind="var" path="JSOUP-1.7.3"/>
+	<classpathentry kind="var" path="COMMONS-LANG-3.3.2" sourcepath="/COMMONS-LANG-3.3.2-SRC"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

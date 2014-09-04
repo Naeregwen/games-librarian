@@ -80,4 +80,28 @@ public class BundleManager {
 				: ResourceBundle.getBundle("i18n/messages").getString(key);
 	}
 
+	/**
+	 * Not needed to be visible anymore. 
+	 * The method is called through static call
+	 * 
+	 * @param key
+	 * @return
+	 */
+	private String getResources(String key) {
+		return librarian.getParameters().getResources().getString(key);
+	}
+
+	/**
+	 * Visible call to search key inside named bundle Resources
+	 * 
+	 * @param me
+	 * @param key
+	 * @return
+	 */
+	public static String getResources(WindowBuilderMask me, String key) {
+		return me != null && me.getLibrarian() != null && me.getLibrarian().getBundleManager() != null ? // WindowBuilder
+				me.getLibrarian().getBundleManager().getResources(key)
+				: ResourceBundle.getBundle("i18n/resources").getString(key);
+	}
+
 }

@@ -10,6 +10,7 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import commons.BundleManager;
+import commons.enums.LibraryTab;
 import commons.enums.ProfileTab;
 import commons.enums.TabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
@@ -57,7 +58,7 @@ public class GotoAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		if (tabEnum.isMain())
 			me.getLibrarian().displayMainTab(tabEnum);
-		else if (tabEnum instanceof ProfileTab)
+		else if (tabEnum instanceof LibraryTab || tabEnum instanceof ProfileTab)
 			me.getLibrarian().displaySubTab(tabEnum);
 	}
 

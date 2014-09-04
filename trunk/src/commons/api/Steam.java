@@ -69,6 +69,7 @@ public class Steam {
 
 	// Base URL for Steam Community
 	public static final String steamCommunityURL = "http://www.steamcommunity.com";
+	public static final String steamCommunityShortURL = "http://steamcommunity.com/";
 	public static int responseStatusCode = 404;
 	public static StatusLine responseStatusLine = null;
 	public static String responseErrorCause = "";
