@@ -88,7 +88,7 @@ public class SteamGamesListParser extends DefaultHandler {
 			if (gamesList != null) gamesList.setSteamID(characters);
 		} else if(qName.equalsIgnoreCase("game")) {
 			if (gamesList != null) {
-				// complete game data
+				// Complete game data
 				position += 1;
 				game.setInitialPosition(position);
 				if (game.getHoursLast2Weeks() == null)

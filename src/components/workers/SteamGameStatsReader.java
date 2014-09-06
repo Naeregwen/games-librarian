@@ -21,7 +21,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import commons.ColoredTee;
-import commons.ColoredTee.TextColor;
+import commons.ColoredTee.TeeColor;
 import commons.api.Steam;
 import commons.api.SteamGame;
 import commons.api.SteamGameStats;
@@ -38,11 +38,20 @@ public class SteamGameStatsReader extends SwingWorker<SteamGameStats, String> {
 	Librarian librarian;
 	SteamGame game;
 	CountDownLatch doneSignal;
+	int index;
 	
-	public SteamGameStatsReader(Librarian librarian, SteamGame game, CountDownLatch doneSignal) {
+	public SteamGameStatsReader(Librarian librarian, SteamGame game, CountDownLatch doneSignal, int index) {
 		this.librarian = librarian;
 		this.game = game;
 		this.doneSignal = doneSignal;
+		this.index = index;
+	}
+
+	/**
+	 * @return the game
+	 */
+	public SteamGame getGame() {
+		return game;
 	}
 
 	/*/
@@ -51,37 +60,45 @@ public class SteamGameStatsReader extends SwingWorker<SteamGameStats, String> {
 	 */
 	@Override
 	protected SteamGameStats doInBackground() throws Exception {
+		
 		if (game == null || game.getStatsLink() == null || librarian.getCurrentSteamProfile() == null) return null;
+		
 		ResourceBundle messages = librarian.getParameters().getMessages();
 		String steamId = librarian.getCurrentSteamProfile().getId();
 		String steamId64 = librarian.getCurrentSteamProfile().getId64();
 		SteamGameStatsParser steamGameStatsParser = new SteamGameStatsParser(steamId64, steamId, 0, null);
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		String url = "";
+		
 		try {
+			
 	    	url = Steam.gameMainStatsURLCommand(steamId64, game);
-	    	publish(TextColor.Message.name(), String.format(messages.getString("infosReadGameStatsIsStarting"), game.getName(), steamId), TextColor.Info.name(), url);
+	    	publish(TeeColor.Message.name(), String.format(messages.getString("infosReadGameStatsIsStarting"), index, game.getName(), steamId), TeeColor.Info.name(), url);
+	    	
+	    	new URL(url); // Reject malformed URL
+	    	
 			XMLReader steamGameStatsReader = XMLReaderFactory.createXMLReader();
 			steamGameStatsReader.setContentHandler(steamGameStatsParser);
-			new URL(url); // Reject malformed URL
-			HttpGet httpget = new HttpGet(url);
-			publish("SteamGameStatsReader Executing request " + httpget.getRequestLine());
-            Exception exception = httpclient.execute(httpget, new XMLResponseHandler(steamGameStatsReader));
+			HttpGet httpGet = new HttpGet(url);
+			publish("SteamGameStatsReader Executing request " + httpGet.getRequestLine());
+			
+            Exception exception = httpclient.execute(httpGet, new XMLResponseHandler(steamGameStatsReader));
             if (exception != null)
             	if (exception instanceof SAXParseException)
-                	publish("error", String.format(messages.getString("errorExceptionMessageWithSteamIDTextAndURL"), steamId,
+                	publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamIDTextAndURL"), steamId,
                 			librarian.getCurrentSteamProfile().getPrivacyState(messages.getString("undefinedPrivacyState")),
                 			game.getID("unknown gamename"), url,
                 			exception.getClass().getName(), messages.getString("invalidXML")));
             	else
-            		publish("error", String.format(messages.getString("errorExceptionMessageWithSteamIDTextAndURL"), steamId,
+            		publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamIDTextAndURL"), steamId,
             				librarian.getCurrentSteamProfile().getPrivacyState(messages.getString("undefinedPrivacyState")),
             				game.getID("unknown gamename"), url,
             				exception.getClass().getName(), exception.getLocalizedMessage()));
+            
 		} catch (CancellationException e) {
 			publish("SteamGameStatsReader " + game.getName() + " cancelled during doInBackground");
         } catch (IOException exception) {
-			publish("error", String.format(messages.getString("errorExceptionMessageWithSteamIDTextAndURL"), steamId,
+			publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamIDTextAndURL"), steamId,
 					librarian.getCurrentSteamProfile().getPrivacyState(messages.getString("undefinedPrivacyState")),
 					game.getID("unknown gamename"), url,
 					exception.getClass().getName(), exception.getLocalizedMessage()));

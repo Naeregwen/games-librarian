@@ -20,7 +20,7 @@ import components.Librarian;
  */
 public class ColoredTee {
 
-	public enum TextColor {
+	public enum TeeColor {
 		
 		Message(Color.BLUE),
 		Info(Color.BLACK),
@@ -28,7 +28,7 @@ public class ColoredTee {
 		
 		Color color;
 		
-		TextColor(Color color) {
+		TeeColor(Color color) {
 			this.color = color;
 		}
 
@@ -53,57 +53,57 @@ public class ColoredTee {
 	}
 	
 	public void writeMessage(String message, boolean nl) {
-		write(message, TextColor.Message.color, nl, System.out);
+		write(message, TeeColor.Message.color, nl, System.out);
 	}
 	
 	public void writelnMessage(String message) {
-		write(message, TextColor.Message.color, true, System.out);
+		write(message, TeeColor.Message.color, true, System.out);
 	}
 	
 	public void writeMessage(List<String> messages, boolean nl) {
 		for (String message : messages) 
-			write(message, TextColor.Message.color, nl, System.out);
+			write(message, TeeColor.Message.color, nl, System.out);
 	}
 	
 	public void writelnMessage(List<String> messages) {
 		for (String message : messages) 
-			write(message, TextColor.Message.color, true, System.out);
+			write(message, TeeColor.Message.color, true, System.out);
 	}
 	
 	public void writeInfos(String message, boolean nl) {
-		write(message, TextColor.Info.color, nl, System.out);
+		write(message, TeeColor.Info.color, nl, System.out);
 	}
 	
 	public void writelnInfos(String message) {
-		write(message, TextColor.Info.color, true, System.out);
+		write(message, TeeColor.Info.color, true, System.out);
 	}
 	
 	public void writeInfos(List<String> messages, boolean nl) {
 		for (String message : messages)
-			write(message, TextColor.Info.color, nl, System.out);
+			write(message, TeeColor.Info.color, nl, System.out);
 	}
 	
 	public void writelnInfos(List<String> messages) {
 		for (String message : messages)
-			write(message, TextColor.Info.color, true, System.out);
+			write(message, TeeColor.Info.color, true, System.out);
 	}
 	
 	public void writeError(String message, boolean nl) {
-		write(message, TextColor.Error.color, nl, System.err);
+		write(message, TeeColor.Error.color, nl, System.err);
 	}		
 
 	public void writelnError(String message) {
-		write(message, TextColor.Error.color, true, System.err);
+		write(message, TeeColor.Error.color, true, System.err);
 	}		
 
 	public void writeError(List<String> messages, boolean nl) {
 		for (String message : messages)
-			write(message, TextColor.Error.color, nl, System.err);
+			write(message, TeeColor.Error.color, nl, System.err);
 	}
 	
 	public void writelnError(List<String> messages) {
 		for (String message : messages)
-			write(message, TextColor.Error.color, true, System.err);
+			write(message, TeeColor.Error.color, true, System.err);
 	}
 	
 	public void printStackTrace(Exception e) {
@@ -111,14 +111,14 @@ public class ColoredTee {
 		if (parameters.isUseConsole()) e.printStackTrace();
 		if (librarian != null) {
 			if (e.getLocalizedMessage() != null)
-				librarian.appendMessage(formattedDate + "Exception " + e.getClass().getCanonicalName() + " : " + e.getLocalizedMessage() + "\n", TextColor.Error.color);
+				librarian.appendMessage(formattedDate + "Exception " + e.getClass().getCanonicalName() + " : " + e.getLocalizedMessage() + "\n", TeeColor.Error.color);
 			else if (e.getMessage() != null)
-				librarian.appendMessage(formattedDate + "Exception " + e.getClass().getCanonicalName() + " : " + e.getMessage() + "\n", TextColor.Error.color);
+				librarian.appendMessage(formattedDate + "Exception " + e.getClass().getCanonicalName() + " : " + e.getMessage() + "\n", TeeColor.Error.color);
 			else
-				librarian.appendMessage(formattedDate + "Exception " + e.getClass().getCanonicalName() + "\n", TextColor.Error.color);
+				librarian.appendMessage(formattedDate + "Exception " + e.getClass().getCanonicalName() + "\n", TeeColor.Error.color);
 			if (parameters.isDebug())
 				for (StackTraceElement stackTraceElement : e.getStackTrace()) {
-					librarian.appendMessage(formattedDate + "\t" + stackTraceElement.toString() + "\n", TextColor.Error.color);
+					librarian.appendMessage(formattedDate + "\t" + stackTraceElement.toString() + "\n", TeeColor.Error.color);
 			} 
 		}
 	}
@@ -137,23 +137,23 @@ public class ColoredTee {
 		if (strings.size() <= 0) return;
 		String firstString = strings.get(0);
 		boolean isFirstString = true;
-		boolean writeMessage = firstString.equalsIgnoreCase(ColoredTee.TextColor.Message.name());
-		boolean writeInfo = firstString.equalsIgnoreCase(ColoredTee.TextColor.Info.name());
-		boolean writeError = firstString.equalsIgnoreCase(ColoredTee.TextColor.Error.name());
+		boolean writeMessage = firstString.equalsIgnoreCase(ColoredTee.TeeColor.Message.name());
+		boolean writeInfo = firstString.equalsIgnoreCase(ColoredTee.TeeColor.Info.name());
+		boolean writeError = firstString.equalsIgnoreCase(ColoredTee.TeeColor.Error.name());
 		if (writeError || writeMessage | writeInfo) strings.remove(0);
         for (String string : strings) {
         	if (!isFirstString) {
-	    		writeMessage = string.equalsIgnoreCase(ColoredTee.TextColor.Message.name());
-	    		writeInfo = string.equalsIgnoreCase(ColoredTee.TextColor.Info.name());
-	    		writeError = string.equalsIgnoreCase(ColoredTee.TextColor.Error.name());
+	    		writeMessage = string.equalsIgnoreCase(ColoredTee.TeeColor.Message.name());
+	    		writeInfo = string.equalsIgnoreCase(ColoredTee.TeeColor.Info.name());
+	    		writeError = string.equalsIgnoreCase(ColoredTee.TeeColor.Error.name());
 	    		if (writeError || writeMessage | writeInfo) continue;
         	} else
         		isFirstString = false;
         	if (writeError) {
-        		if (!string.equalsIgnoreCase(ColoredTee.TextColor.Error.name()))
+        		if (!string.equalsIgnoreCase(ColoredTee.TeeColor.Error.name()))
         			tee.writelnError(string);
         	} else if (writeMessage) {
-        		if (!string.equalsIgnoreCase(ColoredTee.TextColor.Message.name()))
+        		if (!string.equalsIgnoreCase(ColoredTee.TeeColor.Message.name()))
         			tee.writelnMessage(string);
         	} else 
         		tee.writelnInfos(string);

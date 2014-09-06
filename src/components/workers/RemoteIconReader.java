@@ -53,16 +53,20 @@ public class RemoteIconReader extends SwingWorker<ImageIcon, String> {
 	protected ImageIcon doInBackground() throws Exception {
 		if (remoteIconButton.getIconURL() != null && !remoteIconButton.getIconURL().trim().equals("")) {
 			if (remoteIconButton.getIconURL().trim().toLowerCase().startsWith("http")) {
+				
 				CloseableHttpClient httpclient = HttpClients.createDefault();
 				HttpGet httpget = new HttpGet(remoteIconButton.getIconURL());
 				publish("RemoteIconReader Executing request " + httpget.getRequestLine());
+				
 				try {
 					return httpclient.execute(httpget, new ImageIconResponseHandler());
 				} finally {
 					httpclient.close();
 				}
 			} else {
+				
 				publish("RemoteIconReader Executing request " + remoteIconButton.getIconURL());
+				
 				try {
 					BufferedImage image = ImageIO.read(new URL(remoteIconButton.getIconURL()));
 					return new ImageIcon(image);

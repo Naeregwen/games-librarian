@@ -332,16 +332,16 @@ public class GamesLibrarian extends JFrame {
 	
 	private JButton loadAllGamesStatsButton;
 	
-	private JLabel libraryTotalGamesWithErroredStatsLabel;
-	JTextField libraryTotalGamesWithErroredStatsTextField;
+	JLabel libraryTotalGamesWithInvalidStatsLabel;
+	JTextField libraryTotalGamesWithInvalidStatsTextField;
 	
-	private JLabel libraryTotalAchievementsLabel;
+	JLabel libraryTotalAchievementsLabel;
 	JTextField libraryTotalAchievementsTextField;
 	
-	private JLabel libraryTotalUnlockedAchievementsLabel;
+	JLabel libraryTotalUnlockedAchievementsLabel;
 	JTextField libraryTotalUnlockedAchievementsTextField;
 	
-	private JLabel libraryPercentageAchievedLabel;
+	JLabel libraryPercentageAchievedLabel;
 	JTextField libraryPercentageAchievedTextField;
 	
 	// Game Tab
@@ -1526,10 +1526,10 @@ public class GamesLibrarian extends JFrame {
 		
 		// Main pane
 		libraryStatisticsMainPane = new JPanel();
-		libraryStatisticsMainPane.setName("libraryStatisticsMainTab");
+		libraryStatisticsMainPane.setName("libraryStatisticsTab");
 		libraryStatisticsMainPane.setLayout(new MigLayout("", "[][][]", "[][][][][][][][][][]"));
 		
-		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsMainTabTitle")), GamesLibrary.libraryStatisticsMenuIcon, libraryStatisticsMainPane, null);
+		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsTabTitle")), GamesLibrary.libraryStatisticsMenuIcon, libraryStatisticsMainPane, null);
 		
 		// libraryTotalGames
 		libraryTotalGamesLabel = new Label(me, "libraryTotalGamesLabel");
@@ -1601,17 +1601,17 @@ public class GamesLibrarian extends JFrame {
 		libraryTotalHoursLast2WeeksFormattedLabel = new JLabel("");
 		libraryStatisticsMainPane.add(libraryTotalHoursLast2WeeksFormattedLabel, "cell 2 5");
 		
-		// libraryTotalGamesWithErroredStats
-		libraryTotalGamesWithErroredStatsLabel = new JLabel("libraryTotalGamesWithErroredStats");
-		libraryStatisticsMainPane.add(libraryTotalGamesWithErroredStatsLabel, "cell 0 6,alignx trailing");
+		// libraryTotalGamesWithInvalidStats
+		libraryTotalGamesWithInvalidStatsLabel = new Label(me, "libraryTotalGamesWithInvalidStatsLabel");
+		libraryStatisticsMainPane.add(libraryTotalGamesWithInvalidStatsLabel, "cell 0 6,alignx trailing");
 		
-		libraryTotalGamesWithErroredStatsTextField = new JTextField();
-		libraryTotalGamesWithErroredStatsTextField.setEditable(false);
-		libraryTotalGamesWithErroredStatsTextField.setColumns(10);
-		libraryStatisticsMainPane.add(libraryTotalGamesWithErroredStatsTextField, "cell 1 6,growx");
+		libraryTotalGamesWithInvalidStatsTextField = new JTextField();
+		libraryTotalGamesWithInvalidStatsTextField.setEditable(false);
+		libraryTotalGamesWithInvalidStatsTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryTotalGamesWithInvalidStatsTextField, "cell 1 6,growx");
 		
 		// libraryTotalAchievements
-		libraryTotalAchievementsLabel = new JLabel("libraryTotalAchievements");
+		libraryTotalAchievementsLabel = new Label(me, "libraryTotalAchievementsLabel");
 		libraryStatisticsMainPane.add(libraryTotalAchievementsLabel, "cell 0 7,alignx trailing");
 		
 		libraryTotalAchievementsTextField = new JTextField();
@@ -1620,7 +1620,7 @@ public class GamesLibrarian extends JFrame {
 		libraryStatisticsMainPane.add(libraryTotalAchievementsTextField, "cell 1 7,growx");
 		
 		// libraryTotalUnlockedAchievements
-		libraryTotalUnlockedAchievementsLabel = new JLabel("libraryTotalUnlockedAchievements");
+		libraryTotalUnlockedAchievementsLabel = new Label(me, "libraryTotalUnlockedAchievementsLabel");
 		libraryStatisticsMainPane.add(libraryTotalUnlockedAchievementsLabel, "cell 0 8,alignx trailing");
 		
 		libraryTotalUnlockedAchievementsTextField = new JTextField();
@@ -1629,7 +1629,7 @@ public class GamesLibrarian extends JFrame {
 		libraryStatisticsMainPane.add(libraryTotalUnlockedAchievementsTextField, "cell 1 8,growx");
 		
 		// libraryPercentageAchieved
-		libraryPercentageAchievedLabel = new JLabel("libraryPercentageAchieved");
+		libraryPercentageAchievedLabel = new Label(me, "libraryPercentageAchievedLabel");
 		libraryStatisticsMainPane.add(libraryPercentageAchievedLabel, "cell 0 9,alignx trailing");
 		
 		libraryPercentageAchievedTextField = new JTextField();

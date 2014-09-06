@@ -18,7 +18,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import commons.ColoredTee;
-import commons.ColoredTee.TextColor;
+import commons.ColoredTee.TeeColor;
 import commons.GamesLibrary.LoadingSource;
 import commons.api.Parameters;
 import commons.api.Steam;
@@ -53,7 +53,9 @@ public class SteamProfileReader extends SwingWorker<SteamProfile, String> {
 	 */
 	@Override
 	protected SteamProfile doInBackground() throws Exception {
+		
 		if (librarian.getCurrentSteamProfile() == null || (librarian.getCurrentSteamProfile().getSteamID() == null && librarian.getCurrentSteamProfile().getSteamID64() == null)) return null;
+		
 		Parameters parameters = librarian.getParameters();
     	ResourceBundle messages = parameters.getMessages();
 		String steamId = librarian.getCurrentSteamProfile().getId();
@@ -61,18 +63,23 @@ public class SteamProfileReader extends SwingWorker<SteamProfile, String> {
 		SteamProfileParser steamProfileParser = new SteamProfileParser(parameters, librarian.getTee(), 0);
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 //		CloseableHttpClient httpclient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+		
 		try {
+			
 	    	String url = Steam.profileURLCommand(steamId64);
-	    	publish(TextColor.Message.name(), String.format(messages.getString("infosReadProfileIsStarting"), 1), TextColor.Info.name(), url);
+	    	publish(TeeColor.Message.name(), String.format(messages.getString("infosReadProfileIsStarting"), 1), TeeColor.Info.name(), url);
+	    	
+	    	new URL(url); // Reject malformed URL
+	    	
 			XMLReader steamProfileReader = XMLReaderFactory.createXMLReader();
 			steamProfileReader.setContentHandler(steamProfileParser);
-			new URL(url); // Reject malformed URL
+			XMLResponseHandler responseHandler = new XMLResponseHandler(steamProfileReader);
 			HttpGet httpGet = new HttpGet(url);
 			publish("SteamProfileReader Executing request " + httpGet.getRequestLine());
-			XMLResponseHandler responseHandler = new XMLResponseHandler(steamProfileReader);
+			
             Exception exception = httpClient.execute(httpGet, responseHandler);
             if (exception != null)
-            	publish("error", String.format(messages.getString("errorExceptionMessageWithSteamID"), steamId, 
+            	publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamID"), steamId, 
            			 librarian.getCurrentSteamProfile().getPrivacyState(messages.getString("undefinedPrivacyState")), exception.getClass().getName(), exception.getLocalizedMessage()));
             if (responseHandler.getHttpStatus() != 200) {
             	if (steamProfileParser != null && steamProfileParser.getSteamProfile() != null) {
@@ -110,6 +117,8 @@ public class SteamProfileReader extends SwingWorker<SteamProfile, String> {
 					} else {
 						// Update profiles list
 						librarian.addProfile(steamProfile, false);
+						// Replace SteamGamesList
+						librarian.replaceSteamGamesList();
 						// Update ui profile tab
 						librarian.updateProfileTab(steamProfile);
 						librarian.updateSelectedSteamProfile(steamProfile);

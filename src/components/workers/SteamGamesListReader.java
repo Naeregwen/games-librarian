@@ -21,6 +21,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import commons.ColoredTee;
+import commons.ColoredTee.TeeColor;
 import commons.GamesLibrary.LoadingSource;
 import commons.api.Parameters;
 import commons.api.Steam;
@@ -45,23 +46,31 @@ public class SteamGamesListReader extends SwingWorker<SteamGamesList, String> {
 	
 	@Override
 	protected SteamGamesList doInBackground() throws Exception {
+		
 		if (librarian.getCurrentSteamProfile().getId64() == null) return null;
+		
 		Parameters parameters = librarian.getParameters();
 		ResourceBundle messages = parameters.getMessages();
 		String steamId64 = librarian.getCurrentSteamProfile().getId64();
 		SteamGamesListParser steamGamesListParser = new SteamGamesListParser(parameters.getDefaultSteamLaunchMethod(), LoadingSource.Steam);
 		CloseableHttpClient httpclient = HttpClients.createDefault();
+		
 		try {
+			
 			String url = Steam.gamesListURLCommand(steamId64);
+			
+			new URL(url); // Reject malformed URL
+			
 			XMLReader steamGameListsReader = XMLReaderFactory.createXMLReader();
 			steamGameListsReader.setContentHandler(steamGamesListParser);
-			new URL(url); // Reject malformed URL
 			HttpGet httpget = new HttpGet(url);
 			publish("SteamGamesListReader Executing request " + httpget.getRequestLine());
+			
             Exception exception = httpclient.execute(httpget, new XMLResponseHandler(steamGameListsReader));
             if (exception != null)
-            	publish("error", String.format(messages.getString("errorExceptionMessageWithSteamID64"), steamId64, 
+            	publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamID64"), steamId64, 
             			 exception.getClass().getName(), exception.getLocalizedMessage()));
+            
 		} catch (ConnectException e) {
 			exception = e;
 		} catch (MalformedURLException e) {
@@ -90,27 +99,28 @@ public class SteamGamesListReader extends SwingWorker<SteamGamesList, String> {
 				librarian.getTee().printStackTrace(exception);
 			} else {
 				SteamGamesList steamGamesList = get();
-				if (steamGamesList == null) {
-					librarian.updateLibraryMainTabTitle();
-				} else {
+//				if (steamGamesList == null) {
+//					librarian.updateLibraryMainTabTitle();
+//				} else {
+				if (steamGamesList != null) {
 					Parameters parameters = librarian.getParameters();
 					parameters.setSteamGamesList(steamGamesList);
 					if (steamGamesList != null && steamGamesList.getSteamGames() != null && steamGamesList.getSteamGames().size() > 0) {
 						librarian.getTee().writelnInfos(parameters.summarizeGamesList());
 						// Replace currentSteamProfile.steamGames by parameters.steamGamesList.steamGames
 						librarian.replaceSteamGamesList();
-
 					} else {
 						librarian.readError();
 					}
-					librarian.updateLibraryMainTabTitle();
+//					librarian.updateLibraryMainTabTitle();
 					librarian.updateAllLibraryTabs();
 				}
 			}
 		} catch (InterruptedException | ExecutionException e) {
-			librarian.updateLibraryMainTabTitle();
+//			librarian.updateLibraryMainTabTitle();
 			librarian.getTee().printStackTrace(e);
 		}
+		librarian.updateLibraryMainTabTitle();
 	}	
 	
 	/*/

@@ -45,9 +45,11 @@ public class IconPaneReader extends SwingWorker<BufferedImage, String>  {
 	@Override
 	protected BufferedImage doInBackground() throws Exception {
 		if (uri.trim().toLowerCase().startsWith("http")) {
+			
 			CloseableHttpClient httpclient = HttpClients.createDefault();
 			HttpGet httpget = new HttpGet(uri);
 			publish("IconPaneReader Executing request " + httpget.getRequestLine());
+			
 			try {
 				return httpclient.execute(httpget, new BufferedImageResponseHandler());
 			} finally {
