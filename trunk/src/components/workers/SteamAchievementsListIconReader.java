@@ -39,9 +39,11 @@ public class SteamAchievementsListIconReader extends SwingWorker<ImageIcon, Stri
 	
 	@Override
 	protected ImageIcon doInBackground() throws Exception {
+		
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpGet httpget = new HttpGet(playerAvatarIconURL);
         publish("IconPaneReader Executing request " + httpget.getRequestLine());
+        
         try {
             return httpclient.execute(httpget, new ImageIconResponseHandler());
         } finally {

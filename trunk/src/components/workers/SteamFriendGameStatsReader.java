@@ -21,7 +21,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import commons.ColoredTee;
-import commons.ColoredTee.TextColor;
+import commons.ColoredTee.TeeColor;
 import commons.api.Steam;
 import commons.api.SteamGame;
 import commons.api.SteamGameStats;
@@ -64,29 +64,37 @@ public class SteamFriendGameStatsReader extends SwingWorker<SteamGameStats, Stri
 
 	@Override
 	protected SteamGameStats doInBackground() throws Exception {
+		
 		if (friend == null || friend.getSteamID64() == null || game.getStatsLink() == null || friend.getGame(game) == null) return null;
+		
 		ResourceBundle messages = librarian.getParameters().getMessages();
 		String steamId = friend.getId();
 		String steamId64 = friend.getId64();
 		SteamGameStatsParser steamGamesStatsParser = new SteamGameStatsParser(steamId64, steamId, initialPosition, friendAvatarIcon);
 		CloseableHttpClient httpclient = HttpClients.createDefault();
+		
 		try {
+			
 	    	SteamGame friendGame = friend.getGame(game);
 	    	String url = Steam.gameStatsURLCommand(steamId64, friendGame);
-	    	publish(TextColor.Message.name(), String.format(messages.getString("infosReadGameStatsIsStarting"), friendGame.getName(), steamId), TextColor.Info.name(), url);
+	    	
+	    	new URL(url); // Reject malformed URL
+	    	
+	    	publish(TeeColor.Message.name(), String.format(messages.getString("infosReadGameStatsIsStarting"), initialPosition, friendGame.getName(), steamId), TeeColor.Info.name(), url);
 			XMLReader steamGameStatsReader = XMLReaderFactory.createXMLReader();
 			steamGameStatsReader.setContentHandler(steamGamesStatsParser);
-			new URL(url); // Reject malformed URL
 			HttpGet httpget = new HttpGet(url);
 			publish("SteamFriendGameStatsReader Executing request " + httpget.getRequestLine());
+			
             Exception exception = httpclient.execute(httpget, new XMLResponseHandler(steamGameStatsReader));
             if (exception != null)
-            	publish("error", String.format(messages.getString("errorExceptionMessageWithSteamID"), friend.getId(), 
+            	publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamID"), friend.getId(), 
             			friend.getPrivacyState(messages.getString("undefinedPrivacyState")), exception.getClass().getName(), exception.getLocalizedMessage()));
+            
 		} catch (CancellationException e) {
 			publish("SteamFriendGameStatsReader " + steamId + " cancelled during doInBackground");
         } catch (IOException exception) {
-			publish("error", String.format(messages.getString("errorExceptionMessageWithSteamID"), friend.getId(), 
+			publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamID"), friend.getId(), 
 					friend.getPrivacyState(messages.getString("undefinedPrivacyState")), exception.getClass().getName(), exception.getLocalizedMessage()));
         } finally {
             httpclient.close();

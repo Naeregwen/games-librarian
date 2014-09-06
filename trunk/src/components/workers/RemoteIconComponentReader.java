@@ -45,14 +45,19 @@ public class RemoteIconComponentReader extends SwingWorker<ImageIcon, String> {
 
 	@Override
 	protected ImageIcon doInBackground() throws Exception {
+		
 		if ((remoteIconComponent.getIcon() != null && !remoteIconComponent.getIcon().equals(GamesLibrary.noAvatarIcon))
 				|| (remoteIconComponent.getIconURL() != null && !remoteIconComponent.getIconURL().trim().equals("")))
 			return null;
+		
 		CloseableHttpClient httpclient = HttpClients.createDefault();
+		
 		try {
+			
 			HttpGet httpget = new HttpGet(remoteIconComponent.getIconURL());
 			publish("RemoteIconComponentReader Executing request " + httpget.getRequestLine());
 			return httpclient.execute(httpget, new ImageIconResponseHandler());
+			
 		} catch (MalformedURLException e) {
 			exception = e;
 		} catch (IOException ie) {

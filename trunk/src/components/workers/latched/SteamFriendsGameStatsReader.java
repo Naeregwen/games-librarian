@@ -55,27 +55,31 @@ public class SteamFriendsGameStatsReader extends SwingWorker<Boolean, String> {
 	
 	@Override
 	protected Boolean doInBackground() throws Exception {
+		
 		if (game == null || friendWithSameGameButtons == null) return null;
+		
     	try {
+    		
 	    	int initialPosition = 1;
 			CountDownLatch doneSignal = new CountDownLatch(friendWithSameGameButtons.size());
+			
 			for (SteamFriendWithSameGameButton friendWithSameGameButton : friendWithSameGameButtons) {
 				
-//				try {
-//					Thread.sleep(300);
-//				} catch (CancellationException e) {
-//					cancelSteamFriendGameStatsReaders();
-//					librarian.getTee().writelnInfos("SteamFriendsListReader cancelled");
-//					break;
-//				} catch (InterruptedException e) {
-//					librarian.getTee().printStackTrace(e);
-//				}
+				try {
+    				Thread.sleep((long)(Math.random() * 100) + 50); // Add some delay between requests
+				} catch (InterruptedException e) {
+					cancelSteamFriendGameStatsReaders();
+					librarian.getTee().writelnInfos("SteamFriendsListReader interrupted during doInBackground sleep");
+					break;
+				}
 				
 				SteamFriendGameStatsReader steamFriendGameStatsReader = new SteamFriendGameStatsReader(librarian, friendWithSameGameButton.getSteamProfile(), friendWithSameGameButton.getIcon(), game, initialPosition++, doneSignal);
 				steamFriendGameStatsReaders.add(steamFriendGameStatsReader);
 				steamFriendGameStatsReader.execute();
 			}
+			
 			doneSignal.await();
+			
 		} catch (InterruptedException e) {
 			cancelSteamFriendGameStatsReaders();
 			publish("SteamFriendsGameStatsReader " + game.getName() + " interrupted during doInBackground");

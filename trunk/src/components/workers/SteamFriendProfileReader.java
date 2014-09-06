@@ -16,7 +16,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import commons.ColoredTee;
-import commons.ColoredTee.TextColor;
+import commons.ColoredTee.TeeColor;
 import commons.api.Parameters;
 import commons.api.Steam;
 import commons.api.SteamProfile;
@@ -53,23 +53,31 @@ public class SteamFriendProfileReader extends SwingWorker<SteamProfile, String> 
 	 */
 	@Override
 	protected SteamProfile doInBackground() throws Exception {
+		
 		if (steamId64 == null) return null;
+		
 		Parameters parameters = librarian.getParameters();
 		ResourceBundle messages = parameters.getMessages();
 		SteamProfileParser steamProfileParser = new SteamProfileParser(parameters, librarian.getTee(), index);
 		CloseableHttpClient httpclient = HttpClients.createDefault();
+		
 		try {
+			
 	    	String url = Steam.profileURLCommand(steamId64);
-	    	publish(TextColor.Message.name(), String.format(messages.getString("infosReadProfileIsStarting"), index), TextColor.Info.name(), url);
+	    	publish(TeeColor.Message.name(), String.format(messages.getString("infosReadProfileIsStarting"), index), TeeColor.Info.name(), url);
+	    	
+	    	new URL(url); // Reject malformed URL
+	    	
 			XMLReader steamProfileReader = XMLReaderFactory.createXMLReader();
 			steamProfileReader.setContentHandler(steamProfileParser);
-			new URL(url); // Reject malformed URL
 			HttpGet httpget = new HttpGet(url);
 			publish("SteamFriendProfileReader Executing request " + httpget.getRequestLine());
+			
             Exception exception = httpclient.execute(httpget, new XMLResponseHandler(steamProfileReader));
             if (exception != null)
-            	publish("error", String.format(messages.getString("errorExceptionMessageWithSteamID64"), steamId64, 
+            	publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamID64"), steamId64, 
             			 exception.getClass().getName(), exception.getLocalizedMessage()));
+            
 		} catch (CancellationException e) {
 			publish("SteamFriendProfileReader " + steamId64 + " cancelled during doInBackground");
 		} finally {

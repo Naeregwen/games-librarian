@@ -34,38 +34,68 @@ public class AllSteamGamesStatsReader extends SwingWorker<SteamGamesList, String
 		this.steamGameStatsReaders = new Vector<SteamGameStatsReader>();
 	}
 
+	private void cancelSteamGameStatsReaders() {
+		for (SteamGameStatsReader steamGameStatsReader : steamGameStatsReaders) {
+			if (!steamGameStatsReader.isDone() && !steamGameStatsReader.isCancelled())
+				if (steamGameStatsReader.cancel(true))
+					librarian.getTee().writelnInfos("steamGameStatsReader " + steamGameStatsReader.getGame().getName() + " cancelled");
+				else
+					librarian.getTee().writelnError("Can not cancel steamGameStatsReader");
+			else
+				librarian.getTee().writelnInfos("steamGameStatsReader " + steamGameStatsReader.getGame().getName() + " already done/cancelled");
+		}
+	}
+	
+	private void clearProgressIndicators() {
+		librarian.setAllSteamGamesStatsReading(false);
+		librarian.updateLibraryMainTabTitle();
+	}
+	
 	@Override
 	protected SteamGamesList doInBackground() throws Exception {
+		
 		if (steamProfile.getSteamID64() == null && steamProfile.getSteamID() == null) return null;
+		
 		SteamGamesList steamGamesList = null;
-    	if (steamProfile.getSteamGames() != null && !steamProfile.getSteamGames().isEmpty()) {
-    		steamGamesList = new SteamGamesList(steamProfile);
-//    		librarian.setSteamFriendsListReading(true);
-//    		librarian.updateProfileFriendsTabTitle();
+		
+    	try {
     		
-	    	publish("AllSteamGamesStatsReader starting");
-	    	
-    		CountDownLatch doneSignal = new CountDownLatch(steamProfile.getSteamGames().size());
-    		int index = 1;
-    		for (SteamGame game : steamProfile.getSteamGames()) {
-    			
-//    			try {
-//    				Thread.sleep(100);
-//    			} catch (CancellationException e) {
-//    				cancelSteamFriendProfileReaders();
-//    				librarian.getTee().writelnInfos("SteamFriendsListReader cancelled");
-//    				break;
-//    			} catch (InterruptedException e) {
-//    				librarian.getTee().printStackTrace(e);
-//				}
-
-    			SteamGameStatsReader steamGameStatsReader = new SteamGameStatsReader(librarian, game, doneSignal);
-    			steamGameStatsReaders.add(steamGameStatsReader);
-    			steamGameStatsReader.execute();
-    		}
-			doneSignal.await();
-			publish("AllSteamGamesStatsReader finishing");
-    	}
+	    	if (steamProfile.getSteamGames() != null && !steamProfile.getSteamGames().isEmpty()) {
+	    		
+	    		steamGamesList = new SteamGamesList(steamProfile);
+	    		
+	    		// Must know this number before constructing a CountDownLatch
+	    		int gamesWithStats = 0;
+	    		for (SteamGame game : steamProfile.getSteamGames())
+	    			if (game.getStatsLink() != null)
+	    				gamesWithStats++;
+	    		
+	    		CountDownLatch doneSignal = new CountDownLatch(gamesWithStats);
+	    		int index = 1;
+	    		
+	    		for (SteamGame game : steamProfile.getSteamGames()) {
+	    			
+	    			if (game.getStatsLink() == null) continue;
+	    			
+	    			try {
+	    				Thread.sleep((long)(Math.random() * 100) + 50); // Add some delay between requests
+	    			} catch (InterruptedException e) {
+	    				librarian.getTee().writelnInfos("AllSteamGamesStatsReader interrupted during doInBackground sleep");
+	    				break;
+					}
+	
+	    			SteamGameStatsReader steamGameStatsReader = new SteamGameStatsReader(librarian, game, doneSignal, index++);
+	    			steamGameStatsReaders.add(steamGameStatsReader);
+	    			steamGameStatsReader.execute();
+	    		}
+	    		
+				doneSignal.await();
+	    	}
+		} catch (InterruptedException e) {
+			publish("AllSteamGamesStatsReader " + steamProfile.getId() + " interrupted during doInBackground");
+		} catch (CancellationException e) {
+			publish("AllSteamGamesStatsReader " + steamProfile.getId() + " cancelled during doInBackground");
+		}
     	return steamGamesList;
 	}
 
@@ -76,7 +106,7 @@ public class AllSteamGamesStatsReader extends SwingWorker<SteamGamesList, String
 	@Override
 	protected void done() {
 		if (isCancelled()) {
-//			cancelSteamFriendProfileReaders();
+			cancelSteamGameStatsReaders();
 			librarian.getTee().writelnInfos("AllSteamGamesStatsReader " + steamProfile.getId() + " cancelled before done");
 		} else {
 			try {
@@ -86,19 +116,16 @@ public class AllSteamGamesStatsReader extends SwingWorker<SteamGamesList, String
 					librarian.updateLibraryStatisticsMainTab();
 				}
 			} catch (InterruptedException e) {
-//				cancelSteamFriendProfileReaders();
+				cancelSteamGameStatsReaders();
 				librarian.getTee().writelnInfos("AllSteamGamesStatsReader " + steamProfile.getId() + " interrupted during done");
 				librarian.getTee().printStackTrace(e);
-			} catch (CancellationException e) {
-//				cancelSteamFriendProfileReaders();
-				librarian.getTee().writelnInfos("AllSteamGamesStatsReader " + steamProfile.getId() + " cancelled during done");
 			} catch (ExecutionException e) {
-//				cancelSteamFriendProfileReaders();
+				cancelSteamGameStatsReaders();
 				librarian.getTee().writelnInfos("AllSteamGamesStatsReader " + steamProfile.getId() + " execution exception during done");
 				librarian.getTee().printStackTrace(e);
 			}
 		}
-//		clearProgressIndicators();
+		clearProgressIndicators();
 	}
 	
 	/*/

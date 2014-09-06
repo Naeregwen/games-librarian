@@ -21,7 +21,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import commons.ColoredTee;
-import commons.ColoredTee.TextColor;
+import commons.ColoredTee.TeeColor;
 import commons.GamesLibrary.LoadingSource;
 import commons.api.Steam;
 import commons.api.SteamGame;
@@ -63,25 +63,33 @@ public class SteamFriendGameListReader extends SwingWorker<Vector<SteamGame>, St
 	 */
 	@Override
 	protected Vector<SteamGame> doInBackground() throws Exception {
+		
 		if (friend == null || friend.getSteamID64() == null) return null;
+		
 		SteamGamesListParser steamGamesListParser = new SteamGamesListParser(defaultSteamLaunchMethod, LoadingSource.Steam);
 		CloseableHttpClient httpclient = HttpClients.createDefault();
+		
 		try {
+			
 			String url = Steam.gamesListURLCommand(friend.getSteamID64());
-			publish(TextColor.Message.name(), String.format(messages.getString("infosRollReadingGamesListFromURL"), index, friend.getId(), friend.getPrivacyState(messages.getString("undefinedPrivacyState"))), TextColor.Info.name(), url);
+			publish(TeeColor.Message.name(), String.format(messages.getString("infosRollReadingGamesListFromURL"), index, friend.getId(), friend.getPrivacyState(messages.getString("undefinedPrivacyState"))), TeeColor.Info.name(), url);
+			
+			new URL(url); // Reject malformed URL
+			
 			XMLReader steamGamesListReader = XMLReaderFactory.createXMLReader();
 			steamGamesListReader.setContentHandler(steamGamesListParser);
-        	new URL(url); // Reject malformed URL
             HttpGet httpget = new HttpGet(url);
             publish("SteamFriendGameListReader Executing request " + httpget.getRequestLine());
+            
             Exception exception = httpclient.execute(httpget, new XMLResponseHandler(steamGamesListReader));
             if (exception != null)
-            	publish("error", String.format(messages.getString("errorExceptionMessageWithSteamID"), friend.getId(), 
+            	publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamID"), friend.getId(), 
             			friend.getPrivacyState(messages.getString("undefinedPrivacyState")), exception.getClass().getName(), exception.getLocalizedMessage()));
+            
 		} catch (CancellationException e) {
 			publish("SteamFriendGameStatsReader " + friend.getSteamID64() + " cancelled during doInBackground");
 		} catch (IOException e) {
-			publish("error", String.format(messages.getString("errorExceptionMessageWithSteamID"), friend.getId(), 
+			publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamID"), friend.getId(), 
 					friend.getPrivacyState(messages.getString("undefinedPrivacyState")), e.getClass().getName(), e.getLocalizedMessage()));
         } finally {
             httpclient.close();

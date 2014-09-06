@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 
 import commons.ColoredTee;
-import commons.ColoredTee.TextColor;
+import commons.ColoredTee.TeeColor;
 import commons.api.SteamGame;
 import commons.api.SteamLaunchMethod;
 import commons.api.SteamProfile;
@@ -65,10 +65,15 @@ public class SteamFriendsGameListsReader extends SwingWorker<List<SteamProfile>,
 	
 	@Override
 	protected List<SteamProfile> doInBackground() throws Exception {
+		
+		if (steamProfile == null || steamProfile.getSteamFriends().isEmpty()) return null;
+		
 		Vector<SteamProfile> friendsWithoutGamelist = new Vector<SteamProfile>();
 		ResourceBundle messages = librarian.getParameters().getMessages();
-		if (steamProfile == null || steamProfile.getSteamFriends().isEmpty()) return null;
+		
 		try {
+			
+    		// Must know this number before constructing a CountDownLatch
 			List<SteamProfile> friends = steamProfile.getSteamFriends();
 			Iterator<SteamProfile> friendsIterator = friends.iterator();
 			while (friendsIterator.hasNext()) {
@@ -80,34 +85,38 @@ public class SteamFriendsGameListsReader extends SwingWorker<List<SteamProfile>,
 			if (friendsWithoutGamelist.size() > 0) {
 				CountDownLatch doneSignal = new CountDownLatch(friendsWithoutGamelist.size());
 				int index = 1;
+				
 				for (SteamProfile friend : friendsWithoutGamelist) {
 					
-//	    			try {
-//	    				Thread.sleep(300);
-//	    			} catch (CancellationException e) {
+	    			try {
+	    				Thread.sleep((long)(Math.random() * 100) + 1000); // Add some delay between requests
+	    			} catch (CancellationException e) {
 //	    				cancelSteamFriendGameListReaders();
-//	    				librarian.getTee().writelnInfos("SteamFriendsGameListsReader cancelled");
-//	    				break;
-//	    			} catch (InterruptedException e) {
-//	    				librarian.getTee().printStackTrace(e);
-//					}
+	    				librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " cancelled during doInBackground");
+	    			} catch (InterruptedException e) {
+//	    				cancelSteamFriendGameListReaders();
+	    				librarian.getTee().writelnInfos("SteamFriendsGameListsReader interrupted during doInBackground sleep");
+	    				break;
+					}
 					
 	    			SteamFriendGameListReader steamFriendGameListReader = new SteamFriendGameListReader(librarian, friend, index++, doneSignal, defaultSteamLaunchMethod, messages);
 	    			steamFriendGameListReaders.add(steamFriendGameListReader);
 	    			steamFriendGameListReader.execute();
 				}
+				
 				doneSignal.await();
+				
 				friendsIterator = friends.iterator();
 				while (friendsIterator.hasNext()) {
 					SteamProfile friend = friendsIterator.next();
-    				publish(TextColor.Info.name(), String.format(messages.getString("summarizeGamesList"), URLDecoder.decode(friend.getId(), "UTF-8"), friend.getSteamGames() != null? friend.getSteamGames().size() : 0));
+    				publish(TeeColor.Info.name(), String.format(messages.getString("summarizeGamesList"), URLDecoder.decode(friend.getId(), "UTF-8"), friend.getSteamGames() != null? friend.getSteamGames().size() : 0));
 				}
 			}
 		} catch (InterruptedException e) {
-			cancelSteamFriendGameListReaders();
+//			cancelSteamFriendGameListReaders();
 			librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " interrupted during doInBackground");
 		} catch (CancellationException e) {
-			cancelSteamFriendGameListReaders();
+//			cancelSteamFriendGameListReaders();
 			librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " cancelled during doInBackground");
 		}
 
@@ -122,32 +131,28 @@ public class SteamFriendsGameListsReader extends SwingWorker<List<SteamProfile>,
 	protected void done() {
 		if (isCancelled()) {
 			cancelSteamFriendGameListReaders();
-			clearProgressIndicators();
 			librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " cancelled before done");
 		} else {
 			try {
 				List<SteamProfile> friendsWithoutGamelist = (List<SteamProfile>) get();
 				for (SteamProfile friend : friendsWithoutGamelist)
 					librarian.addFriendGameList(friend.getSteamID64(), friend.getSteamGames());
-				clearProgressIndicators();
 				librarian.updateFriendsWithSameGamePane();
 			} catch (InterruptedException e) {
 				cancelSteamFriendGameListReaders();
-				clearProgressIndicators();
 				librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " interrupted during done");
 				librarian.getTee().printStackTrace(e);
 			} catch (CancellationException e) {
 				cancelSteamFriendGameListReaders();
-				clearProgressIndicators();
 				librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " cancelled during done");
 				cancelSteamFriendGameListReaders();
 			} catch (ExecutionException e) {
 				cancelSteamFriendGameListReaders();
-				clearProgressIndicators();
 				librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " execution exception during done");
 				librarian.getTee().printStackTrace(e);
 			}
 		}
+		clearProgressIndicators();
 	}
 	
 	/*/
