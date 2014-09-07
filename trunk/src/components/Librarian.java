@@ -786,113 +786,113 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		return ((SteamAchievementsTableModel) steamAchievementsTable.getModel()).getSteamAchievementsComparator().getSteamAchievementsSortMethod();
 	}
 	
-	//
-	// Display/Sort Steam data
-	//
-	
-	public void setPreviousSteamGameSortMethod() {
-		if (view.librarySortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.librarySortMethodComboBox.getSelectedIndex();
-		int previousIndex = selectedIndex == 0 ? view.librarySortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-		view.librarySortMethodComboBox.setSelectedIndex(previousIndex);
-	}
-	
-	public void setNextSteamGameSortMethod() {
-		if (view.librarySortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.librarySortMethodComboBox.getSelectedIndex();
-		int nextIndex = selectedIndex == view.librarySortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-		view.librarySortMethodComboBox.setSelectedIndex(nextIndex);
-	}
-	
-	public void setPreviousSteamGameDisplayMode() {
-		if (view.libraryDisplayModeComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.libraryDisplayModeComboBox.getSelectedIndex();
-		int previousIndex = selectedIndex == 0 ? view.libraryDisplayModeComboBox.getItemCount() - 1 : selectedIndex - 1;
-		view.libraryDisplayModeComboBox.setSelectedIndex(previousIndex);
-	}
-	
-	public void setNextSteamGameDisplayMode() {
-		if (view.libraryDisplayModeComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.libraryDisplayModeComboBox.getSelectedIndex();
-		int nextIndex = selectedIndex == view.libraryDisplayModeComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-		view.libraryDisplayModeComboBox.setSelectedIndex(nextIndex);
-	}
-	
-	public void setPreviousSteamAchievementsSortMethod() {
-		if (view.steamAchievementsSortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.steamAchievementsSortMethodComboBox.getSelectedIndex();
-		int previousIndex = selectedIndex == 0 ? view.steamAchievementsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-		view.steamAchievementsSortMethodComboBox.setSelectedIndex(previousIndex);
-	}
-	
-	public void setNextSteamAchievementsSortMethod() {
-		if (view.steamAchievementsSortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.steamAchievementsSortMethodComboBox.getSelectedIndex();
-		int nextIndex = selectedIndex == view.steamAchievementsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-		view.steamAchievementsSortMethodComboBox.setSelectedIndex(nextIndex);
-	}
-	
-	public void setPreviousSteamAchievementsColumnsSortMethod() {
-		if (view.steamAchievementsListsSortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.steamAchievementsListsSortMethodComboBox.getSelectedIndex();
-		int previousIndex = selectedIndex == 0 ? view.steamAchievementsListsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-		view.steamAchievementsListsSortMethodComboBox.setSelectedIndex(previousIndex);
-	}
-	
-	public void setNextSteamAchievementsColumnsSortMethod() {
-		if (view.steamAchievementsListsSortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.steamAchievementsListsSortMethodComboBox.getSelectedIndex();
-		int nextIndex = selectedIndex == view.steamAchievementsListsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-		view.steamAchievementsListsSortMethodComboBox.setSelectedIndex(nextIndex);
-	}
-	
-	public void setPreviousSteamProfile() {
-		if (view.knownProfilesComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.knownProfilesComboBox.getSelectedIndex();
-		int previousIndex = selectedIndex == 0 ? view.knownProfilesComboBox.getItemCount() - 1 : selectedIndex - 1;
-		view.knownProfilesComboBox.setSelectedIndex(previousIndex);
-	}
-	
-	public void setNextSteamProfile() {
-		if (view.knownProfilesComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.knownProfilesComboBox.getSelectedIndex();
-		int nextIndex = selectedIndex == view.knownProfilesComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-		view.knownProfilesComboBox.setSelectedIndex(nextIndex);
-	}
-	
-	public void setPreviousSteamGroupSortMethod() {
-		if (view.steamGroupsSortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.steamGroupsSortMethodComboBox.getSelectedIndex();
-		int previousIndex = selectedIndex == 0 ? view.steamGroupsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-		view.steamGroupsSortMethodComboBox.setSelectedIndex(previousIndex);
-    	displaySubTab(ProfileTab.Groups);
-		
-	}
-	
-	public void setNextSteamGroupSortMethod() {
-		if (view.steamGroupsSortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.steamGroupsSortMethodComboBox.getSelectedIndex();
-		int nextIndex = selectedIndex == view.steamGroupsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-		view.steamGroupsSortMethodComboBox.setSelectedIndex(nextIndex);
-    	displaySubTab(ProfileTab.Groups);
-	}
-	
-	public void setPreviousSteamFriendSortMethod() {
-		if (view.steamFriendsSortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.steamFriendsSortMethodComboBox.getSelectedIndex();
-		int previousIndex = selectedIndex == 0 ? view.steamFriendsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-		view.steamFriendsSortMethodComboBox.setSelectedIndex(previousIndex);
-        displaySubTab(ProfileTab.Friends);
-	}
-	
-	public void setNextSteamFriendSortMethod() {
-		if (view.steamFriendsSortMethodComboBox.getItemCount() <= 0) return;
-		int selectedIndex = view.steamFriendsSortMethodComboBox.getSelectedIndex();
-		int nextIndex = selectedIndex == view.steamFriendsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-		view.steamFriendsSortMethodComboBox.setSelectedIndex(nextIndex);
-        displaySubTab(ProfileTab.Friends);
-	}
-	
+//	//
+//	// Display/Sort Steam data
+//	//
+//	
+//	public void setPreviousSteamGameSortMethod() {
+//		if (view.librarySortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.librarySortMethodComboBox.getSelectedIndex();
+//		int previousIndex = selectedIndex == 0 ? view.librarySortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
+//		view.librarySortMethodComboBox.setSelectedIndex(previousIndex);
+//	}
+//	
+//	public void setNextSteamGameSortMethod() {
+//		if (view.librarySortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.librarySortMethodComboBox.getSelectedIndex();
+//		int nextIndex = selectedIndex == view.librarySortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
+//		view.librarySortMethodComboBox.setSelectedIndex(nextIndex);
+//	}
+//	
+//	public void setPreviousSteamGameDisplayMode() {
+//		if (view.libraryDisplayModeComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.libraryDisplayModeComboBox.getSelectedIndex();
+//		int previousIndex = selectedIndex == 0 ? view.libraryDisplayModeComboBox.getItemCount() - 1 : selectedIndex - 1;
+//		view.libraryDisplayModeComboBox.setSelectedIndex(previousIndex);
+//	}
+//	
+//	public void setNextSteamGameDisplayMode() {
+//		if (view.libraryDisplayModeComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.libraryDisplayModeComboBox.getSelectedIndex();
+//		int nextIndex = selectedIndex == view.libraryDisplayModeComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
+//		view.libraryDisplayModeComboBox.setSelectedIndex(nextIndex);
+//	}
+//	
+//	public void setPreviousSteamAchievementsSortMethod() {
+//		if (view.steamAchievementsSortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.steamAchievementsSortMethodComboBox.getSelectedIndex();
+//		int previousIndex = selectedIndex == 0 ? view.steamAchievementsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
+//		view.steamAchievementsSortMethodComboBox.setSelectedIndex(previousIndex);
+//	}
+//	
+//	public void setNextSteamAchievementsSortMethod() {
+//		if (view.steamAchievementsSortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.steamAchievementsSortMethodComboBox.getSelectedIndex();
+//		int nextIndex = selectedIndex == view.steamAchievementsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
+//		view.steamAchievementsSortMethodComboBox.setSelectedIndex(nextIndex);
+//	}
+//	
+//	public void setPreviousSteamAchievementsColumnsSortMethod() {
+//		if (view.steamAchievementsListsSortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.steamAchievementsListsSortMethodComboBox.getSelectedIndex();
+//		int previousIndex = selectedIndex == 0 ? view.steamAchievementsListsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
+//		view.steamAchievementsListsSortMethodComboBox.setSelectedIndex(previousIndex);
+//	}
+//	
+//	public void setNextSteamAchievementsColumnsSortMethod() {
+//		if (view.steamAchievementsListsSortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.steamAchievementsListsSortMethodComboBox.getSelectedIndex();
+//		int nextIndex = selectedIndex == view.steamAchievementsListsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
+//		view.steamAchievementsListsSortMethodComboBox.setSelectedIndex(nextIndex);
+//	}
+//	
+//	public void setPreviousSteamProfile() {
+//		if (view.knownProfilesComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.knownProfilesComboBox.getSelectedIndex();
+//		int previousIndex = selectedIndex == 0 ? view.knownProfilesComboBox.getItemCount() - 1 : selectedIndex - 1;
+//		view.knownProfilesComboBox.setSelectedIndex(previousIndex);
+//	}
+//	
+//	public void setNextSteamProfile() {
+//		if (view.knownProfilesComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.knownProfilesComboBox.getSelectedIndex();
+//		int nextIndex = selectedIndex == view.knownProfilesComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
+//		view.knownProfilesComboBox.setSelectedIndex(nextIndex);
+//	}
+//	
+//	public void setPreviousSteamGroupSortMethod() {
+//		if (view.steamGroupsSortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.steamGroupsSortMethodComboBox.getSelectedIndex();
+//		int previousIndex = selectedIndex == 0 ? view.steamGroupsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
+//		view.steamGroupsSortMethodComboBox.setSelectedIndex(previousIndex);
+//    	displaySubTab(ProfileTab.Groups);
+//		
+//	}
+//	
+//	public void setNextSteamGroupSortMethod() {
+//		if (view.steamGroupsSortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.steamGroupsSortMethodComboBox.getSelectedIndex();
+//		int nextIndex = selectedIndex == view.steamGroupsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
+//		view.steamGroupsSortMethodComboBox.setSelectedIndex(nextIndex);
+//    	displaySubTab(ProfileTab.Groups);
+//	}
+//	
+//	public void setPreviousSteamFriendSortMethod() {
+//		if (view.steamFriendsSortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.steamFriendsSortMethodComboBox.getSelectedIndex();
+//		int previousIndex = selectedIndex == 0 ? view.steamFriendsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
+//		view.steamFriendsSortMethodComboBox.setSelectedIndex(previousIndex);
+//        displaySubTab(ProfileTab.Friends);
+//	}
+//	
+//	public void setNextSteamFriendSortMethod() {
+//		if (view.steamFriendsSortMethodComboBox.getItemCount() <= 0) return;
+//		int selectedIndex = view.steamFriendsSortMethodComboBox.getSelectedIndex();
+//		int nextIndex = selectedIndex == view.steamFriendsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
+//		view.steamFriendsSortMethodComboBox.setSelectedIndex(nextIndex);
+//        displaySubTab(ProfileTab.Friends);
+//	}
+//	
 	//
 	// Sorting data
 	//

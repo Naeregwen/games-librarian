@@ -33,7 +33,7 @@ public class SteamGamesDisplayModeComboBox extends JComboBox<SteamGamesDisplayMo
 	public SteamGamesDisplayModeComboBox(WindowBuilderMask me) {
 		super(SteamGamesDisplayMode.values());
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
-		setRenderer(new SteamGamesDisplayModeComboBoxRenderer((ListCellRenderer<SteamGamesDisplayMode>)this.getRenderer()));
+		setRenderer(new SteamGamesDisplayModeComboBoxRenderer((ListCellRenderer<SteamGamesDisplayMode>) this.getRenderer()));
 		addItemListener(this);
 	}
 	

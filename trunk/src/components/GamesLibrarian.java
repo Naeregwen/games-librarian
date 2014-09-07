@@ -93,20 +93,6 @@ import components.actions.enums.SteamGamesSortMethodAction;
 import components.actions.enums.SteamGroupsSortMethodAction;
 import components.actions.texts.LookAndFeelAction;
 import components.buttons.GameLeftClickActionButton;
-import components.buttons.NextSteamAchievementsColumnsSortMethodButton;
-import components.buttons.NextSteamAchievementsSortMethodButton;
-import components.buttons.NextSteamFriendSortMethodButton;
-import components.buttons.NextSteamGameDisplayModeButton;
-import components.buttons.NextSteamGameSortMethodButton;
-import components.buttons.NextSteamGroupSortMethodButton;
-import components.buttons.NextSteamProfileButton;
-import components.buttons.PreviousSteamAchievementsColumnsSortMethodButton;
-import components.buttons.PreviousSteamAchievementsSortMethodButton;
-import components.buttons.PreviousSteamFriendSortMethodButton;
-import components.buttons.PreviousSteamGameDisplayModeButton;
-import components.buttons.PreviousSteamGameSortMethodButton;
-import components.buttons.PreviousSteamGroupSortMethodButton;
-import components.buttons.PreviousSteamProfileButton;
 import components.buttons.listeners.GameLeftClickActionButtonListener;
 import components.comboboxes.DumpModeComboBox;
 import components.comboboxes.GameLeftClickActionComboBox;
@@ -122,6 +108,7 @@ import components.comboboxes.SteamGroupsSortMethodComboBox;
 import components.comboboxes.SteamLaunchMethodComboBox;
 import components.comboboxes.adapters.EnumSelectionStateAdapter;
 import components.comboboxes.adapters.TextSelectionStateAdapter;
+import components.containers.ArrowedComboBox;
 import components.containers.GameLauncher;
 import components.containers.IconPane;
 import components.containers.MostPlayedGameLauncher;
@@ -277,14 +264,12 @@ public class GamesLibrarian extends JFrame {
 	
 	TitleLabel libraryTitleLabel;
 	JButton loadLibraryButton;
+	
 	Label librarySortMethodLabel;
-	PreviousSteamGameSortMethodButton previousSteamGameSortMethodButton;
 	SteamGamesSortMethodComboBox librarySortMethodComboBox;
-	NextSteamGameSortMethodButton nextSteamGameSortMethodButton;
+	
 	Label libraryDisplayModeLabel;
-	PreviousSteamGameDisplayModeButton previousSteamGameDisplayModeButton;
 	SteamGamesDisplayModeComboBox libraryDisplayModeComboBox;
-	NextSteamGameDisplayModeButton nextSteamGameDisplayModeButton;
 	
 	private JPanel libraryOptionsPane;
 	Label libraryLeftClickActionLabel;
@@ -353,14 +338,12 @@ public class GamesLibrarian extends JFrame {
 	
 	TitleLabel currentGameTitleLabel;
 	JButton loadGameStatsButton;
+	
 	Label steamAchievementsSortMethodLabel;
-	PreviousSteamAchievementsSortMethodButton previousSteamAchievementsSortMethodButton;
 	SteamAchievementsSortMethodComboBox steamAchievementsSortMethodComboBox;
-	NextSteamAchievementsSortMethodButton nextSteamAchievementsSortMethodButton;
+	
 	Label steamAchievementsColumnsSortMethodLabel;
-	PreviousSteamAchievementsColumnsSortMethodButton previousSteamAchievementsColumnsSortMethodButton;
 	SteamAchievementsListsSortMethodComboBox steamAchievementsListsSortMethodComboBox;
-	NextSteamAchievementsColumnsSortMethodButton nextSteamAchievementsColumnsSortMethodButton;
 
 	private JPanel gameOptionsPane;
 	Label gameLeftClickActionLabel;
@@ -394,17 +377,14 @@ public class GamesLibrarian extends JFrame {
 	
 	JButton loadProfileButton;
 	JButton addProfileButton;
-	PreviousSteamProfileButton previousKnownProfileButton;
+	
 	KnownProfilesComboBox knownProfilesComboBox;
-	NextSteamProfileButton nextKnownProfileButton;
+	
 	Label steamGroupsSortMethodLabel;
-	PreviousSteamGroupSortMethodButton previousSteamGroupSortMethodButton;
 	SteamGroupsSortMethodComboBox steamGroupsSortMethodComboBox;
-	NextSteamGroupSortMethodButton nextSteamGroupSortMethodButton;
+	
 	Label steamFriendsSortMethodLabel;
-	PreviousSteamFriendSortMethodButton previousSteamFriendSortMethodButton;
 	SteamFriendsSortMethodComboBox steamFriendsSortMethodComboBox;
-	NextSteamFriendSortMethodButton nextSteamFriendSortMethodButton;
 	
 	Label steamGroupsDisplayModeLabel;
 	JToggleButton steamGroupsDisplayModeList;
@@ -1665,45 +1645,31 @@ public class GamesLibrarian extends JFrame {
 		// Commands pane
 		libraryCommandsPane = new JPanel();
 		libraryCommandsPane.setBorder(new LineBorder(Color.GRAY));
-		libraryCommandsPane.setLayout(new MigLayout("", "[][][][][][][][][grow]", "[][]"));
+		libraryCommandsPane.setLayout(new MigLayout("", "[][][][grow]", "[][]"));
 				
 		// libraryTitle
 		libraryTitleLabel = new TitleLabel(me, "libraryTitleLabelEmpty");
-		libraryCommandsPane.add(libraryTitleLabel, "cell 0 0 8 1,alignx left,aligny center");
+		libraryCommandsPane.add(libraryTitleLabel, "cell 0 0 3 1,alignx left,aligny center");
 		
 		gamesLibrarianLibrary.add(libraryCommandsPane, "cell 0 0,grow");
 		
 		// loadLibraryButton
 		loadLibraryButton = new JButton(loadLibraryAction);
-		libraryCommandsPane.add(loadLibraryButton, "cell 0 1,alignx left,aligny top");
+		libraryCommandsPane.add(loadLibraryButton, "cell 0 1,alignx left,aligny center");
 		
 		// librarySortMethod
 		librarySortMethodLabel = new Label(me, "librarySortMethodLabel");
-		libraryCommandsPane.add(librarySortMethodLabel, "cell 1 1,alignx left,aligny center");
-		
-		previousSteamGameSortMethodButton = new PreviousSteamGameSortMethodButton(me);
-		libraryCommandsPane.add(previousSteamGameSortMethodButton, "cell 2 1");
-		
 		librarySortMethodComboBox = new SteamGamesSortMethodComboBox(me);
-		libraryCommandsPane.add(librarySortMethodComboBox, "cell 3 1,alignx left,aligny center");
 		
-		nextSteamGameSortMethodButton = new NextSteamGameSortMethodButton(me);
-		libraryCommandsPane.add(nextSteamGameSortMethodButton, "cell 4 1");
+		libraryCommandsPane.add(new ArrowedComboBox(librarySortMethodLabel, librarySortMethodComboBox), "cell 1 1");
 		
 		new EnumSelectionStateAdapter<SteamGamesSortMethod>(librarySortMethodActionGroup, librarySortMethodComboBox).configure();
 		
 		// libraryDisplayMode
 		libraryDisplayModeLabel = new Label(me, "libraryDisplayModeLabel");
-		libraryCommandsPane.add(libraryDisplayModeLabel, "cell 5 1,alignx left,aligny center");
-		
-		previousSteamGameDisplayModeButton = new PreviousSteamGameDisplayModeButton(me);
-		libraryCommandsPane.add(previousSteamGameDisplayModeButton, "cell 6 1");
-		
 		libraryDisplayModeComboBox = new SteamGamesDisplayModeComboBox(me);
-		libraryCommandsPane.add(libraryDisplayModeComboBox, "cell 7 1,alignx left,aligny center");
 		
-		nextSteamGameDisplayModeButton = new NextSteamGameDisplayModeButton(me);
-		libraryCommandsPane.add(nextSteamGameDisplayModeButton, "cell 8 1");
+		libraryCommandsPane.add(new ArrowedComboBox(libraryDisplayModeLabel, libraryDisplayModeComboBox), "cell 2 1");
 		
 		new EnumSelectionStateAdapter<SteamGamesDisplayMode>(libraryDisplayModeActionGroup, libraryDisplayModeComboBox).configure();
 		
@@ -1760,46 +1726,32 @@ public class GamesLibrarian extends JFrame {
 		// Commands pane
 		gameCommandsPane = new JPanel();
 		gameCommandsPane.setBorder(new LineBorder(Color.GRAY));
-		gameCommandsPane.setLayout(new MigLayout("", "[][][][][][][][][grow]", "[][]"));
+		gameCommandsPane.setLayout(new MigLayout("", "[][][][grow]", "[][]"));
 		
 		gamesLibrarianGame.add(gameCommandsPane, "cell 0 0 4 1,grow");
 		
 		// currentGameTitle
 		currentGameTitleLabel = new TitleLabel(me, "currentGameTitleLabelEmpty");
-		gameCommandsPane.add(currentGameTitleLabel, "flowx,cell 0 0 8 1,alignx left,aligny center");
+		gameCommandsPane.add(currentGameTitleLabel, "flowx,cell 0 0 3 1,alignx left,aligny center");
 		
 		// loadGameStatsButton
 		loadGameStatsButton = new JButton(loadGameStatsAction);
-		gameCommandsPane.add(loadGameStatsButton, "cell 0 1,alignx left,aligny top");
+		gameCommandsPane.add(loadGameStatsButton, "cell 0 1,alignx left,aligny center");
 		
 		// steamAchievementsSortMethod
 		steamAchievementsSortMethodLabel = new Label(me, "achievementsSortMethodLabel");
-		gameCommandsPane.add(steamAchievementsSortMethodLabel, "cell 1 1,alignx left,aligny center");
-		
-		previousSteamAchievementsSortMethodButton = new PreviousSteamAchievementsSortMethodButton(me);
-		gameCommandsPane.add(previousSteamAchievementsSortMethodButton, "cell 2 1");
-		
 		steamAchievementsSortMethodComboBox = new SteamAchievementsSortMethodComboBox(me);
-		gameCommandsPane.add(steamAchievementsSortMethodComboBox, "cell 3 1,alignx left,aligny center");
 		
-		nextSteamAchievementsSortMethodButton = new NextSteamAchievementsSortMethodButton(me);
-		gameCommandsPane.add(nextSteamAchievementsSortMethodButton, "cell 4 1");
+		gameCommandsPane.add(new ArrowedComboBox(steamAchievementsSortMethodLabel, steamAchievementsSortMethodComboBox), "cell 1 1");
 		
 		new EnumSelectionStateAdapter<SteamAchievementsSortMethod>(steamAchievementsSortMethodActionGroup, steamAchievementsSortMethodComboBox).configure();
 		
 		// steamAchievementsColumnsSortMethod
 		steamAchievementsColumnsSortMethodLabel = new Label(me, "steamAchievementsListsSortMethodLabel");
-		gameCommandsPane.add(steamAchievementsColumnsSortMethodLabel, "cell 5 1,alignx trailing");
-		
-		previousSteamAchievementsColumnsSortMethodButton = new PreviousSteamAchievementsColumnsSortMethodButton(me);
-		gameCommandsPane.add(previousSteamAchievementsColumnsSortMethodButton, "cell 6 1");
-		
 		steamAchievementsListsSortMethodComboBox = new SteamAchievementsListsSortMethodComboBox(me);
-		gameCommandsPane.add(steamAchievementsListsSortMethodComboBox, "cell 7 1,alignx left,aligny center");
 		
-		nextSteamAchievementsColumnsSortMethodButton = new NextSteamAchievementsColumnsSortMethodButton(me);
-		gameCommandsPane.add(nextSteamAchievementsColumnsSortMethodButton, "cell 8 1");
-		
+		gameCommandsPane.add(new ArrowedComboBox(steamAchievementsColumnsSortMethodLabel, steamAchievementsListsSortMethodComboBox), "cell 2 1");
+
 		new EnumSelectionStateAdapter<SteamAchievementsListsSortMethod>(steamAchievementsListsSortMethodActionGroup, steamAchievementsListsSortMethodComboBox).configure();
 		
 		// gameOptionsPane
@@ -2243,60 +2195,41 @@ public class GamesLibrarian extends JFrame {
 		// Commands pane
 		profileCommandsPane = new JPanel();
 		profileCommandsPane.setBorder(new LineBorder(Color.GRAY));
-		profileCommandsPane.setLayout(new MigLayout("", "[][][][][][][][][][][][][grow]", "[][]"));
+		profileCommandsPane.setLayout(new MigLayout("", "[][][][][][grow]", "[][]"));
 		
 		gamesLibrarianProfile.add(profileCommandsPane, "cell 0 0,grow");
 		
 		// currentProfileTitle
 		currentProfileTitleLabel = new TitleLabel(me, "currentProfileTitleLabelEmpty");
-		profileCommandsPane.add(currentProfileTitleLabel, "cell 0 0 13 1,alignx left,aligny center");
+		profileCommandsPane.add(currentProfileTitleLabel, "cell 0 0 6 1,alignx left,aligny center");
 		
 		// loadProfileButton
 		loadProfileButton = new JButton(loadProfileAction);
-		profileCommandsPane.add(loadProfileButton, "cell 0 1");
+		profileCommandsPane.add(loadProfileButton, "cell 0 1,aligny center");
 		
 		// addProfileButton
 		addProfileButton = new JButton(addProfileAction);
-		profileCommandsPane.add(addProfileButton, "cell 1 1");
+		profileCommandsPane.add(addProfileButton, "cell 1 1,aligny center");
 		
 		// knownProfilesComboBox
-		previousKnownProfileButton = new PreviousSteamProfileButton(me);
-		profileCommandsPane.add(previousKnownProfileButton, "cell 2 1");
-		
 		knownProfilesComboBox = new KnownProfilesComboBox(me);
-		profileCommandsPane.add(knownProfilesComboBox, "cell 3 1,growx");
 		
-		nextKnownProfileButton = new NextSteamProfileButton(me);
-		profileCommandsPane.add(nextKnownProfileButton, "cell 4 1");
+		profileCommandsPane.add(new ArrowedComboBox(null, knownProfilesComboBox), "cell 2 1");
 		
 		// steamGroupsSortMethodComboBox
 		steamGroupsSortMethodLabel = new Label(me, "steamGroupsSortMethodLabel");
-		profileCommandsPane.add(steamGroupsSortMethodLabel, "cell 5 1,alignx trailing");
-		
-		previousSteamGroupSortMethodButton = new PreviousSteamGroupSortMethodButton(me);
-		profileCommandsPane.add(previousSteamGroupSortMethodButton, "cell 6 1");
-		
 		steamGroupsSortMethodComboBox = new SteamGroupsSortMethodComboBox(me);
-		profileCommandsPane.add(steamGroupsSortMethodComboBox, "cell 7 1,growx");
 		
-		nextSteamGroupSortMethodButton = new NextSteamGroupSortMethodButton(me);
-		profileCommandsPane.add(nextSteamGroupSortMethodButton, "cell 8 1");
-		
+		profileCommandsPane.add(new ArrowedComboBox(steamGroupsSortMethodLabel, steamGroupsSortMethodComboBox), "cell 3 1");
+
 		new EnumSelectionStateAdapter<SteamGroupsSortMethod>(steamGroupsSortMethodActionGroup, steamGroupsSortMethodComboBox).configure();
 
 		// steamFriendsSortMethodComboBox
 		steamFriendsSortMethodLabel = new Label(me, "steamFriendsSortMethodLabel");
-		profileCommandsPane.add(steamFriendsSortMethodLabel, "cell 9 1,alignx trailing");
-		
-		previousSteamFriendSortMethodButton = new PreviousSteamFriendSortMethodButton(me);
-		profileCommandsPane.add(previousSteamFriendSortMethodButton, "cell 10 1");
-		
 		steamFriendsSortMethodComboBox = new SteamFriendsSortMethodComboBox(me);
-		profileCommandsPane.add(steamFriendsSortMethodComboBox, "cell 11 1,growx");
 		
-		nextSteamFriendSortMethodButton = new NextSteamFriendSortMethodButton(me);
-		profileCommandsPane.add(nextSteamFriendSortMethodButton, "cell 12 1");
-		
+		profileCommandsPane.add(new ArrowedComboBox(steamFriendsSortMethodLabel, steamFriendsSortMethodComboBox), "cell 4 1");
+
 		new EnumSelectionStateAdapter<SteamFriendsSortMethod>(steamFriendsSortMethodActionGroup, steamFriendsSortMethodComboBox).configure();
 		
 		// profileOptionsPane
