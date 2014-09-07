@@ -73,10 +73,6 @@ public class Steam {
 	public static final String steamCommunityStoreURL = "http://store.steampowered.com/";
 	public static final String steamCommunityAppURL = "http://steamcommunity.com/app/";
 	
-	public static int responseStatusCode = 404;
-	public static StatusLine responseStatusLine = null;
-	public static String responseErrorCause = "";
-	
 	// Base dimensions for avatarFull icons
 	public static final int avatarFullIconHeight = 184;
 	public static final int avatarFullIconWidth = 184;
@@ -105,16 +101,22 @@ public class Steam {
 	public static final int dialogIconWidth = 32;
 	public static final int dialogIconHeight = 32;
 
+	// isSteamCommunityReachable() status
+	public static int responseStatusCode = 404;
+	public static StatusLine responseStatusLine = null;
+	public static String responseErrorCause = "";
+	
 	// Useful pattern
 	private static final Pattern steamGameLinkPattern = Pattern.compile("https?://steamcommunity.com/app/(\\d+)/?");
 	private static final Pattern steamGameStatsLinkPattern = Pattern.compile("https?://steamcommunity.com/(id|profiles)/([^/]+)/stats/([^/]+)/?");
 	private static final Pattern steamGameImageLinkPattern = Pattern.compile("https?://media.steampowered.com/steamcommunity/public/images/apps/([^/]+)/[^\\.]+(\\.([^\\.]+))?");
 	
 	/**
-	 * Steam API Call Method
-	 * 
-	 * Profile : http://steamcommunity.com/profile/gamerSteamId64?xml=1
-	 * Id : http://steamcommunity.com/id/gamerSteamId?xml=1
+	 * <p>Steam API Enumeration Call Method</p>
+	 * <ul>
+	 * <li>Profile : http://steamcommunity.com/profile/gamerSteamId64?xml=1</li>
+	 * <li>Id : http://steamcommunity.com/id/gamerSteamId?xml=1</li>
+	 * </ul>
 	 */
 	public static enum SteamAPICallMethod { Profile, Id };
 	
@@ -134,6 +136,65 @@ public class Steam {
 	 */
 	public static boolean isAPICallBySteamId(String gamerSteamId) {
 		return !isAPICallBySteamId64(gamerSteamId);
+	}
+	
+	/**
+	 * <p>
+	 * Steam API Enumeration Requests response formats : XML or HTML.
+	 * <br/>Enumeration elements contains their query string URL argument in String format.
+	 * </p>
+	 */
+	public static enum SteamResponseFormat {
+		
+		XML ("xml=1"),
+		HTML ("tab=achievements");
+		
+		String urlArgument;
+		
+		SteamResponseFormat(String urlArgument) {
+			this.urlArgument = urlArgument;
+		}
+
+		/**
+		 * @return the urlArgument
+		 */
+		public String getUrlArgument() {
+			return urlArgument;
+		}
+		
+	};
+	
+	/**
+	 * <p>
+	 * Steam API Enumeration Requests response language : English, French, ...
+	 * <br/>Enumeration elements contains their query string URL argument in String format.
+	 * <p>
+	 * <p>
+	 * Used to force English language in requested URL.
+	 * <br/>Forcing English language give uniform HTML pages to parse, in particular for date parsing.
+	 * <br/>Very useful in building URL to obtain HTML pages for scraping.
+	 * </p>
+	 * <p>Seems not to be fully supported with XML.</p>
+	 * </p>
+	 */
+	public static enum SteamResponseLanguage {
+		
+		English ("l=english"),
+		French("l=french");
+		
+		String urlArgument;
+		
+		SteamResponseLanguage(String urlArgument) {
+			this.urlArgument = urlArgument;
+		}
+
+		/**
+		 * @return the urlArgument
+		 */
+		public String getUrlArgument() {
+			return urlArgument;
+		}
+		
 	}
 	
 	/**
@@ -196,7 +257,7 @@ public class Steam {
 	 */
 	public static String profileURLCommand(String gamerSteamId) {
 		gamerSteamId = gamerSteamId.trim();
-		return Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "/?xml=1";
+		return Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "?" + SteamResponseFormat.XML.getUrlArgument();
 	}
 	
 	/**
@@ -207,7 +268,7 @@ public class Steam {
 	 */
 	public static String gamesListURLCommand(String gamerSteamId) {
 		gamerSteamId = gamerSteamId.trim();
-		return Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "/games?xml=1";
+		return Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "/games" + "?" + SteamResponseFormat.XML.getUrlArgument();
 	}
 	
 	/**
@@ -218,7 +279,7 @@ public class Steam {
 	 */
 	public static String friendsListURLCommand(String gamerSteamId) {
 		gamerSteamId = gamerSteamId.trim();
-		return Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "/friends?xml=1";
+		return Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "/friends" + "?" + SteamResponseFormat.XML.getUrlArgument();
 	}
 	
 	/**
@@ -228,29 +289,36 @@ public class Steam {
 	 * @return
 	 */
 	public static String gameMainStatsURLCommand(String gamerSteamId, SteamGame game) {
-		return steamGameStatsLinkPattern.matcher(game.getStatsLink()).matches() ? 
-				game.getStatsLink() + "/?xml=1" : 
-					Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "/stats/" + game.getStatsLink() + "/?xml=1";
+		return (steamGameStatsLinkPattern.matcher(game.getStatsLink()).matches() ?
+				game.getStatsLink() :
+					Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "/stats/" + game.getStatsLink()) + "/" + "?" + SteamResponseFormat.XML.getUrlArgument();
 	}
 	
 	/**
-	 * Build URL command to get XML statsList from Steam Community for gamerSteamId/game
+	 * <p>
+	 * Build URL command to get XML/HTML statsList from Steam Community for gamerSteamId/game.
+	 * <br/>When using HTML, force language to English as noted in {@link SteamResponseLanguage}.
+	 * </p>
 	 * 
-	 * @param gamerSteamId
-	 * @param game
+	 * @param gamerSteamId gamer identifier
+	 * @param game game from which statistics are requested
+	 * @param steamResponseFormat {@link SteamResponseFormat} of response needed
+	 * @param steamResponseLanguage {@link SteamResponseLanguage} of response needed
 	 * @return
 	 */
-	public static String gameStatsURLCommand(String gamerSteamId, SteamGame game) {
-		if (Strings.fullNumericPattern.matcher(gamerSteamId).matches()) {
-			return steamGameStatsLinkPattern.matcher(game.getStatsLink()).matches() ? game.getStatsLink() + "/?xml=1" : 
-				Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "/stats/" + game.getStatsLink() + "/?xml=1";
-		} else {
-			gamerSteamId = gamerSteamId.trim();
-			return steamGameStatsLinkPattern.matcher(game.getStatsLink()).matches() ? game.getStatsLink() + "/?xml=1" : 
-				Steam.steamCommunityURL + "/" + baseProfileURL(gamerSteamId) + gamerSteamId + "/stats/" + game.getStatsLink() + "/?xml=1";
-		} 
+	public static String gameStatsURLCommand(String gamerSteamId, SteamGame game, SteamResponseFormat steamResponseFormat, SteamResponseLanguage steamResponseLanguage) {
+		gamerSteamId = gamerSteamId.trim();
+		return (steamGameStatsLinkPattern.matcher(game.getStatsLink()).matches() ?
+				game.getStatsLink() :
+					Steam.steamCommunityURL + "/"
+					+ (Strings.fullNumericPattern.matcher(gamerSteamId).matches() ? baseProfileURL(gamerSteamId) : baseProfileURL(gamerSteamId))
+					+ gamerSteamId + "/stats/"
+					+ game.getStatsLink()) + (steamResponseFormat.equals(SteamResponseFormat.XML) ? "/" : "")
+					+ "?"
+					+ steamResponseFormat.getUrlArgument()
+					+ (steamResponseLanguage != null ? "&" + steamResponseLanguage.getUrlArgument() : "");
 	}
-	
+
 	/**
 	 * Launch a game with Steam Protocol
 	 * "steam://run/" + appID

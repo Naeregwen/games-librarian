@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Vector;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
@@ -23,9 +24,14 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import commons.ColoredTee;
 import commons.ColoredTee.TeeColor;
 import commons.api.Steam;
+import commons.api.SteamAchievement;
+import commons.api.SteamAchievementsList;
 import commons.api.SteamGame;
 import commons.api.SteamGameStats;
+import commons.api.Steam.SteamResponseFormat;
+import commons.api.Steam.SteamResponseLanguage;
 import commons.api.parsers.SteamGameStatsParser;
+import commons.api.scrapers.SteamAchievementsListScraper;
 import components.Librarian;
 import components.workers.responsehandlers.XMLResponseHandler;
 
@@ -84,16 +90,47 @@ public class SteamGameStatsReader extends SwingWorker<SteamGameStats, String> {
 			
             Exception exception = httpclient.execute(httpGet, new XMLResponseHandler(steamGameStatsReader));
             if (exception != null)
-            	if (exception instanceof SAXParseException)
+            	if (exception instanceof SAXParseException) {
                 	publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamIDTextAndURL"), steamId,
                 			librarian.getCurrentSteamProfile().getPrivacyState(messages.getString("undefinedPrivacyState")),
                 			game.getID("unknown gamename"), url,
                 			exception.getClass().getName(), messages.getString("invalidXML")));
-            	else
+            	} else
             		publish(TeeColor.Error.name(), String.format(messages.getString("errorExceptionMessageWithSteamIDTextAndURL"), steamId,
             				librarian.getCurrentSteamProfile().getPrivacyState(messages.getString("undefinedPrivacyState")),
             				game.getID("unknown gamename"), url,
             				exception.getClass().getName(), exception.getLocalizedMessage()));
+            else if (steamGameStatsParser.getSteamGameStats() == null 
+            			|| steamGameStatsParser.getSteamGameStats().getSteamAchievementsList() == null 
+            			|| steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements() == null 
+            			|| steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() == 0) {
+            	
+            		// Try HTML Version
+            		url = Steam.gameStatsURLCommand(steamId64, game, SteamResponseFormat.HTML, SteamResponseLanguage.English);
+            		
+            		publish("HTML SteamGameStatsReader Trying HTML request  : " + url);
+            		
+            		SteamAchievementsListScraper steamAchievementsListScraper = new SteamAchievementsListScraper(url);
+            		Vector<SteamAchievement> steamAchievements = steamAchievementsListScraper.getAchievements();
+            		
+            		SteamAchievementsList steamAchievementsList = new SteamAchievementsList(steamId64, steamId, 0, null);
+            		steamAchievementsList.setSteamAchievements(steamAchievements);
+            		
+            		SteamGameStats steamGameStats = new SteamGameStats(steamId64);
+            		steamGameStats.setAppID(game.getAppID());
+            		steamGameStats.setSteamAchievementsList(steamAchievementsList);
+            		
+            		return steamGameStats;
+            }
+            
+            if (steamGameStatsParser.getSteamGameStats() == null)
+            	System.err.println("NULL steamGameStatsParser.getSteamGameStats() " + game.getName());
+            else if (steamGameStatsParser.getSteamGameStats().getSteamAchievementsList() == null)
+            	System.err.println("NULL steamGameStatsParser.getSteamGameStats().getSteamAchievementsList()" + game.getName());
+            else if (steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements() == null)
+            	System.err.println("NULL steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements()" + game.getName());
+            else if (steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() == 0)
+            	System.err.println("NULL steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() == 0" + game.getName());
             
 		} catch (CancellationException e) {
 			publish("SteamGameStatsReader " + game.getName() + " cancelled during doInBackground");
