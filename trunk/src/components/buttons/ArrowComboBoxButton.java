@@ -38,13 +38,6 @@ public class ArrowComboBoxButton extends JButton implements ActionListener {
 		addActionListener(this);
 	}
 
-	/**
-	 * @return the arrowDirection
-	 */
-	public ArrowDirection getArrowDirection() {
-		return arrowDirection;
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int selectedIndex = -1;
