@@ -96,7 +96,6 @@ import components.actions.RollAction;
 import components.actions.SteamFriendsDisplayModeAction;
 import components.actions.SteamGroupsDisplayModeAction;
 import components.buttons.GameLeftClickActionButton;
-import components.comboboxes.KnownProfilesComboBox;
 import components.comboboxes.SteamFriendsSortMethodComboBox;
 import components.comboboxes.SteamGamesSortMethodComboBox;
 import components.comboboxes.SteamGroupsSortMethodComboBox;
@@ -1362,6 +1361,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		percentFormat.setMaximumFractionDigits(2);
 		
 		// Clear all games statistics
+		view.libraryTotalFinishedGamesTextField.setText("0");
 		view.libraryTotalGamesWithInvalidStatsTextField.setText("0");
 		view.libraryTotalAchievementsTextField.setText("0");
 		view.libraryTotalUnlockedAchievementsTextField.setText("0");
@@ -1620,6 +1620,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			Integer totalAchievements = 0;
 			Integer totalUnlockedAchievements = 0;
 			Integer totalGamesWithErroredStats = 0;
+			Integer totalFinishedGames = 0;
 			
 	    	if (currentSteamProfile.getSteamGames() != null && !currentSteamProfile.getSteamGames().isEmpty()) {
 	    		for (SteamGame game : currentSteamProfile.getSteamGames()) {
@@ -1627,11 +1628,18 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	    					&& game.getSteamGameStats().getSteamAchievementsList() != null 
 	    					&& game.getSteamGameStats().getSteamAchievementsList().getSteamAchievements() != null
 	    					&& game.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() > 0) {
+	    				Integer currentGameTotalAchievements = 0;
+	    				Integer currentGameTotalUnlockedAchievements = 0;
 	    				for (SteamAchievement steamAchievement : game.getSteamGameStats().getSteamAchievementsList().getSteamAchievements()) {
 	    					totalAchievements++;
-	    					if (steamAchievement.isClosed())
+	    					currentGameTotalAchievements++;
+	    					if (steamAchievement.isClosed()) {
 	    						totalUnlockedAchievements++;
+	    						currentGameTotalUnlockedAchievements++;
+	    					}
 	    				}
+	    				if (currentGameTotalAchievements.equals(currentGameTotalUnlockedAchievements))
+	    					totalFinishedGames++;
 	    			} else if ((game.getStatsLink() != null && !game.getStatsLink().trim().equals(""))
 	    					&& (game.getSteamGameStats() == null
 	    						|| game.getSteamGameStats().getSteamAchievementsList() == null
@@ -1642,6 +1650,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	    			}
 	    		}
 	    		
+	    		view.libraryTotalFinishedGamesTextField.setText(totalFinishedGames.toString());
 	    		view.libraryTotalGamesWithInvalidStatsTextField.setText(totalGamesWithErroredStats.toString());
 	    		view.libraryTotalAchievementsTextField.setText(totalAchievements.toString());
 	    		view.libraryTotalUnlockedAchievementsTextField.setText(totalUnlockedAchievements.toString());
@@ -3728,6 +3737,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		view.libraryTotalGamesWithStoreLinkLabel.setText(UITexts.getString("libraryTotalGamesWithStoreLinkLabel"));
 		view.libraryTotalWastedHoursLabel.setText(UITexts.getString("libraryTotalWastedHoursLabel"));
 		view.libraryTotalHoursLast2WeeksLabel.setText(UITexts.getString("libraryTotalHoursLast2WeeksLabel"));
+		view.libraryTotalFinishedGamesLabel.setText(UITexts.getString("libraryTotalFinishedGamesLabel"));
 		view.libraryTotalGamesWithInvalidStatsLabel.setText(UITexts.getString("libraryTotalGamesWithInvalidStatsLabel"));
 		view.libraryTotalAchievementsLabel.setText(UITexts.getString("libraryTotalAchievementsLabel"));
 		view.libraryTotalUnlockedAchievementsLabel.setText(UITexts.getString("libraryTotalUnlockedAchievementsLabel"));
