@@ -96,6 +96,7 @@ import components.actions.RollAction;
 import components.actions.SteamFriendsDisplayModeAction;
 import components.actions.SteamGroupsDisplayModeAction;
 import components.buttons.GameLeftClickActionButton;
+import components.comboboxes.KnownProfilesComboBox;
 import components.comboboxes.SteamFriendsSortMethodComboBox;
 import components.comboboxes.SteamGamesSortMethodComboBox;
 import components.comboboxes.SteamGroupsSortMethodComboBox;
@@ -1692,7 +1693,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		boolean sameGame = lastSteamGameWithStats != null && game.getAppID() != null && game.getAppID().equalsIgnoreCase(lastSteamGameWithStats.getAppID());
 		
 		// Update friendsWithSameGamePane & steamAchievementsTable
-		if (sameGame)
+		if (sameGame || game.getSteamGameStats() != null)
 			updateGameTab(currentSteamGame.getSteamGameStats());
 		else {
 			clearFriendsWithSameGamePane();
@@ -3175,6 +3176,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	
 	/**
 	 * Read all SteamGameStats of current Library from currentSteamProfile from Steam community
+	 * 
+	 * TODO: LoadAllGamesStatsAction and LoadLibraryAction must be mutually exclusive
 	 */
 	public void readAllSteamGamesStats() {
 		
@@ -3979,6 +3982,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			view.loadParametersAction.loadConfiguration(configurationFilename);
 		}
 
+		// Initialize knownProfilesComboBox
+		if (currentSteamProfile.getId() != null)
+			view.knownProfilesComboBox.addProfile(currentSteamProfile);
+		
 		// Replace currentSteamProfile.steamGames by parameters.steamGamesList.steamGames
 		replaceSteamGamesList();
 		

@@ -163,6 +163,15 @@ public class SteamAchievement {
 		this.initialPosition = initialPosition;
 	}
 
+	/*/
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return getClass().getName() + "[name=" + name + ", initialPosition=" + initialPosition + ", closed=" + closed + ", unlockTimestamp=" + unlockTimestamp + ", apiname=" + apiname + ", description=" + description + ", iconClosed=" + iconClosed + ", iconOpen=" + iconOpen + "]";
+	}
+	
 	//
 	// Utilities
 	//

@@ -26,6 +26,7 @@ import commons.api.Steam;
 import commons.api.SteamGame;
 import commons.api.SteamGameStats;
 import commons.api.SteamProfile;
+import commons.api.Steam.SteamResponseFormat;
 import commons.api.parsers.SteamGameStatsParser;
 import components.Librarian;
 import components.workers.responsehandlers.XMLResponseHandler;
@@ -76,7 +77,7 @@ public class SteamFriendGameStatsReader extends SwingWorker<SteamGameStats, Stri
 		try {
 			
 	    	SteamGame friendGame = friend.getGame(game);
-	    	String url = Steam.gameStatsURLCommand(steamId64, friendGame);
+	    	String url = Steam.gameStatsURLCommand(steamId64, friendGame, SteamResponseFormat.XML, null);
 	    	
 	    	new URL(url); // Reject malformed URL
 	    	
