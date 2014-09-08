@@ -132,7 +132,7 @@ public class GamesLibrarian extends JFrame {
 	/**
 	 * Main frame initial dimensions 
 	 */
-	private static final int initialFrameWidth = 1120;
+	private static final int initialFrameWidth = 1280;
 	private static final int initialFrameHeight = 640;
 	
 	/**
@@ -195,7 +195,7 @@ public class GamesLibrarian extends JFrame {
 	 * Runtime variables
 	 */
 	BundleManager bundleManager;
-	private JPanel gameLaunchersPane;
+	JPanel gameLaunchersPane;
 
 	/**
 	 * @return the bundleManager
@@ -272,6 +272,7 @@ public class GamesLibrarian extends JFrame {
 	SteamGamesDisplayModeComboBox libraryDisplayModeComboBox;
 	
 	private JPanel libraryOptionsPane;
+	private JPanel libraryLeftClickActionPane;
 	Label libraryLeftClickActionLabel;
 	GameLeftClickActionButton libraryLeftClickSelectButton;
 	GameLeftClickActionButton libraryLeftClickLaunchButton;
@@ -346,6 +347,7 @@ public class GamesLibrarian extends JFrame {
 	SteamAchievementsListsSortMethodComboBox steamAchievementsListsSortMethodComboBox;
 
 	private JPanel gameOptionsPane;
+	private JPanel gameLeftClickActionPane;
 	Label gameLeftClickActionLabel;
 	GameLeftClickActionButton gameLeftClickSelectButton;
 	GameLeftClickActionButton gameLeftClickLaunchButton;
@@ -386,14 +388,19 @@ public class GamesLibrarian extends JFrame {
 	Label steamFriendsSortMethodLabel;
 	SteamFriendsSortMethodComboBox steamFriendsSortMethodComboBox;
 	
+	private JPanel steamGroupsDisplayModePane;
 	Label steamGroupsDisplayModeLabel;
 	JToggleButton steamGroupsDisplayModeList;
 	JToggleButton steamGroupsDisplayModeGrid;
+	
+	private JPanel steamFriendsDisplayModePane;
 	Label steamFriendsDisplayModeLabel;
 	JToggleButton steamFriendsDisplayModeList;
 	JToggleButton steamFriendsDisplayModeGrid;
 	
 	private JPanel profileOptionsPane;
+	
+	private JPanel profileLeftClickActionPane;
 	Label profileLeftClickActionLabel;
 	GameLeftClickActionButton profileLeftClickSelectButton;
 	GameLeftClickActionButton profileLeftClickLaunchButton;
@@ -1307,9 +1314,9 @@ public class GamesLibrarian extends JFrame {
 		
 		// gameChoicePane
 		gameChoicePane = new JPanel();
-		gameChoicePane.setLayout(new MigLayout("", "[]", "[][][]"));
+		gameChoicePane.setLayout(new MigLayout("", "[]", "10[][][]"));
 		
-		gamesLibrarianControls.add(gameChoicePane, "cell 0 1,alignx center,aligny center");
+		gamesLibrarianControls.add(gameChoicePane, "cell 0 1,alignx center,aligny top");
 		
 		gameChoiceButtonGroup = new ButtonGroup();
 		
@@ -1328,10 +1335,11 @@ public class GamesLibrarian extends JFrame {
 		gameChoicePane.add(threeGamesRadioButton, "cell 0 2");
 		gameChoiceButtonGroup.add(threeGamesRadioButton);
 		
+		gameLaunchersPane = new JPanel();
+		
 		WrapLayout gameLaunchersPaneWrapLayout = new WrapLayout();
 		gameLaunchersPaneWrapLayout.setAlignment(FlowLayout.LEFT);
 		
-		gameLaunchersPane = new JPanel();
 		gameLaunchersPane.setLayout(gameLaunchersPaneWrapLayout);
 
 		gamesLibrarianControls.add(gameLaunchersPane, "cell 1 1 2 1,growx,aligny top");
@@ -1438,10 +1446,11 @@ public class GamesLibrarian extends JFrame {
 		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryMainTabTitle")), GamesLibrary.libraryMenuIcon, libraryPane, null);
 		
 		// libraryPane
+		buttonsLibraryPane = new JPanel();
+		
 		WrapLayout libraryPaneWrapLayout = new WrapLayout();
 		libraryPaneWrapLayout.setAlignment(FlowLayout.LEFT);
 		
-		buttonsLibraryPane = new JPanel();
 		buttonsLibraryPane.setLayout(libraryPaneWrapLayout);
 		
 		libraryScrollPane = new JScrollPane();
@@ -1533,10 +1542,6 @@ public class GamesLibrarian extends JFrame {
 		libraryTotalGamesWithStatsTextField.setColumns(10);
 		
 		libraryStatisticsMainPane.add(libraryTotalGamesWithStatsTextField, "cell 1 1");
-		
-		// loadAllGameStatsButton
-		loadAllGamesStatsButton = new JButton(loadAllGamesStatsAction);
-		libraryStatisticsMainPane.add(loadAllGamesStatsButton, "cell 2 1");
 		
 		// libraryTotalGamesWithGlobalStats
 		libraryTotalGamesWithGlobalStatsLabel = new Label(me, "libraryTotalGamesWithGlobalStatsLabel");
@@ -1649,15 +1654,21 @@ public class GamesLibrarian extends JFrame {
 		// Commands pane
 		libraryCommandsPane = new JPanel();
 		libraryCommandsPane.setBorder(new LineBorder(Color.GRAY));
-		WrapLayout wl_libraryCommandsPane = new WrapLayout();
-		wl_libraryCommandsPane.setAlignment(FlowLayout.LEFT);
-		libraryCommandsPane.setLayout(wl_libraryCommandsPane);
+		
+		WrapLayout libraryCommandsPaneWrapLayout = new WrapLayout();
+		libraryCommandsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
+		
+		libraryCommandsPane.setLayout(libraryCommandsPaneWrapLayout);
 		
 		gamesLibrarianLibrary.add(libraryCommandsPane, "cell 0 1,grow");
 		
 		// loadLibraryButton
 		loadLibraryButton = new JButton(loadLibraryAction);
 		libraryCommandsPane.add(loadLibraryButton);
+		
+		// loadAllGameStatsButton
+		loadAllGamesStatsButton = new JButton(loadAllGamesStatsAction);
+		libraryCommandsPane.add(loadAllGamesStatsButton);
 		
 		// librarySortMethod
 		librarySortMethodLabel = new Label(me, "librarySortMethodLabel");
@@ -1678,26 +1689,34 @@ public class GamesLibrarian extends JFrame {
 		// libraryOptionsPane
 		libraryOptionsPane = new JPanel();
 		libraryOptionsPane.setBorder(new LineBorder(Color.GRAY));
-		libraryOptionsPane.setLayout(new MigLayout("", "[][][grow]", "[]"));
+		
+		WrapLayout libraryOptionsPaneWrapLayout = new WrapLayout();
+		libraryOptionsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
+		
+		libraryOptionsPane.setLayout(libraryOptionsPaneWrapLayout);
+		
+		// libraryLeftClickAction
+		libraryLeftClickActionPane = new JPanel();
+		libraryOptionsPane.add(libraryLeftClickActionPane);
 		
 		libraryLeftClickActionLabel = new Label(me, "leftClickActionLabel");
-		libraryOptionsPane.add(libraryLeftClickActionLabel, "cell 0 0");
-		
-		gamesLibrarianLibrary.add(libraryOptionsPane, "cell 0 2,grow");
+		libraryLeftClickActionPane.add(libraryLeftClickActionLabel);
 		
 		ButtonGroup libraryLeftClickActionButtonGroup = new ButtonGroup();
 		
 		libraryLeftClickSelectButton = new GameLeftClickActionButton(me, "leftClickActionSelect", GameLeftClickAction.Select);
 		libraryLeftClickSelectButton.addItemListener(new GameLeftClickActionButtonListener(me));
 		
-		libraryOptionsPane.add(libraryLeftClickSelectButton, "cell 1 0");
+		libraryLeftClickActionPane.add(libraryLeftClickSelectButton);
 		libraryLeftClickActionButtonGroup.add(libraryLeftClickSelectButton);
 		
 		libraryLeftClickLaunchButton = new GameLeftClickActionButton(me, "leftClickActionLaunch", GameLeftClickAction.Launch);
 		libraryLeftClickLaunchButton.addItemListener(new GameLeftClickActionButtonListener(me));
 		
-		libraryOptionsPane.add(libraryLeftClickLaunchButton, "cell 2 0");
+		libraryLeftClickActionPane.add(libraryLeftClickLaunchButton);
 		libraryLeftClickActionButtonGroup.add(libraryLeftClickLaunchButton);
+		
+		gamesLibrarianLibrary.add(libraryOptionsPane, "cell 0 2,grow");
 		
 		// libraryMainPane
 		libraryMainPane = new JTabbedPane(JTabbedPane.TOP);
@@ -1706,7 +1725,7 @@ public class GamesLibrarian extends JFrame {
 		// Create the Library Sub Tab
 		createLibraryTab();
 		
-		// Create the Library Statistics Main Tab
+		// Create the Library Statistics Sub Tab
 		createLibraryStatisticsMainTab();
 		
 		// First visible card panel
@@ -1730,11 +1749,12 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianGame.add(currentGameTitleLabel, "cell 0 0");
 
 		// Commands pane
+		gameCommandsPane = new JPanel();
+		gameCommandsPane.setBorder(new LineBorder(Color.GRAY));
+		
 		WrapLayout gameCommandsPaneWrapLayout = new WrapLayout();
 		gameCommandsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
 		
-		gameCommandsPane = new JPanel();
-		gameCommandsPane.setBorder(new LineBorder(Color.GRAY));
 		gameCommandsPane.setLayout(gameCommandsPaneWrapLayout);
 		
 		gamesLibrarianGame.add(gameCommandsPane, "cell 0 1 4 1,grow");
@@ -1742,6 +1762,10 @@ public class GamesLibrarian extends JFrame {
 		// loadGameStatsButton
 		loadGameStatsButton = new JButton(loadGameStatsAction);
 		gameCommandsPane.add(loadGameStatsButton);
+		
+		// loadAllAchievementsButton
+		loadAllAchievementsButton = new JButton(loadAllAchievementsAction);
+		gameCommandsPane.add(loadAllAchievementsButton);
 		
 		// steamAchievementsSortMethod
 		steamAchievementsSortMethodLabel = new Label(me, "achievementsSortMethodLabel");
@@ -1762,26 +1786,33 @@ public class GamesLibrarian extends JFrame {
 		// gameOptionsPane
 		gameOptionsPane = new JPanel();
 		gameOptionsPane.setBorder(new LineBorder(Color.GRAY));
-		gameOptionsPane.setLayout(new MigLayout("", "[][][grow]", "[]"));
+		
+		WrapLayout gameOptionsPaneWrapLayout = new WrapLayout();
+		gameOptionsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
+		
+		gameOptionsPane.setLayout(gameOptionsPaneWrapLayout);
 		
 		gamesLibrarianGame.add(gameOptionsPane, "cell 0 2 4 1,grow");
 		
 		// gameLeftClickAction
+		gameLeftClickActionPane = new JPanel();
+		gameOptionsPane.add(gameLeftClickActionPane);
+		
 		gameLeftClickActionLabel = new Label(me, "leftClickActionLabel");
-		gameOptionsPane.add(gameLeftClickActionLabel, "cell 0 0");
+		gameLeftClickActionPane.add(gameLeftClickActionLabel);
 		
 		ButtonGroup gameLeftClickActionButtonGroup = new ButtonGroup();
 		
 		gameLeftClickSelectButton = new GameLeftClickActionButton(me, "leftClickActionSelect", GameLeftClickAction.Select);
 		gameLeftClickSelectButton.addItemListener(new GameLeftClickActionButtonListener(me));
 		
-		gameOptionsPane.add(gameLeftClickSelectButton, "cell 1 0");
+		gameLeftClickActionPane.add(gameLeftClickSelectButton);
 		gameLeftClickActionButtonGroup.add(gameLeftClickSelectButton);
 		
 		gameLeftClickLaunchButton = new GameLeftClickActionButton(me, "leftClickActionLaunch", GameLeftClickAction.Launch);
 		gameLeftClickLaunchButton.addItemListener(new GameLeftClickActionButtonListener(me));
 		
-		gameOptionsPane.add(gameLeftClickLaunchButton, "cell 2 0");
+		gameLeftClickActionPane.add(gameLeftClickLaunchButton);
 		gameLeftClickActionButtonGroup.add(gameLeftClickLaunchButton);
 		
 		// currentGameLauncher
@@ -1820,18 +1851,15 @@ public class GamesLibrarian extends JFrame {
 		
 		gamesLibrarianGame.add(currentGameHoursPlayedTotal, "cell 3 4,growx");
 		
-		// loadAllAchievementsButton
-		loadAllAchievementsButton = new JButton(loadAllAchievementsAction);
-		gamesLibrarianGame.add(loadAllAchievementsButton, "cell 1 5,alignx right,aligny top");
-		
 		// friendsWithSameGame
 		friendsWithSameGameLabel = new Label(me, "friendsWithSameGameLabel");
 		gamesLibrarianGame.add(friendsWithSameGameLabel, "cell 2 5,alignx trailing");
 		
+		friendsWithSameGamePane = new JPanel();
+		
 		WrapLayout friendsWithSameGameLayout = new WrapLayout();
 		friendsWithSameGameLayout.setAlignment(FlowLayout.LEFT);
 		
-		friendsWithSameGamePane = new JPanel();
 		friendsWithSameGamePane.setLayout(friendsWithSameGameLayout);
 		
 		friendsWithSameGameScrollPane = new JScrollPane();
@@ -2202,11 +2230,12 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianProfile.add(currentProfileTitleLabel, "cell 0 0");
 		
 		// Commands pane
+		profileCommandsPane = new JPanel();
+		profileCommandsPane.setBorder(new LineBorder(Color.GRAY));
+
 		WrapLayout profileCommandsPaneWrapLayout = new WrapLayout();
 		profileCommandsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
 		
-		profileCommandsPane = new JPanel();
-		profileCommandsPane.setBorder(new LineBorder(Color.GRAY));
 		profileCommandsPane.setLayout(profileCommandsPaneWrapLayout);
 		
 		gamesLibrarianProfile.add(profileCommandsPane, "cell 0 1,grow");
@@ -2243,62 +2272,71 @@ public class GamesLibrarian extends JFrame {
 		// profileOptionsPane
 		profileOptionsPane = new JPanel();
 		profileOptionsPane.setBorder(new LineBorder(Color.GRAY));
+		
 		WrapLayout profileOptionsPaneWrapLayout = new WrapLayout();
 		profileOptionsPaneWrapLayout.setAlignment(FlowLayout.LEFT);
+		
 		profileOptionsPane.setLayout(profileOptionsPaneWrapLayout);
 		
 		gamesLibrarianProfile.add(profileOptionsPane, "cell 0 2,grow");
 		
 		// profileLeftClickAction
+		profileLeftClickActionPane = new JPanel();
+		profileOptionsPane.add(profileLeftClickActionPane);
+		
 		profileLeftClickActionLabel = new Label(me, "leftClickActionLabel");
-		profileOptionsPane.add(profileLeftClickActionLabel, "cell 0 0");
+		profileLeftClickActionPane.add(profileLeftClickActionLabel);
 		
 		ButtonGroup profileLeftClickActionButtonGroup = new ButtonGroup();
 		
 		profileLeftClickSelectButton = new GameLeftClickActionButton(me, "leftClickActionSelect", GameLeftClickAction.Select);
 		profileLeftClickSelectButton.addItemListener(new GameLeftClickActionButtonListener(me));
 		
+		profileLeftClickActionPane.add(profileLeftClickSelectButton);
 		profileLeftClickActionButtonGroup.add(profileLeftClickSelectButton);
-
-		profileOptionsPane.add(profileLeftClickSelectButton, "cell 1 0");
 		
 		profileLeftClickLaunchButton = new GameLeftClickActionButton(me, "leftClickActionLaunch", GameLeftClickAction.Launch);
 		profileLeftClickLaunchButton.addItemListener(new GameLeftClickActionButtonListener(me));
 		
+		profileLeftClickActionPane.add(profileLeftClickLaunchButton);
 		profileLeftClickActionButtonGroup.add(profileLeftClickLaunchButton);
-
-		profileOptionsPane.add(profileLeftClickLaunchButton, "cell 2 0");
 		
 		//steamGroupsDisplayMode
+		steamGroupsDisplayModePane = new JPanel();
+		profileOptionsPane.add(steamGroupsDisplayModePane);
+		
 		steamGroupsDisplayModeLabel = new Label(me, "steamGroupsDisplayModeLabel");
-		profileOptionsPane.add(steamGroupsDisplayModeLabel, "cell 3 0");
+		steamGroupsDisplayModePane.add(steamGroupsDisplayModeLabel);
 		
 		ButtonGroup steamGroupsDisplayModeButtonGroup = new ButtonGroup();
 		
 		steamGroupsDisplayModeList = (JToggleButton) ActionGroupFactory.getToggleButton(steamGroupsDisplayModeListAction);
 		
-		profileOptionsPane.add(steamGroupsDisplayModeList, "cell 4 0");
+		steamGroupsDisplayModePane.add(steamGroupsDisplayModeList);
 		steamGroupsDisplayModeButtonGroup.add(steamGroupsDisplayModeList);
 		
 		steamGroupsDisplayModeGrid = (JToggleButton) ActionGroupFactory.getToggleButton(steamGroupsDisplayModeGridAction);
 		
-		profileOptionsPane.add(steamGroupsDisplayModeGrid, "cell 5 0");
+		steamGroupsDisplayModePane.add(steamGroupsDisplayModeGrid);
 		steamGroupsDisplayModeButtonGroup.add(steamGroupsDisplayModeGrid);
 		
 		// steamFriendsDisplayMode
+		steamFriendsDisplayModePane = new JPanel();
+		profileOptionsPane.add(steamFriendsDisplayModePane);
+		
 		steamFriendsDisplayModeLabel = new Label(me, "steamFriendsDisplayModeLabel");
-		profileOptionsPane.add(steamFriendsDisplayModeLabel, "cell 6 0");
+		steamFriendsDisplayModePane.add(steamFriendsDisplayModeLabel);
 		
 		ButtonGroup steamFriendsDisplayModeButtonGroup = new ButtonGroup();
 		
 		steamFriendsDisplayModeList = (JToggleButton) ActionGroupFactory.getToggleButton(steamFriendsDisplayModeListAction);
 		
-		profileOptionsPane.add(steamFriendsDisplayModeList, "cell 7 0");
+		steamFriendsDisplayModePane.add(steamFriendsDisplayModeList);
 		steamFriendsDisplayModeButtonGroup.add(steamFriendsDisplayModeList);
 		
 		steamFriendsDisplayModeGrid = (JToggleButton) ActionGroupFactory.getToggleButton(steamFriendsDisplayModeGridAction);
 		
-		profileOptionsPane.add(steamFriendsDisplayModeGrid, "cell 8 0");
+		steamFriendsDisplayModePane.add(steamFriendsDisplayModeGrid);
 		steamFriendsDisplayModeButtonGroup.add(steamFriendsDisplayModeGrid);
 		
 		profilePane = new JTabbedPane(JTabbedPane.TOP);
