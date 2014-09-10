@@ -7,19 +7,23 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.api.SteamProfile;
+import commons.enums.ButtonsDisplayMode;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.actions.interfaces.IconAndTextAction;
 
 /**
  * @author Naeregwen
  *
  */
-public class AddProfileAction extends AbstractAction {
+public class AddProfileAction extends AbstractAction implements IconAndTextAction {
 
 	/**
 	 * 
@@ -27,6 +31,8 @@ public class AddProfileAction extends AbstractAction {
 	private static final long serialVersionUID = 2525714252951132850L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+
 	String currentProfileID;
 
 	/**
@@ -34,6 +40,7 @@ public class AddProfileAction extends AbstractAction {
 	 */
 	public AddProfileAction(WindowBuilderMask me) {
 		this.me = me;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		translate();
 	}
 
@@ -51,6 +58,20 @@ public class AddProfileAction extends AbstractAction {
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "addProfileTooltip"));
 	}
 	
+	@Override
+	public String getLabelKey() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
+			return null;
+		return "addProfileMenuLabel";
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
+			return null;
+		return GamesLibrary.addProfile;
+	}
+
 	/**
 	 * Adding a profile based on user input
 	 */

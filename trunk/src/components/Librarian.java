@@ -71,6 +71,7 @@ import commons.comparators.SteamFriendsComparator;
 import commons.comparators.SteamGamesComparator;
 import commons.comparators.SteamGroupButtonsComparator;
 import commons.comparators.SteamGroupsComparator;
+import commons.enums.ButtonsDisplayMode;
 import commons.enums.DumpMode;
 import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
@@ -99,7 +100,9 @@ import components.buttons.GameLeftClickActionButton;
 import components.comboboxes.SteamFriendsSortMethodComboBox;
 import components.comboboxes.SteamGamesSortMethodComboBox;
 import components.comboboxes.SteamGroupsSortMethodComboBox;
+import components.comboboxes.observables.ButtonsDisplayModeObservables;
 import components.comboboxes.observables.SteamAchievementsSortMethodObservables;
+import components.comboboxes.observers.ButtonsDisplayModeObserver;
 import components.comboboxes.observers.SteamAchievementsSortMethodObserver;
 import components.containers.BoundedComponent;
 import components.containers.GameLauncher;
@@ -133,7 +136,7 @@ import components.workers.latched.SteamFriendsListReader;
  * @author Naeregwen
  *
  */
-public class Librarian implements SteamAchievementsSortMethodObservables {
+public class Librarian implements SteamAchievementsSortMethodObservables, ButtonsDisplayModeObservables {
 
 	/**
 	 * Setup data
@@ -146,6 +149,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	 * Runtime variables
 	 */
 	private ArrayList<SteamAchievementsSortMethodObserver> achievementsSortMethodObservers;
+	private ArrayList<ButtonsDisplayModeObserver> buttonsDisplayModeObservers;
 	private HashMap<String, SteamProfile> profiles;
 	
 	private SteamGame currentSteamGame;
@@ -215,6 +219,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		this.view = me.me.me();
 		// Initialize runtime variables
 		achievementsSortMethodObservers = new ArrayList<SteamAchievementsSortMethodObserver>();
+		buttonsDisplayModeObservers = new ArrayList<ButtonsDisplayModeObserver>();
 		loadAllAchievements = false;
 		selectedDirectory = "";
 		selectedFilename = "";
@@ -765,7 +770,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	
 	/**
 	 * Replace currentSteamProfile.steamGames by parameters.steamGamesList.steamGames
-	 * Only when steamIDd64 is matching 
+	 * Only when the steamIDd64 are matching
 	 */
 	public void replaceSteamGamesList() {
 		if (parameters.getSteamGamesList() != null && currentSteamProfile != null 
@@ -786,113 +791,6 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		return ((SteamAchievementsTableModel) steamAchievementsTable.getModel()).getSteamAchievementsComparator().getSteamAchievementsSortMethod();
 	}
 	
-//	//
-//	// Display/Sort Steam data
-//	//
-//	
-//	public void setPreviousSteamGameSortMethod() {
-//		if (view.librarySortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.librarySortMethodComboBox.getSelectedIndex();
-//		int previousIndex = selectedIndex == 0 ? view.librarySortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-//		view.librarySortMethodComboBox.setSelectedIndex(previousIndex);
-//	}
-//	
-//	public void setNextSteamGameSortMethod() {
-//		if (view.librarySortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.librarySortMethodComboBox.getSelectedIndex();
-//		int nextIndex = selectedIndex == view.librarySortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-//		view.librarySortMethodComboBox.setSelectedIndex(nextIndex);
-//	}
-//	
-//	public void setPreviousSteamGameDisplayMode() {
-//		if (view.libraryDisplayModeComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.libraryDisplayModeComboBox.getSelectedIndex();
-//		int previousIndex = selectedIndex == 0 ? view.libraryDisplayModeComboBox.getItemCount() - 1 : selectedIndex - 1;
-//		view.libraryDisplayModeComboBox.setSelectedIndex(previousIndex);
-//	}
-//	
-//	public void setNextSteamGameDisplayMode() {
-//		if (view.libraryDisplayModeComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.libraryDisplayModeComboBox.getSelectedIndex();
-//		int nextIndex = selectedIndex == view.libraryDisplayModeComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-//		view.libraryDisplayModeComboBox.setSelectedIndex(nextIndex);
-//	}
-//	
-//	public void setPreviousSteamAchievementsSortMethod() {
-//		if (view.steamAchievementsSortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.steamAchievementsSortMethodComboBox.getSelectedIndex();
-//		int previousIndex = selectedIndex == 0 ? view.steamAchievementsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-//		view.steamAchievementsSortMethodComboBox.setSelectedIndex(previousIndex);
-//	}
-//	
-//	public void setNextSteamAchievementsSortMethod() {
-//		if (view.steamAchievementsSortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.steamAchievementsSortMethodComboBox.getSelectedIndex();
-//		int nextIndex = selectedIndex == view.steamAchievementsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-//		view.steamAchievementsSortMethodComboBox.setSelectedIndex(nextIndex);
-//	}
-//	
-//	public void setPreviousSteamAchievementsColumnsSortMethod() {
-//		if (view.steamAchievementsListsSortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.steamAchievementsListsSortMethodComboBox.getSelectedIndex();
-//		int previousIndex = selectedIndex == 0 ? view.steamAchievementsListsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-//		view.steamAchievementsListsSortMethodComboBox.setSelectedIndex(previousIndex);
-//	}
-//	
-//	public void setNextSteamAchievementsColumnsSortMethod() {
-//		if (view.steamAchievementsListsSortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.steamAchievementsListsSortMethodComboBox.getSelectedIndex();
-//		int nextIndex = selectedIndex == view.steamAchievementsListsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-//		view.steamAchievementsListsSortMethodComboBox.setSelectedIndex(nextIndex);
-//	}
-//	
-//	public void setPreviousSteamProfile() {
-//		if (view.knownProfilesComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.knownProfilesComboBox.getSelectedIndex();
-//		int previousIndex = selectedIndex == 0 ? view.knownProfilesComboBox.getItemCount() - 1 : selectedIndex - 1;
-//		view.knownProfilesComboBox.setSelectedIndex(previousIndex);
-//	}
-//	
-//	public void setNextSteamProfile() {
-//		if (view.knownProfilesComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.knownProfilesComboBox.getSelectedIndex();
-//		int nextIndex = selectedIndex == view.knownProfilesComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-//		view.knownProfilesComboBox.setSelectedIndex(nextIndex);
-//	}
-//	
-//	public void setPreviousSteamGroupSortMethod() {
-//		if (view.steamGroupsSortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.steamGroupsSortMethodComboBox.getSelectedIndex();
-//		int previousIndex = selectedIndex == 0 ? view.steamGroupsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-//		view.steamGroupsSortMethodComboBox.setSelectedIndex(previousIndex);
-//    	displaySubTab(ProfileTab.Groups);
-//		
-//	}
-//	
-//	public void setNextSteamGroupSortMethod() {
-//		if (view.steamGroupsSortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.steamGroupsSortMethodComboBox.getSelectedIndex();
-//		int nextIndex = selectedIndex == view.steamGroupsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-//		view.steamGroupsSortMethodComboBox.setSelectedIndex(nextIndex);
-//    	displaySubTab(ProfileTab.Groups);
-//	}
-//	
-//	public void setPreviousSteamFriendSortMethod() {
-//		if (view.steamFriendsSortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.steamFriendsSortMethodComboBox.getSelectedIndex();
-//		int previousIndex = selectedIndex == 0 ? view.steamFriendsSortMethodComboBox.getItemCount() - 1 : selectedIndex - 1;
-//		view.steamFriendsSortMethodComboBox.setSelectedIndex(previousIndex);
-//        displaySubTab(ProfileTab.Friends);
-//	}
-//	
-//	public void setNextSteamFriendSortMethod() {
-//		if (view.steamFriendsSortMethodComboBox.getItemCount() <= 0) return;
-//		int selectedIndex = view.steamFriendsSortMethodComboBox.getSelectedIndex();
-//		int nextIndex = selectedIndex == view.steamFriendsSortMethodComboBox.getItemCount() - 1 ? 0 : selectedIndex + 1;
-//		view.steamFriendsSortMethodComboBox.setSelectedIndex(nextIndex);
-//        displaySubTab(ProfileTab.Friends);
-//	}
-//	
 	//
 	// Sorting data
 	//
@@ -2713,16 +2611,27 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	}
 	
 	/**
-	 * update Tool tips according to displayTooltips value
-	 * @param displayTooltips
+	 * Update Parameters with new value of displayTooltips
+	 * Update Tool tips according to the new value
+	 * @param displayTooltips the new value
 	 */
 	public void updateDisplayTooltips(Boolean displayTooltips) {
 		parameters.setDisplayTooltips(displayTooltips);
 		if (displayTooltips) {
-			//TODO: Finish
+			// TODO: Finish updateDisplayTooltips
 		} else {
-			
+			// OR NOT
 		}
+	}
+
+	/**
+	 * Update Parameters with new value of buttonsDisplayMode
+	 * Update display of command buttons according to the new value
+	 * @param buttonsDisplayMode the new value
+	 */
+	public void updateCommandButtons(ButtonsDisplayMode buttonsDisplayMode) {
+		parameters.setButtonsDisplayMode(buttonsDisplayMode);
+		updateButtonsDisplayModeObservers();
 	}
 
 	/**
@@ -2755,7 +2664,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 			tee.writelnError(message);
 		}
 	}
-
+	
 	/**
 	 * Validate and complete all missing new application parameters with previousParameters set values.<br/>
 	 * Update all UI elements impacted by a new application parameters set coming from:
@@ -2986,6 +2895,14 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		else
 			view.displayTooltipsNoButton.setSelected(true);
 		
+		// Update buttonsDisplayMode
+		if (parameters.getButtonsDisplayMode() == null)
+			if (previousParameters.getButtonsDisplayMode() == null)
+				parameters.setButtonsDisplayMode(Parameters.defaultButtonsDisplayMode);
+			else
+				parameters.setButtonsDisplayMode(previousParameters.getButtonsDisplayMode());
+		view.buttonsDisplayModeComboBox.setSelectedItem(parameters.getButtonsDisplayMode());
+		
 		// dumpMode already updated
 		// localeChoice already updated
 		// lookAndFeelInfo already updated
@@ -3019,7 +2936,6 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		if (startup)
 			view.profilePane.setSelectedComponent(view.profileSummaryPane);
 	}
-	
 	
 	//
 	// Threads management
@@ -3844,6 +3760,9 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 
 		view.displayToolTipsLabel.setText(UITexts.getString("displayToolTipsLabel"));
 		
+		view.buttonsDisplayModeLabel.setText(UITexts.getString("buttonsDisplayModeLabel"));
+		view.buttonsDisplayModeComboBox.setToolTipText(UITexts.getString("buttonsDisplayModeToolTip"));
+		
 		view.dumpModeLabel.setText(UITexts.getString("dumpModeLabel"));
 		view.dumpModeComboBox.setToolTipText(UITexts.getString("dumpModeToolTip"));
 		
@@ -3901,6 +3820,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		parameters.setSteamGroupsDisplayMode(Parameters.defaultSteamGroupsDisplayMode);
 		parameters.setSteamFriendsDisplayMode(Parameters.defaultSteamFriendsDisplayMode);
 		parameters.setDisplayTooltips(Parameters.defaultDisplayToolTips);
+		parameters.setButtonsDisplayMode(Parameters.defaultButtonsDisplayMode);
 		
 		parameters.setDebug(Parameters.defaultDebug);
 		parameters.setCheckCommunityOnStartup(Parameters.defaultCheckCommunityOnStartup);
@@ -4013,6 +3933,23 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 	// Observe runtime variables change to update display
 	//
 	
+	// SteamGamesSortMethod
+	public void updateSteamGamesSortMethod() {
+		steamGamesTable.sorter();
+	}
+	
+	// SteamGroupsSortMethod
+	public void updateSteamGroupsSortMethod() {
+		steamGroupsTable.sorter();
+	}
+	
+	// SteamFriendsSortMethod
+	public void updateSteamFriendsSortMethod() {
+		steamFriendsTable.sorter();
+	}
+
+	// SteamAchievementsSortMethod
+	
 	@Override
 	public void addSteamAchievementsSortMethodObserver(SteamAchievementsSortMethodObserver achievementsSortMethodObserver) {
 		achievementsSortMethodObservers.add(achievementsSortMethodObserver);
@@ -4029,14 +3966,22 @@ public class Librarian implements SteamAchievementsSortMethodObservables {
 		achievementsSortMethodObservers.remove(achievementsSortMethodObserver);
 	}
 
-	public void updateSteamGamesSortMethod() {
-		steamGamesTable.sorter();
-	}
+	// ButtonsDisplayMode
 	
-	public void updateSteamGroupsSortMethod() {
-		steamGroupsTable.sorter();
+	@Override
+	public void addButtonsDisplayModeObserver(ButtonsDisplayModeObserver buttonsDisplayModeObserver) {
+		buttonsDisplayModeObservers.add(buttonsDisplayModeObserver);
+		
 	}
-	public void updateSteamFriendsSortMethod() {
-		steamFriendsTable.sorter();
+
+	@Override
+	public void updateButtonsDisplayModeObservers() {
+		for (ButtonsDisplayModeObserver observer : buttonsDisplayModeObservers)
+			observer.update();
+	}
+
+	@Override
+	public void removeButtonsDisplayModeObserver(ButtonsDisplayModeObserver buttonsDisplayModeObserver) {
+		buttonsDisplayModeObservers.remove(buttonsDisplayModeObserver);
 	}
 }

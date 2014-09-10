@@ -13,7 +13,6 @@ import java.util.Vector;
 
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,6 +38,7 @@ import commons.GamesLibrary;
 import commons.api.Parameters;
 import commons.api.Steam;
 import commons.api.SteamLaunchMethod;
+import commons.enums.ButtonsDisplayMode;
 import commons.enums.DumpMode;
 import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
@@ -82,6 +82,7 @@ import components.actions.SteamFriendsDisplayModeAction;
 import components.actions.SteamGroupsDisplayModeAction;
 import components.actions.ViewParametersAction;
 import components.actions.adapters.LibrarianCloser;
+import components.actions.enums.ButtonsDisplayModeAction;
 import components.actions.enums.DefaultSteamLaunchMethodAction;
 import components.actions.enums.DumpModeAction;
 import components.actions.enums.LocaleChoiceAction;
@@ -92,8 +93,10 @@ import components.actions.enums.SteamGamesDisplayModeAction;
 import components.actions.enums.SteamGamesSortMethodAction;
 import components.actions.enums.SteamGroupsSortMethodAction;
 import components.actions.texts.LookAndFeelAction;
+import components.buttons.CommandButton;
 import components.buttons.GameLeftClickActionButton;
 import components.buttons.listeners.GameLeftClickActionButtonListener;
+import components.comboboxes.ButtonsDisplayModeComboBox;
 import components.comboboxes.DumpModeComboBox;
 import components.comboboxes.GameLeftClickActionComboBox;
 import components.comboboxes.KnownProfilesComboBox;
@@ -221,7 +224,7 @@ public class GamesLibrarian extends JFrame {
 	
 	// Controls Tab
 	
-	JButton rollButton;
+	CommandButton rollButton;
 	JTextField gameNameTextField;
 	
 	JPanel gameChoicePane;
@@ -243,13 +246,13 @@ public class GamesLibrarian extends JFrame {
 	GameArgumentsTextField argumentsGame2TextField;
 	GameArgumentsTextField argumentsGame3TextField;
 	
-	JButton refreshGamesListButton;
-	JButton scrollLockButton;
-	JButton debugButton;
-	JButton clearConsoleButton;
-	JButton loadParametersButton;
-	JButton saveParametersButton;
-	JButton viewParametersButton;
+	CommandButton refreshGamesListButton;
+	CommandButton scrollLockButton;
+	CommandButton debugButton;
+	CommandButton clearConsoleButton;
+	CommandButton loadParametersButton;
+	CommandButton saveParametersButton;
+	CommandButton viewParametersButton;
 	
 	JTextPane consoleTextPane;
 
@@ -263,7 +266,7 @@ public class GamesLibrarian extends JFrame {
 	JPanel libraryCommandsPane;
 	
 	TitleLabel libraryTitleLabel;
-	JButton loadLibraryButton;
+	CommandButton loadLibraryButton;
 	
 	Label librarySortMethodLabel;
 	SteamGamesSortMethodComboBox librarySortMethodComboBox;
@@ -316,7 +319,7 @@ public class GamesLibrarian extends JFrame {
 	JTextField libraryTotalHoursLast2WeeksTextField;
 	JLabel libraryTotalHoursLast2WeeksFormattedLabel;
 	
-	private JButton loadAllGamesStatsButton;
+	private CommandButton loadAllGamesStatsButton;
 	
 	Label libraryTotalFinishedGamesLabel;
 	JTextField libraryTotalFinishedGamesTextField;
@@ -338,7 +341,7 @@ public class GamesLibrarian extends JFrame {
 	JPanel gameCommandsPane;
 	
 	TitleLabel currentGameTitleLabel;
-	JButton loadGameStatsButton;
+	CommandButton loadGameStatsButton;
 	
 	Label steamAchievementsSortMethodLabel;
 	SteamAchievementsSortMethodComboBox steamAchievementsSortMethodComboBox;
@@ -362,7 +365,7 @@ public class GamesLibrarian extends JFrame {
 	Label currentGameHoursPlayedTotalLabel;
 	JTextField currentGameHoursPlayedTotal;
 
-	JButton loadAllAchievementsButton;
+	CommandButton loadAllAchievementsButton;
 	Label friendsWithSameGameLabel;
 	JScrollPane friendsWithSameGameScrollPane;
 	JPanel friendsWithSameGamePane;
@@ -377,8 +380,8 @@ public class GamesLibrarian extends JFrame {
 	
 	TitleLabel currentProfileTitleLabel;
 	
-	JButton loadProfileButton;
-	JButton addProfileButton;
+	CommandButton loadProfileButton;
+	CommandButton addProfileButton;
 	
 	KnownProfilesComboBox knownProfilesComboBox;
 	
@@ -501,11 +504,11 @@ public class GamesLibrarian extends JFrame {
 	// Options Tab
 	
 	Label windowsDistributionLabel;
-	JButton resetOptionsButton;
+	CommandButton resetOptionsButton;
 	JTextField windowsDistributionTextField;
 	
 	Label steamExecutableLabel;
-	JButton steamExecutableButton;
+	CommandButton steamExecutableButton;
 	JTextField steamExecutableTextField;
 	
 	Label gamerSteamIdLabel;
@@ -523,6 +526,9 @@ public class GamesLibrarian extends JFrame {
 	Label displayToolTipsLabel;
 	JToggleButton displayTooltipsYesButton;
 	JToggleButton displayTooltipsNoButton;
+	
+	Label buttonsDisplayModeLabel;
+	ButtonsDisplayModeComboBox buttonsDisplayModeComboBox;
 	
 	Label localeChoiceLabel;
 	LocaleChoiceComboBox localeChoiceComboBox;
@@ -670,6 +676,12 @@ public class GamesLibrarian extends JFrame {
 	private ActionGroup displayToolTipsActionGroup;
 	DisplayToolTipsAction displayToolTipsYesAction;
 	DisplayToolTipsAction displayToolTipsNoAction;
+
+	private JMenu buttonsDisplayModeMenu;
+	private ActionGroup buttonsDisplayModeActionGroup;
+	ButtonsDisplayModeAction buttonsDisplayModeIconAndTextAction;
+	ButtonsDisplayModeAction buttonsDisplayModeIconAction;
+	ButtonsDisplayModeAction buttonsDisplayModeTextAction;
 	
 	private JMenu localeChoiceMenu;
 	private ActionGroup localeChoiceActionGroup;
@@ -1079,7 +1091,25 @@ public class GamesLibrarian extends JFrame {
 
 		displayToolTipsMenu.add(ActionGroupFactory.getRadioMenuItem(displayToolTipsYesAction));
 		displayToolTipsMenu.add(ActionGroupFactory.getRadioMenuItem(displayToolTipsNoAction));
+		
+		// buttonsDisplayModeMenu
+		buttonsDisplayModeMenu = new JMenu(BundleManager.getUITexts(me, "buttonsDisplayModeMenuLabel"));
+		buttonsDisplayModeMenu.setIcon(GamesLibrary.buttonsDisplayModeIcon);
+		optionsMenu.add(buttonsDisplayModeMenu);
 
+		buttonsDisplayModeIconAndTextAction = new ButtonsDisplayModeAction(me, ButtonsDisplayMode.IconAndText);
+		buttonsDisplayModeIconAction = new ButtonsDisplayModeAction(me, ButtonsDisplayMode.Icon);
+		buttonsDisplayModeTextAction = new ButtonsDisplayModeAction(me, ButtonsDisplayMode.Text);
+		
+		buttonsDisplayModeActionGroup = new ActionGroup();
+		buttonsDisplayModeActionGroup.add(buttonsDisplayModeIconAndTextAction);
+		buttonsDisplayModeActionGroup.add(buttonsDisplayModeIconAction);
+		buttonsDisplayModeActionGroup.add(buttonsDisplayModeTextAction);
+
+		buttonsDisplayModeMenu.add(ActionGroupFactory.getRadioMenuItem(buttonsDisplayModeIconAndTextAction));
+		buttonsDisplayModeMenu.add(ActionGroupFactory.getRadioMenuItem(buttonsDisplayModeIconAction));
+		buttonsDisplayModeMenu.add(ActionGroupFactory.getRadioMenuItem(buttonsDisplayModeTextAction));
+		
 		optionsMenu.addSeparator();
 		
 		// localeChoiceMenu
@@ -1255,6 +1285,10 @@ public class GamesLibrarian extends JFrame {
 		for (Action action : displayToolTipsActionGroup.getActions())
 			((DisplayToolTipsAction) action).translate();
 		
+		buttonsDisplayModeMenu.setText(BundleManager.getUITexts(me, "buttonsDisplayModeMenuLabel"));
+		for (Action action : buttonsDisplayModeActionGroup.getActions())
+			((ButtonsDisplayModeAction) action).translate();
+		
 		localeChoiceMenu.setText(BundleManager.getUITexts(me, "localeChoiceMenuLabel"));
 		for (Action action : localeChoiceActionGroup.getActions())
 			((LocaleChoiceAction) action).translate();
@@ -1301,7 +1335,7 @@ public class GamesLibrarian extends JFrame {
 		mainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "controlsTabTitle")), null, gamesLibrarianControls, null);
 
 		// rollButton
-		rollButton = new JButton(rollAction);
+		rollButton = new CommandButton(me, rollAction);
 		gamesLibrarianControls.add(rollButton, "cell 0 0,alignx left");
 		
 		// gameNameTextField
@@ -1393,7 +1427,7 @@ public class GamesLibrarian extends JFrame {
 		gameLaunchersPane.add(gameLauncher3);
 		
 		// refreshGamesListButton
-		refreshGamesListButton = new JButton(refreshGamesListAction);
+		refreshGamesListButton = new CommandButton(me, refreshGamesListAction);
 		gamesLibrarianControls.add(refreshGamesListButton, "cell 0 2 2 1,alignx left");
 		
 		// console
@@ -1406,27 +1440,27 @@ public class GamesLibrarian extends JFrame {
 		consoleScrollPane.setViewportView(consoleTextPane);
 		
 		// scrollLockButton
-		scrollLockButton = new JButton(scrollLockAction);
+		scrollLockButton = new CommandButton(me, scrollLockAction);
 		gamesLibrarianControls.add(scrollLockButton, "cell 0 3 2 1,alignx left");
 		
 		// debugButton
-		debugButton = new JButton(debugAction);
+		debugButton = new CommandButton(me, debugAction);
 		gamesLibrarianControls.add(debugButton, "cell 0 4 2 1,alignx left");
 		
 		// clearConsoleButton
-		clearConsoleButton = new JButton(clearConsoleAction);
+		clearConsoleButton = new CommandButton(me, clearConsoleAction);
 		gamesLibrarianControls.add(clearConsoleButton, "cell 0 5 2 1,alignx left");
 		
 		// loadParametersButton
-		loadParametersButton = new JButton(loadParametersAction);
+		loadParametersButton = new CommandButton(me, loadParametersAction);
 		gamesLibrarianControls.add(loadParametersButton, "cell 0 6 2 1,alignx left");
 		
 		// saveParametersButton
-		saveParametersButton = new JButton(saveParametersAction);
+		saveParametersButton = new CommandButton(me, saveParametersAction);
 		gamesLibrarianControls.add(saveParametersButton, "cell 0 7 2 1,alignx left");
 		
 		// viewParametersButton
-		viewParametersButton = new JButton(viewParametersAction);
+		viewParametersButton = new CommandButton(me, viewParametersAction);
 		gamesLibrarianControls.add(viewParametersButton, "cell 0 8 2 1,alignx left,aligny top");
 		
 	}
@@ -1663,11 +1697,11 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianLibrary.add(libraryCommandsPane, "cell 0 1,grow");
 		
 		// loadLibraryButton
-		loadLibraryButton = new JButton(loadLibraryAction);
+		loadLibraryButton = new CommandButton(me, loadLibraryAction);
 		libraryCommandsPane.add(loadLibraryButton);
 		
 		// loadAllGameStatsButton
-		loadAllGamesStatsButton = new JButton(loadAllGamesStatsAction);
+		loadAllGamesStatsButton = new CommandButton(me, loadAllGamesStatsAction);
 		libraryCommandsPane.add(loadAllGamesStatsButton);
 		
 		// librarySortMethod
@@ -1760,11 +1794,11 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianGame.add(gameCommandsPane, "cell 0 1 4 1,grow");
 		
 		// loadGameStatsButton
-		loadGameStatsButton = new JButton(loadGameStatsAction);
+		loadGameStatsButton = new CommandButton(me, loadGameStatsAction);
 		gameCommandsPane.add(loadGameStatsButton);
 		
 		// loadAllAchievementsButton
-		loadAllAchievementsButton = new JButton(loadAllAchievementsAction);
+		loadAllAchievementsButton = new CommandButton(me, loadAllAchievementsAction);
 		gameCommandsPane.add(loadAllAchievementsButton);
 		
 		// steamAchievementsSortMethod
@@ -2241,11 +2275,11 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianProfile.add(profileCommandsPane, "cell 0 1,grow");
 		
 		// loadProfileButton
-		loadProfileButton = new JButton(loadProfileAction);
+		loadProfileButton = new CommandButton(me, loadProfileAction);
 		profileCommandsPane.add(loadProfileButton);
 		
 		// addProfileButton
-		addProfileButton = new JButton(addProfileAction);
+		addProfileButton = new CommandButton(me, addProfileAction);
 		profileCommandsPane.add(addProfileButton);
 		
 		// knownProfilesComboBox
@@ -2363,7 +2397,7 @@ public class GamesLibrarian extends JFrame {
 		// Main pane
 		gamesLibrarianOptions = new JPanel();
 		gamesLibrarianOptions.setName("optionsTab");
-		gamesLibrarianOptions.setLayout(new MigLayout("", "[][][][grow]", "[][][][][][][][][]"));
+		gamesLibrarianOptions.setLayout(new MigLayout("", "[][][][grow]", "[][][][][][][][][][]"));
 		
 		mainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "optionsTabTitle")), null, gamesLibrarianOptions, null);
 
@@ -2380,14 +2414,14 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianOptions.add(windowsDistributionTextField, "cell 3 0,growx");
 		
 		// resetOptions
-		resetOptionsButton = new JButton(resetOptionsAction);
+		resetOptionsButton = new CommandButton(me, resetOptionsAction);
 		gamesLibrarianOptions.add(resetOptionsButton, "cell 1 0 2 1");
 		
 		// steamExecutable
 		steamExecutableLabel = new Label(me, "steamExecutableOptionLabel");
 		gamesLibrarianOptions.add(steamExecutableLabel, "cell 0 1,alignx trailing");
 		
-		steamExecutableButton = new JButton(steamExecutableAction);
+		steamExecutableButton = new CommandButton(me, steamExecutableAction);
 		gamesLibrarianOptions.add(steamExecutableButton, "cell 1 1 2 1");
 		
 		steamExecutableTextField = new JTextField();
@@ -2456,23 +2490,32 @@ public class GamesLibrarian extends JFrame {
 		gamesLibrarianOptions.add(displayTooltipsNoButton, "cell 2 6");
 		displayTooltipsButtonGroup.add(displayTooltipsNoButton);
 		
+		// buttonsDisplayMode
+		buttonsDisplayModeLabel = new Label(me, "buttonsDisplayModeLabel");
+		gamesLibrarianOptions.add(buttonsDisplayModeLabel, "cell 0 7,alignx trailing");
+		
+		buttonsDisplayModeComboBox = new ButtonsDisplayModeComboBox(me);
+		gamesLibrarianOptions.add(buttonsDisplayModeComboBox, "cell 1 7 3 1");
+		
+		new EnumSelectionStateAdapter<ButtonsDisplayMode>(buttonsDisplayModeActionGroup, buttonsDisplayModeComboBox).configure();
+		
 		// localeChoice
 		localeChoiceLabel = new Label(me, "localeChoiceLabel");
-		gamesLibrarianOptions.add(localeChoiceLabel, "cell 0 7,alignx trailing");
+		gamesLibrarianOptions.add(localeChoiceLabel, "cell 0 8,alignx trailing");
 		
 		localeChoiceComboBox = new LocaleChoiceComboBox(me);
 		localeChoiceComboBox.setToolTipText(BundleManager.getUITexts(me, "languageComboBoxToolTip"));
 		
-		gamesLibrarianOptions.add(localeChoiceComboBox, "cell 1 7 3 1");
+		gamesLibrarianOptions.add(localeChoiceComboBox, "cell 1 8 3 1");
 		
 		new EnumSelectionStateAdapter<LocaleChoice>(localeChoiceActionGroup, localeChoiceComboBox).configure();
 		
 		// lookAndFeel
 		lookAndFeelLabel = new Label(me, "lookAndFeelLabel");
-		gamesLibrarianOptions.add(lookAndFeelLabel, "cell 0 8,alignx trailing");
+		gamesLibrarianOptions.add(lookAndFeelLabel, "cell 0 9,alignx trailing");
 		
 		lookAndFeelInfoComboBox = new LookAndFeelInfoComboBox(me);
-		gamesLibrarianOptions.add(lookAndFeelInfoComboBox, "cell 1 8 3 1");
+		gamesLibrarianOptions.add(lookAndFeelInfoComboBox, "cell 1 9 3 1");
 		
 		new TextSelectionStateAdapter<LookAndFeelInfo>(lookAndFeelActionGroup, lookAndFeelInfoComboBox).configure();
 	}

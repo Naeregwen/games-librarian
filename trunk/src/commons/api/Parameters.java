@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import commons.OS;
+import commons.enums.ButtonsDisplayMode;
 import commons.enums.DumpMode;
 import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
@@ -51,6 +52,7 @@ import components.buttons.observers.GameLeftClickActionObserver;
 	"steamGroupsDisplayMode",
 	"steamFriendsDisplayMode",
 	"displayTooltips",
+	"buttonsDisplayMode",
 	
 	"debug",
 	"checkCommunityOnStartup",
@@ -81,6 +83,7 @@ public class Parameters implements GameLeftClickActionObservables {
 	public static final SteamGroupsDisplayMode defaultSteamGroupsDisplayMode = SteamGroupsDisplayMode.values()[0];
 	public static final SteamFriendsDisplayMode defaultSteamFriendsDisplayMode = SteamFriendsDisplayMode.values()[0];
 	public static final Boolean defaultDisplayToolTips = true;
+	public static final ButtonsDisplayMode defaultButtonsDisplayMode = ButtonsDisplayMode.IconAndText;
 	
 	public static final Boolean defaultDebug = false;
 	public static final Boolean defaultCheckCommunityOnStartup = false;
@@ -109,6 +112,7 @@ public class Parameters implements GameLeftClickActionObservables {
 	SteamGroupsDisplayMode steamGroupsDisplayMode;
 	SteamFriendsDisplayMode steamFriendsDisplayMode;
 	Boolean displayTooltips;
+	ButtonsDisplayMode buttonsDisplayMode;
 	
 	Boolean debug;
 	Boolean checkCommunityOnStartup;
@@ -353,6 +357,20 @@ public class Parameters implements GameLeftClickActionObservables {
 	}
 
 	/**
+	 * @return the buttonsDisplayMode
+	 */
+	public ButtonsDisplayMode getButtonsDisplayMode() {
+		return buttonsDisplayMode;
+	}
+
+	/**
+	 * @param buttonsDisplayMode the buttonsDisplayMode to set
+	 */
+	public void setButtonsDisplayMode(ButtonsDisplayMode buttonsDisplayMode) {
+		this.buttonsDisplayMode = buttonsDisplayMode;
+	}
+
+	/**
 	 * @return the debug
 	 */
 	public Boolean isDebug() {
@@ -507,6 +525,7 @@ public class Parameters implements GameLeftClickActionObservables {
 		result.add("steamGroupsDisplayMode : " + (steamGroupsDisplayMode != null ? steamGroupsDisplayMode : "null"));
 		result.add("steamFriendsDisplayMode : " + (steamFriendsDisplayMode != null ? steamFriendsDisplayMode : "null"));
 		result.add("displayTooltips : " + (displayTooltips != null ? displayTooltips : "null"));
+		result.add("buttonsDisplayMode : " + (buttonsDisplayMode != null ? buttonsDisplayMode : "null"));
 		
 		result.add("debug : " + (debug != null ? debug : "null"));
 		result.add("checkCommunityOnStartup : " + (checkCommunityOnStartup != null ? checkCommunityOnStartup : "null"));
@@ -536,21 +555,28 @@ public class Parameters implements GameLeftClickActionObservables {
 	@Override
 	public Object clone() {
 		Parameters parameters = new Parameters();
+		
 		parameters.setOs(os);
+		
 		parameters.setLocaleChoice(localeChoice);
 		parameters.setLookAndFeelInfo(lookAndFeelInfo);
 		parameters.setUITexts(UITexts);
 		parameters.setMessages(messages);
 		parameters.setResources(resources);
+		
 		parameters.setWindowsDistribution(windowsDistribution);
 		parameters.setSteamExecutable(steamExecutable);
+		
 		parameters.setMainPlayerSteamId(mainPlayerSteamId);
+		
 		parameters.setGameChoice(gameChoice);
 		parameters.setGameLeftClickAction(gameLeftClickAction);
 		parameters.setDefaultSteamLaunchMethod(defaultSteamLaunchMethod);
 		parameters.setSteamGroupsDisplayMode(steamGroupsDisplayMode);
 		parameters.setSteamFriendsDisplayMode(steamFriendsDisplayMode);
 		parameters.setDisplayTooltips(displayTooltips);
+		parameters.setButtonsDisplayMode(buttonsDisplayMode);
+		
 		parameters.setDebug(debug);
 		parameters.setCheckCommunityOnStartup(checkCommunityOnStartup);
 		parameters.setDumpMode(dumpMode);
@@ -558,6 +584,7 @@ public class Parameters implements GameLeftClickActionObservables {
 		parameters.setUseDateTime(useDateTime);
 		parameters.setScrollLocked(scrollLocked);
 		parameters.setXmlOverrideRegistry(xmlOverrideRegistry);
+		
 		return parameters;
 	}
 	

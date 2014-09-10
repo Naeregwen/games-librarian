@@ -30,6 +30,7 @@ import commons.api.SteamGamesList;
 import commons.api.SteamLaunchMethod;
 import commons.api.parsers.contexts.ContextualParser;
 import commons.api.parsers.contexts.ParametersContexts;
+import commons.enums.ButtonsDisplayMode;
 import commons.enums.DumpMode;
 import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
@@ -257,6 +258,11 @@ public class ParametersParser extends ContextualParser<ParametersContexts> {
 			// dumpMode
 			if (checkContextAndStay(qName, ParametersContexts.Parameters))
 				parameters.setDumpMode((DumpMode) parseEnum(qName, Parameters.defaultDumpMode, null));
+			
+		} else if (qName.equalsIgnoreCase("buttonsDisplayMode")) {
+			// buttonsDisplayMode
+			if (checkContextAndStay(qName, ParametersContexts.Parameters))
+				parameters.setButtonsDisplayMode((ButtonsDisplayMode) parseEnum(qName, Parameters.defaultButtonsDisplayMode, null));
 			
 		} else if (qName.equalsIgnoreCase("steamGroupsDisplayMode")) {
 			// steamGroupsDisplayMode
