@@ -2,8 +2,8 @@ package commons.enums;
 
 public enum GameLeftClickAction {
 
-	Launch ("gameLeftClickActionLaunchLabel", "/images/icons/page_white_text.png", "gameLeftClickActionLaunchLabel"),
-	Select ("gameLeftClickActionSelectLabel", "/images/icons/page_white_text.png", "gameLeftClickActionSelectLabel");
+	Launch ("gameLeftClickActionLaunchLabel", "/images/icons/lightning.png", "gameLeftClickActionLaunchLabel"),
+	Select ("gameLeftClickActionSelectLabel", "/images/icons/cursor.png", "gameLeftClickActionSelectLabel");
 	
 	String optionLabel;
 	String iconPath;

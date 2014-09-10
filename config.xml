@@ -10,6 +10,7 @@
    <steamGroupsDisplayMode>Grid</steamGroupsDisplayMode>
    <steamFriendsDisplayMode>List</steamFriendsDisplayMode>
    <displayTooltips>true</displayTooltips>
+   <buttonsDisplayMode>IconAndText</buttonsDisplayMode>
    <debug>false</debug>
    <checkCommunityOnStartup>false</checkCommunityOnStartup>
    <dumpMode>XML</dumpMode>

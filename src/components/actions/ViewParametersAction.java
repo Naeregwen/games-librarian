@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 import commons.BundleManager;
@@ -15,14 +16,16 @@ import commons.api.Parameters;
 import commons.api.SteamProfile;
 import commons.api.parsers.ParametersParser;
 import commons.api.parsers.SteamProfileParser;
+import commons.enums.ButtonsDisplayMode;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.actions.interfaces.IconAndTextAction;
 
 /**
  * @author Naeregwen
  *
  */
-public class ViewParametersAction extends AbstractAction {
+public class ViewParametersAction extends AbstractAction implements IconAndTextAction {
 
 	/**
 	 * 
@@ -30,20 +33,22 @@ public class ViewParametersAction extends AbstractAction {
 	private static final long serialVersionUID = -9198712344515258987L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
 	 */
 	public ViewParametersAction(WindowBuilderMask me) {
 		this.me = me;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		translate();
 	}
 
 	/**
-	 * Translate using BundleManager
+	 * Translate using the BundleManager
 	 */
 	public void translate() {
-		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
+		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "viewParametersMnemonic") != null && !BundleManager.getUITexts(me, "viewParametersMnemonic").equals("")) // WindowBuilder
 			putValue(Action.MNEMONIC_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "viewParametersMnemonic")).getKeyCode());
 		if (BundleManager.getUITexts(me, "viewParametersAccelerator") != null && !BundleManager.getUITexts(me, "viewParametersAccelerator").equals("")) // WindowBuilder
@@ -53,6 +58,20 @@ public class ViewParametersAction extends AbstractAction {
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "viewParametersToolTip"));
 	}
 	
+	@Override
+	public String getLabelKey() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
+			return null;
+		return "viewParametersMenuLabel";
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
+			return null;
+		return GamesLibrary.viewParametersIcon;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */

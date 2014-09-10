@@ -68,6 +68,11 @@ public class GamesLibrary {
 	public static final ImageIcon displayToolTipsYesIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/comments_add.png"));
 	public static final ImageIcon displayToolTipsNoIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/comments_delete.png"));
 	
+	public static final ImageIcon buttonsDisplayModeIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/star.png"));
+	public static final ImageIcon buttonsDisplayModeIconAndTextIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/star_gold.png"));
+	public static final ImageIcon buttonsDisplayModeIconIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/star_gold_half_grey.png"));
+	public static final ImageIcon buttonsDisplayModeTextIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/star_grey.png"));
+	
 	public static final ImageIcon localeChoiceIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/flag_france.png"));
 	public static final ImageIcon lookAndFeelIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/java.png"));
 	

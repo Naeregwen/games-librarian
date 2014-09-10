@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.xml.parsers.DocumentBuilder;
@@ -31,14 +32,16 @@ import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.api.Parameters;
 import commons.api.SteamGame;
+import commons.enums.ButtonsDisplayMode;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.actions.interfaces.IconAndTextAction;
 
 /**
  * @author Naeregwen
  *
  */
-public class SaveParametersAction extends AbstractAction {
+public class SaveParametersAction extends AbstractAction implements IconAndTextAction {
 
 	/**
 	 * 
@@ -46,6 +49,8 @@ public class SaveParametersAction extends AbstractAction {
 	private static final long serialVersionUID = -2263273566679369655L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+
 	String previousFilename;
 
 	/**
@@ -53,14 +58,15 @@ public class SaveParametersAction extends AbstractAction {
 	 */
 	public SaveParametersAction(WindowBuilderMask me) {
 		this.me = me;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		translate();
 	}
 
 	/**
-	 * Translate using BundleManager
+	 * Translate using the BundleManager
 	 */
 	public void translate() {
-		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
+		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "saveParametersMnemonic") != null && !BundleManager.getUITexts(me, "saveParametersMnemonic").equals("")) // WindowBuilder
 			putValue(Action.MNEMONIC_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "saveParametersMnemonic")).getKeyCode());
 		if (BundleManager.getUITexts(me, "saveParametersAccelerator") != null && !BundleManager.getUITexts(me, "saveParametersAccelerator").equals("")) // WindowBuilder
@@ -70,6 +76,20 @@ public class SaveParametersAction extends AbstractAction {
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "saveParametersToolTip"));
 	}
 	
+	@Override
+	public String getLabelKey() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
+			return null;
+		return "saveParametersMenuLabel";
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
+			return null;
+		return GamesLibrary.saveParametersIcon;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */

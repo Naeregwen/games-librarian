@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
@@ -17,16 +18,18 @@ import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.api.Parameters;
 import commons.api.SteamGame;
+import commons.enums.ButtonsDisplayMode;
 import commons.enums.GameChoice;
 import components.GamesLibrarian.WindowBuilderMask;
-import components.containers.GameLauncher;
 import components.Librarian;
+import components.actions.interfaces.IconAndTextAction;
+import components.containers.GameLauncher;
 
 /**
  * @author Naeregwen
  *
  */
-public class RollAction extends AbstractAction {
+public class RollAction extends AbstractAction implements IconAndTextAction {
 
 	/**
 	 * 
@@ -34,6 +37,7 @@ public class RollAction extends AbstractAction {
 	private static final long serialVersionUID = -8293594900473762837L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
 	
 	private static final Random random = new Random();
 	private static int randomAppId;
@@ -43,14 +47,15 @@ public class RollAction extends AbstractAction {
 	 */
 	public RollAction(WindowBuilderMask me) {
 		this.me = me;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		translate();
 	}
 	
 	/**
-	 * Translate using BundleManager
+	 * Translate using the BundleManager
 	 */
 	public void translate() {
-		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
+		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "rollMnemonic") != null && !BundleManager.getUITexts(me, "rollMnemonic").equals("")) // WindowBuilder
 			putValue(MNEMONIC_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "rollMnemonic")).getKeyCode());
 		if (BundleManager.getUITexts(me, "rollAccelerator") != null && !BundleManager.getUITexts(me, "rollAccelerator").equals("")) // WindowBuilder
@@ -60,6 +65,24 @@ public class RollAction extends AbstractAction {
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "rollToolTip"));
 	}
 	
+	@Override
+	public String getLabelKey() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
+			return null;
+		return "rollMenuLabel";
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
+			return null;
+		return GamesLibrary.rollIcon;
+	}
+
+	/**
+	 * Choose between read or roll.
+	 * If nothing to roll then read.
+	 */
 	private void readOrRoll() {
 		Librarian librarian = me.getLibrarian();
 		Parameters parameters = librarian.getParameters();

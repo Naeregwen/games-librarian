@@ -7,18 +7,22 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
 import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.api.Parameters;
+import commons.enums.ButtonsDisplayMode;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.actions.interfaces.IconAndTextAction;
 
 /**
  * @author Naeregwen
  *
  */
-public class DebugAction extends AbstractAction {
+public class DebugAction extends AbstractAction implements IconAndTextAction {
 
 	/**
 	 * 
@@ -26,25 +30,27 @@ public class DebugAction extends AbstractAction {
 	private static final long serialVersionUID = 4416194683104365739L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
 	 */
 	public DebugAction(WindowBuilderMask me) {
 		this.me = me;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		translate();
 	}
 
 	/**
-	 * Translate using BundleManager
+	 * Translate using the BundleManager
 	 */
 	public void translate() {
-		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
+		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "debugMnemonic") != null && !BundleManager.getUITexts(me, "debugMnemonic").equals("")) // WindowBuilder
 			putValue(Action.MNEMONIC_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "debugMnemonic")).getKeyCode());
 		if (BundleManager.getUITexts(me, "debugAccelerator") != null && !BundleManager.getUITexts(me, "debugAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "debugAccelerator")));
-		if (me == null || me.getLibrarian() == null || me.getLibrarian().getParameters().isDebug()) { // WindowBuilder 
+		if (librarian == null || librarian.getParameters().isDebug()) { // WindowBuilder 
 			putValue(NAME, BundleManager.getUITexts(me, "debugOffMenuLabel"));
 			putValue(SMALL_ICON, GamesLibrary.debugStopIcon);
 			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "debugOffToolTip"));
@@ -55,6 +61,20 @@ public class DebugAction extends AbstractAction {
 		}
 	}
 	
+	@Override
+	public String getLabelKey() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
+			return null;
+		return librarian.getParameters().isDebug() ? "debugOffMenuLabel" : "debugOnMenuLabel";
+	}
+
+	@Override
+	public ImageIcon getIcon() {
+		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
+			return null;
+		return librarian.getParameters().isDebug() ? GamesLibrary.debugStopIcon : GamesLibrary.debugStartIcon;
+	}
+
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
