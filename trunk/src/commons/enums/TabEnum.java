@@ -16,12 +16,29 @@ public interface TabEnum {
 	 * @return true if the enumeration represent the main TabEnum (LibrarianTab)
 	 */
 	boolean isMain();
+
+	/**
+	 * Properties belonging to the specialized enumeration
+	 * and corresponding to the same property for each associated GotoAction.
+	 */
 	
 	/**
-	 * Action properties used with Actions specialized by the enumeration type
+	 * @return the LabelKey for the associated GotoAction
 	 */
 	String getLabelKey();
+	
+	/**
+	 * @return the MnemonicKey for the associated GotoAction
+	 */
 	String getMnemonicKey();
+	
+	/**
+	 * @return the AcceleratorKey for the associated GotoAction
+	 */
 	String getAcceleratorKey();
+	
+	/**
+	 * @return the icon for the associated GotoAction
+	 */
 	Icon getIcon();
 }

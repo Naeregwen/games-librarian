@@ -118,5 +118,5 @@ public class SteamGamesList {
 	public void add(SteamGame steamGame) {
 		steamGames.add(steamGame);
 	}
-
+	
 }

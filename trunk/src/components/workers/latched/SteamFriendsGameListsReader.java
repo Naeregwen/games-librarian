@@ -60,7 +60,8 @@ public class SteamFriendsGameListsReader extends SwingWorker<List<SteamProfile>,
 	private void clearProgressIndicators() {
 		librarian.setSteamFriendsGameListsReading(false);
 		librarian.setSteamGameStatsReading(false);
-		librarian.updateGameTabTitle();
+		if (librarian.getCurrentSteamProfile().hasGame(librarian.getCurrentSteamGame()))
+			librarian.updateGameTabTitle();
 	}
 	
 	@Override
@@ -88,16 +89,16 @@ public class SteamFriendsGameListsReader extends SwingWorker<List<SteamProfile>,
 				
 				for (SteamProfile friend : friendsWithoutGamelist) {
 					
-	    			try {
-	    				Thread.sleep((long)(Math.random() * 100) + 1000); // Add some delay between requests
-	    			} catch (CancellationException e) {
-//	    				cancelSteamFriendGameListReaders();
-	    				librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " cancelled during doInBackground");
-	    			} catch (InterruptedException e) {
-//	    				cancelSteamFriendGameListReaders();
-	    				librarian.getTee().writelnInfos("SteamFriendsGameListsReader interrupted during doInBackground sleep");
-	    				break;
-					}
+//	    			try {
+//	    				Thread.sleep((long)(Math.random() * 100) + 1000); // Add some delay between requests
+//	    			} catch (CancellationException e) {
+////	    				cancelSteamFriendGameListReaders();
+//	    				librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " cancelled during doInBackground");
+//	    			} catch (InterruptedException e) {
+////	    				cancelSteamFriendGameListReaders();
+//	    				librarian.getTee().writelnInfos("SteamFriendsGameListsReader interrupted during doInBackground sleep");
+//	    				break;
+//					}
 					
 	    			SteamFriendGameListReader steamFriendGameListReader = new SteamFriendGameListReader(librarian, friend, index++, doneSignal, defaultSteamLaunchMethod, messages);
 	    			steamFriendGameListReaders.add(steamFriendGameListReader);
@@ -137,7 +138,13 @@ public class SteamFriendsGameListsReader extends SwingWorker<List<SteamProfile>,
 				List<SteamProfile> friendsWithoutGamelist = (List<SteamProfile>) get();
 				for (SteamProfile friend : friendsWithoutGamelist)
 					librarian.addFriendGameList(friend.getSteamID64(), friend.getSteamGames());
-				librarian.updateFriendsWithSameGamePane();
+				// Update currentSteamGame Pane only if game owned by currentSteamProfile
+				if (librarian.getCurrentSteamProfile().hasGame(librarian.getCurrentSteamGame()))
+					librarian.updateFriendsWithSameGamePane();
+				else {
+					librarian.setSteamFriendsGameListsReading(false);
+					librarian.updateProfileTabTitle();
+				}
 			} catch (InterruptedException e) {
 				cancelSteamFriendGameListReaders();
 				librarian.getTee().writelnInfos("SteamFriendsGameListsReader " + steamProfile.getId() + " interrupted during done");

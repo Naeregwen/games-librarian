@@ -99,25 +99,22 @@ public class SteamGamesListReader extends SwingWorker<SteamGamesList, String> {
 				librarian.getTee().printStackTrace(exception);
 			} else {
 				SteamGamesList steamGamesList = get();
-//				if (steamGamesList == null) {
-//					librarian.updateLibraryMainTabTitle();
-//				} else {
 				if (steamGamesList != null) {
 					Parameters parameters = librarian.getParameters();
 					parameters.setSteamGamesList(steamGamesList);
 					if (steamGamesList != null && steamGamesList.getSteamGames() != null && steamGamesList.getSteamGames().size() > 0) {
 						librarian.getTee().writelnInfos(parameters.summarizeGamesList());
-						// Replace currentSteamProfile.steamGames by parameters.steamGamesList.steamGames
-						librarian.replaceSteamGamesList();
+						// Replace currentSteamProfile.steamGames by steamGamesList.steamGames, when id are matching
+						if (steamGamesList != null && ((steamGamesList.getSteamID64() != null && steamGamesList.getSteamID64().equals(librarian.getCurrentSteamProfile().getSteamID64())
+										|| (steamGamesList.getSteamID() != null && steamGamesList.getSteamID().equals(librarian.getCurrentSteamProfile().getSteamID())))))
+							librarian.getCurrentSteamProfile().setSteamGames(steamGamesList.getSteamGames());
 					} else {
 						librarian.readError();
 					}
-//					librarian.updateLibraryMainTabTitle();
 					librarian.updateAllLibraryTabs();
 				}
 			}
 		} catch (InterruptedException | ExecutionException e) {
-//			librarian.updateLibraryMainTabTitle();
 			librarian.getTee().printStackTrace(e);
 		}
 		librarian.updateLibraryMainTabTitle();

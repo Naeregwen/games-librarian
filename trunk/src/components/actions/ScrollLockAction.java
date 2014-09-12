@@ -13,6 +13,7 @@ import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.api.Parameters;
 import commons.enums.ButtonsDisplayMode;
+import commons.enums.LibrarianTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
@@ -80,6 +81,7 @@ public class ScrollLockAction extends AbstractAction implements IconAndTextActio
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		librarian.displayMainTab(LibrarianTabEnum.Controls);
 		Parameters parameters = me.getLibrarian().getParameters();
 		parameters.setScrollLocked(!parameters.isScrollLocked());
 		translate();

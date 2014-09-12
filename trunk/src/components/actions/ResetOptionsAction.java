@@ -14,15 +14,16 @@ import javax.swing.KeyStroke;
 
 import commons.BundleManager;
 import commons.GamesLibrary;
+import commons.GamesLibrary.LoadingSource;
 import commons.OS;
 import commons.Strings;
-import commons.GamesLibrary.LoadingSource;
 import commons.api.Parameters;
 import commons.api.SteamProfile;
 import commons.enums.ButtonsDisplayMode;
+import commons.enums.LibrarianTabEnum;
 import commons.windows.WinRegistry;
-import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
 
 /**
@@ -169,6 +170,7 @@ public class ResetOptionsAction extends AbstractAction implements IconAndTextAct
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		librarian.displayMainTab(LibrarianTabEnum.Options);
 		readRegitryOptions();
 	}
 

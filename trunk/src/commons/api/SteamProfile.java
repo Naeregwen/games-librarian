@@ -556,6 +556,11 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		steamFriends.add(steamFriend);
 	}
 	
+	/**
+	 * Determine if profile own a game
+	 * @param steamGame the game to find
+	 * @return true if game owned, false otherwise
+	 */
 	public boolean hasGame(SteamGame steamGame) {
 		for (SteamGame game : steamGames)
 			if (steamGame.getAppID().equals(game.appID))
@@ -563,12 +568,30 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		return false;
 	}
 	
+	/**
+	 * Determine if profile own a game with missing data (coming from MostPlayedGames)
+	 * @param steamGame the game to find
+	 * @return the game from profile game library, null otherwise
+	 */
 	public SteamGame getGame(SteamGame steamGame) {
 		String appID = steamGame.digAppID(); // MostPlayedGame does not have an appId
 		for (SteamGame game : steamGames)
 			if (game.appID.equals(appID))
 				return game;
 		return null;
+	}
+	
+	/**
+	 * Count friends with the same game
+	 * @param steamGame the game to find in friends gamesList
+	 * @return the count of friends with the same game
+	 */
+	public int getFriendsWithSameGameCount(SteamGame steamGame) {
+		int friendsWithSameGameCount = 0;
+		for (SteamProfile steamProfile : this.getSteamFriends())
+			if (steamProfile.hasGame(steamGame))
+				friendsWithSameGameCount++;
+		return friendsWithSameGameCount;
 	}
 	
 	/**
@@ -615,10 +638,6 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		return statusIconURL;
 	}
 	
-	protected Object clone() {
-		return avatarFull;
-	}
-	
 	/**
 	 * Copy needed properties after XML parsing
 	 * @param steamProfile
@@ -654,7 +673,7 @@ public class SteamProfile implements Comparable<SteamProfile> {
 	
 	/**
 	 * Build tool tip content
-	 * @return tool tip content
+	 * @return tool tip HTML content
 	 */
 	public String getTooltipText() {
 		
@@ -987,9 +1006,9 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		
 		return tooltipText.toString();
 	}
+	
 	/**
 	 * Prepare a List<String> to display profile data later
-	 * 
 	 * @return List<String>
 	 */
 	public List<String> toStringList() {
@@ -1053,7 +1072,6 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		
 	/**
 	 * Prepare a List<String> to display friend profile data later
-	 * 
 	 * @return List<String>
 	 */
 	public List<String> toFriendStringList() {
@@ -1064,9 +1082,9 @@ public class SteamProfile implements Comparable<SteamProfile> {
 	}
 
 	/**
-	 * Parse html Id as bodyFragment
+	 * Parse HTML Id as bodyFragment
 	 * And return text result
-	 * @param html
+	 * @param html to parse
 	 * @return parsed body text result
 	 */
 	public static String htmlIdToText(String htmlId) {

@@ -60,6 +60,7 @@ import commons.api.SteamAchievementsList;
 import commons.api.SteamFriend;
 import commons.api.SteamGame;
 import commons.api.SteamGameStats;
+import commons.api.SteamGamesList;
 import commons.api.SteamGroup;
 import commons.api.SteamProfile;
 import commons.api.parsers.SteamGameStatsParser;
@@ -76,12 +77,12 @@ import commons.enums.DumpMode;
 import commons.enums.GameChoice;
 import commons.enums.GameLeftClickAction;
 import commons.enums.LaunchType;
-import commons.enums.LibrarianTab;
-import commons.enums.LibraryTab;
+import commons.enums.LibrarianTabEnum;
+import commons.enums.LibraryTabEnum;
 import commons.enums.LocaleChoice;
 import commons.enums.OnlineState;
 import commons.enums.PrivacyState;
-import commons.enums.ProfileTab;
+import commons.enums.ProfileTabEnum;
 import commons.enums.SteamAchievementsListsSortMethod;
 import commons.enums.SteamAchievementsSortMethod;
 import commons.enums.SteamFriendsDisplayMode;
@@ -167,7 +168,6 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	private SteamFriendsGameStatsReader steamFriendsGameStatsReader;
 	private SteamFriendGameStatsReader steamFriendGameStatsReader;
 	private AllSteamGamesStatsReader allSteamGamesStatsReader;
-	
 
 	private String selectedDirectory;
 	private String selectedFilename;
@@ -182,6 +182,9 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	boolean steamFriendsGameListsReading;
 	boolean steamFriendGameStatsReading;
 	boolean allSteamGamesStatsReading;
+	
+	// Max friends of a profile to chain a readSteamFriendsList request with a readSteamFriendsGameLists request
+	public static final int MaxFriendsForGamesList = 40;
 	
 	/**
 	 * Remember last game name to display between mouse moves
@@ -708,8 +711,11 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	 */
 	public void addProfile(SteamProfile steamProfile, boolean viewOnly) {
 		if (!viewOnly) {
-			if (profiles.containsKey(steamProfile.getSteamID64()))
+			if (profiles.containsKey(steamProfile.getSteamID64())) {
+				SteamProfile oldSteamProfile = profiles.get(steamProfile.getSteamID64());
+				steamProfile.setSteamGames(oldSteamProfile.getSteamGames());
 				profiles.remove(steamProfile.getSteamID64());
+			}
 			profiles.put(steamProfile.getSteamID64(), steamProfile);
 		}
 		// Update Profile Commands Pane
@@ -766,17 +772,6 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 				break;
 			}
 		} 
-	}
-	
-	/**
-	 * Replace currentSteamProfile.steamGames by parameters.steamGamesList.steamGames
-	 * Only when the steamIDd64 are matching
-	 */
-	public void replaceSteamGamesList() {
-		if (parameters.getSteamGamesList() != null && currentSteamProfile != null 
-				&& ((parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamID64() != null && parameters.getSteamGamesList().getSteamID64().equals(currentSteamProfile.getSteamID64())
-						|| (parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamID() != null && parameters.getSteamGamesList().getSteamID().equals(currentSteamProfile.getSteamID())))))
-			currentSteamProfile.setSteamGames(parameters.getSteamGamesList().getSteamGames());
 	}
 	
 	//
@@ -1269,7 +1264,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	/**
 	 * Remove steamAchievementsTable from steamAchievementsScrollPane
 	 */
-	void clearAchievementsTable() {
+	public void clearAchievementsTable() {
 		// Empty steamAchievementsTable
 		if (steamAchievementsTable != null) {
 			((SteamAchievementsTableModel) steamAchievementsTable.getModel()).clear();
@@ -1284,11 +1279,19 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	/**
 	 * Remove FriendWithSameGameButton from ButtonGroup & Pane
 	 */
-	void clearFriendsWithSameGamePane() {
+	public void clearFriendsWithSameGamePane() {
 		Component[] components = view.friendsWithSameGamePane.getComponents();
 		for (int index = 0; index < components.length; index++)
 			if (components[index] instanceof SteamFriendWithSameGameButton)
 				view.friendsWithSameGamePane.remove(components[index]);
+	}
+	
+	/**
+	 * Clear the played hours fields
+	 */
+	public void clearGamePlayedHours() {
+		view.currentGameHoursPlayedLast2Weeks.setText(null);
+		view.currentGameHoursPlayedTotal.setText(null);
 	}
 	
 	/**
@@ -1307,10 +1310,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		
 		// Sort selectors not affected by configuration
 		
-		// Clear texts
-		view.currentGameHoursPlayedLast2Weeks.setText(null);
-		view.currentGameHoursPlayedTotal.setText(null);
+		// Clear texts elements
+		clearGamePlayedHours();
 		
+		// Clear graphics elements
 		clearFriendsWithSameGamePane();
 		clearAchievementsTable();
 	}
@@ -1453,8 +1456,16 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 			view.libraryScrollPane.getVerticalScrollBar().setUnitIncrement(maxHeight + ((WrapLayout)view.buttonsLibraryPane.getLayout()).getVgap());
 		}
 		
-		// Update LibraryMainTab Title Label
+		// Update LibraryMainTab TitleLabel
 		updateLibraryMainTitleLabel();
+		
+		// Update LibraryMainTab Title
+		updateLibraryMainTabTitle();
+	}
+	
+	public void updateGamesLibraryTab(SteamGamesList steamGamesList) {
+		parameters.setSteamGamesList(steamGamesList);
+		updateGamesLibraryTab();
 	}
 	
 	/**
@@ -1637,6 +1648,22 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		//dumpGameStats(steamGameStats);
 	}
 
+	/**
+	 * Update display of GameTab after profile reading
+	 */
+	public void updateGameTab() {
+		
+		// Update GameTab Title Label
+		updateGameTitleLabel();
+		
+		// Clear texts elements
+		clearGamePlayedHours();
+		
+		// Clear graphics elements
+		clearFriendsWithSameGamePane();
+		clearAchievementsTable();
+	}
+	
 	/**
 	 * Update display of ProfileTab
 	 * @param steamProfile the steamProfile to set
@@ -1902,7 +1929,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 			((SteamGroupsDisplayModeAction) action).setTooltip();
         CardLayout cardLayout = (CardLayout) (view.profileGroupsPane.getLayout());
         cardLayout.show(view.profileGroupsPane, steamGroupsDisplayMode.name());
-    	displaySubTab(ProfileTab.Groups);
+    	displaySubTab(ProfileTabEnum.Groups);
 	}
 	
 	public void updateSteamFriendsDisplayMode(SteamFriendsDisplayMode steamFriendsDisplayMode) {
@@ -1911,7 +1938,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 			((SteamFriendsDisplayModeAction) action).setTooltip();
         CardLayout cardLayout = (CardLayout) (view.profileFriendsPane.getLayout());
         cardLayout.show(view.profileFriendsPane, steamFriendsDisplayMode.name());
-        displaySubTab(ProfileTab.Friends);
+        displaySubTab(ProfileTabEnum.Friends);
 	}
 	
 	//
@@ -1976,6 +2003,23 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	}
 	
 	/**
+	 * Update title of gameTab with specified data
+	 * @param steamId the steamId to print
+	 * @param index Tab index 
+	 * @param game game whom name has to be extracted for completing the tab title
+	 */
+	private void updateGameTabTitleId(String steamId, int index, SteamGame game) {
+		if (lastSteamGameWithStats != null && game.getAppID() != null && game.getAppID().equalsIgnoreCase(lastSteamGameWithStats.getAppID())) {
+			int friendsWithSameGame = currentSteamProfile.getFriendsWithSameGameCount(game);
+			view.mainPane.setTitleAt(index, friendsWithSameGame <= 1 ? 
+					GamesLibrarian.getTabTitle(String.format(BundleManager.getUITexts(me, "gameTabTitleWithNameAndFriend"), game.getName(), steamId, friendsWithSameGame)) 
+					: GamesLibrarian.getTabTitle(String.format(BundleManager.getUITexts(me, "gameTabTitleWithNameAndFriends"), game.getName(), steamId, friendsWithSameGame)));	
+		} else {
+			view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(BundleManager.getUITexts(me, "gameTabTitleWithName"), game.getName(), steamId)));
+		}
+	}
+	
+	/**
 	 * Update title of GameTab
 	 */
 	public void updateGameTabTitle() {
@@ -1984,20 +2028,14 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		if (index < 0 || index >= view.mainPane.getTabCount()) return;
 		// Update Tab title
 		String steamId = currentSteamProfile != null && currentSteamProfile.getId() != null ? SteamProfile.htmlIdToText(currentSteamProfile.getId()) : "";
+		SteamGame game = view.getLibrarian().getCurrentSteamGame();
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (steamGameStatsReading) {
+			updateGameTabTitleId(steamId, index, game);
 			view.mainPane.setIconAt(index, GamesLibrary.ajaxLoaderIcon);
 		} else {
 			if (view.getLibrarian() != null && view.getLibrarian().getCurrentSteamGame() != null && !view.getLibrarian().getCurrentSteamGame().getName().equals("")) {
-				SteamGame game = view.getLibrarian().getCurrentSteamGame();
-				if (lastSteamGameWithStats != null && game.getAppID() != null && game.getAppID().equalsIgnoreCase(lastSteamGameWithStats.getAppID())) {
-					int friendsWithSameGame = view.friendsWithSameGamePane.getComponents().length;
-					view.mainPane.setTitleAt(index, friendsWithSameGame <= 1 ? 
-							GamesLibrarian.getTabTitle(String.format(UITexts.getString("gameTabTitleWithNameAndFriend"), game.getName(), steamId, friendsWithSameGame)) 
-							: GamesLibrarian.getTabTitle(String.format(UITexts.getString("gameTabTitleWithNameAndFriends"), game.getName(), steamId, friendsWithSameGame)));	
-				} else {
-					view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("gameTabTitleWithName"), game.getName(), steamId)));
-				}
+				updateGameTabTitleId(steamId, index, game);
 				if (game.getIcon() != null && !game.getIcon().isEmpty()) { 
 					URL urlIcon;
 					try {
@@ -2010,7 +2048,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 				}
 			} else
 				view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("gameTabTitle")));
-			view.mainPane.setIconAt(index, null);
+			view.mainPane.setIconAt(index, null); // FIXME: ??
 		}
 	}
 	
@@ -2033,7 +2071,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		// Update Tab title
 		String steamId = currentSteamProfile != null && currentSteamProfile.getId() != null ? SteamProfile.htmlIdToText(currentSteamProfile.getId()) : "";
 		ResourceBundle UITexts = parameters.getUITexts();
-		if (steamProfileReading || steamFriendsListReading) {
+		if (steamProfileReading || steamFriendsListReading || steamFriendsGameListsReading) {
 			view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(parameters.getUITexts().getString("currentProfileTitleLabelReading"), steamId)));
 			view.mainPane.setIconAt(index, GamesLibrary.ajaxLoaderIcon);
 		} else {
@@ -2083,8 +2121,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		// Update Tab title
 		String steamId = currentSteamProfile != null && currentSteamProfile.getId() != null ? SteamProfile.htmlIdToText(currentSteamProfile.getId()) : "";
 		ResourceBundle UITexts = parameters.getUITexts();
-		if (steamFriendsListReading || steamProfileReading) {
-			if (steamFriendsListReading) {
+		if (steamProfileReading || steamFriendsListReading || steamFriendsGameListsReading) {
+			if (steamFriendsListReading || steamFriendsGameListsReading) {
 				updateProfileTabTitle();
 				view.profilePane.setIconAt(index, GamesLibrary.ajaxLoaderIcon);
 			} else
@@ -2111,7 +2149,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	 */
 	private void updateLibraryMainTitleLabel() {
 		ResourceBundle UITexts = parameters.getUITexts();
-		if (parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamGames() != null && currentSteamProfile != null) {
+		if (parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamGames() != null && (currentSteamProfile != null)) {
 			// Update library title label
 			String steamId = currentSteamProfile.getId();
 			if (parameters.getSteamGamesList().getLoadingSource().equals(LoadingSource.Preloading))
@@ -2357,7 +2395,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	//
 
 	public void updateKnownProfileComboBox() {
-		if (view.knownProfilesComboBox.getSelectedItem() != null && !((SteamProfile)view.knownProfilesComboBox.getSelectedItem()).equals(currentSteamProfile))
+		if (view.knownProfilesComboBox.getSelectedItem() != null && !((SteamProfile) view.knownProfilesComboBox.getSelectedItem()).equals(currentSteamProfile))
 			view.knownProfilesComboBox.setSelectedItem(currentSteamProfile);
 	}
 	
@@ -2411,9 +2449,9 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	 * @return the matching JPanel or null
 	 */
 	public JPanel getMainTabFromEnum(TabEnum tabEnum) {
-		if (tabEnum instanceof ProfileTab)
+		if (tabEnum instanceof ProfileTabEnum)
 			return view.gamesLibrarianProfile;
-		else if (tabEnum instanceof LibraryTab)
+		else if (tabEnum instanceof LibraryTabEnum)
 			return view.gamesLibrarianLibrary;
 		return null;
 	}
@@ -2424,9 +2462,9 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	 * @return the matching JTabbedPane or null
 	 */
 	public JTabbedPane getSubTabFromEnum(TabEnum tabEnum) {
-		if (tabEnum instanceof ProfileTab)
+		if (tabEnum instanceof ProfileTabEnum)
 			return view.profilePane;
-		else if (tabEnum instanceof LibraryTab)
+		else if (tabEnum instanceof LibraryTabEnum)
 			return view.libraryMainPane;
 		return null;
 	}
@@ -2437,22 +2475,22 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	 * @return the matching JPanel or null
 	 */
 	public JPanel getTabFromEnum(TabEnum tabEnum) {
-		if (tabEnum instanceof LibrarianTab)
-		switch ((LibrarianTab)tabEnum) {
+		if (tabEnum instanceof LibrarianTabEnum)
+		switch ((LibrarianTabEnum)tabEnum) {
 		case Controls: return view.gamesLibrarianControls;
 		case Library: return view.gamesLibrarianLibrary;
 		case Game: return view.gamesLibrarianGame;
 		case Profile: return view.gamesLibrarianProfile;
 		case Options: return view.gamesLibrarianOptions;
-		} else if (tabEnum instanceof ProfileTab)
-			switch ((ProfileTab)tabEnum) {
+		} else if (tabEnum instanceof ProfileTabEnum)
+			switch ((ProfileTabEnum)tabEnum) {
 			case Summary: return view.profileSummaryPane;
 			case Status: return view.profileStatusPane;
 			case Groups: return view.profileGroupsPane;
 			case Friends: return view.profileFriendsPane;
 			}
-		else if (tabEnum instanceof LibraryTab)
-			switch ((LibraryTab)tabEnum) {
+		else if (tabEnum instanceof LibraryTabEnum)
+			switch ((LibraryTabEnum)tabEnum) {
 			case LibraryGamesList: return view.libraryPane;
 			case LibraryStatistics: return view.libraryStatisticsMainPane;
 			}
@@ -2464,7 +2502,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	 * @param tab
 	 */
 	public void displayMainTab(TabEnum tabEnum) {
-		JPanel tab = tabEnum instanceof LibrarianTab ? getTabFromEnum(tabEnum) : getMainTabFromEnum(tabEnum);
+		JPanel tab = tabEnum instanceof LibrarianTabEnum ? getTabFromEnum(tabEnum) : getMainTabFromEnum(tabEnum);
 		if (tab == null) return;
 		if (!view.mainPane.getSelectedComponent().equals(tab))
 			view.mainPane.setSelectedComponent(tab);
@@ -3126,12 +3164,47 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	 */
 	public void readSteamGameStats() {
 		
-		if (currentSteamGame == null
+		if (currentSteamGame == null || currentSteamProfile == null
 				|| cancelSteamGameStatsReading()
 				|| cancelSteamProfileReading()
 				|| cancelSteamFriendsListReading()
 				|| cancelSteamFriendsGameListsReading()
 				) return;
+		
+		if (!currentSteamProfile.getId().equals(parameters.getMainPlayerSteamId())) {
+			
+			if (currentSteamProfile.getPrivacyState() == null) {
+				JOptionPane.showMessageDialog(view,
+						String.format(BundleManager.getUITexts(me, "loadGameStatsIncompleteProfileError"), currentSteamProfile.getId(), currentSteamProfile.getPrivacyState()),
+						BundleManager.getUITexts(me, "loadGameStatsTitle"),
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			if (!currentSteamProfile.getPrivacyState().equalsIgnoreCase("public")) {
+				JOptionPane.showMessageDialog(view,
+						String.format(BundleManager.getUITexts(me, "loadGameStatsForProfileError"), currentSteamProfile.getId(), currentSteamProfile.getPrivacyState()),
+						BundleManager.getUITexts(me, "loadGameStatsTitle"),
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+		}
+			
+		if (currentSteamProfile.getSteamGames().size() == 0 && currentSteamProfile.getMostplayedGames().size() != 0 && !currentSteamProfile.getMostplayedGames().contains(currentSteamGame)) {
+			JOptionPane.showMessageDialog(me != null ? me.getLibrarian().getView() : null, // WindowBuilder
+					String.format(BundleManager.getUITexts(me, "loadGameStatsEmptyGamesLibraryError"), currentSteamGame.getName(), currentSteamProfile.getId()),
+					BundleManager.getUITexts(me, "loadGameStatsTitle"),
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		if (!currentSteamProfile.hasGame(currentSteamGame)) {
+			JOptionPane.showMessageDialog(me != null ? me.getLibrarian().getView() : null, // WindowBuilder
+					String.format(BundleManager.getUITexts(me, "loadGameStatsGameNotOwnedError"), currentSteamProfile.getId(), currentSteamGame.getName()),
+					BundleManager.getUITexts(me, "loadGameStatsTitle"),
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		
 		steamGameStatsReading = true;
 		updateGameTabTitle();
@@ -3205,7 +3278,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		if (cancelSteamFriendsGameListsReading()) return;
 		
 		steamGameStatsReading = true;
-    	updateGameTabTitle();
+		if (currentSteamProfile.hasGame(currentSteamGame))
+			updateGameTabTitle();
+		else
+			updateProfileTabTitle();
 
     	(steamFriendsGameListsReader = new SteamFriendsGameListsReader(this, currentSteamProfile, currentSteamGame, parameters.getDefaultSteamLaunchMethod())).execute();
 	}
@@ -3248,7 +3324,16 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 //			return;
 //		}
 			
-		if (currentSteamGame == null || currentSteamGame.getSteamGameStats() == null || !view.steamFriendsButtonGroup.getElements().hasMoreElements()) return;
+		if (currentSteamProfile == null 
+				|| currentSteamGame == null 
+				|| currentSteamGame.getSteamGameStats() == null 
+				|| !view.steamFriendsButtonGroup.getElements().hasMoreElements()
+				) 
+			return;
+		
+		if (!currentSteamProfile.hasGame(currentSteamGame) && !currentSteamProfile.getMostplayedGames().contains(currentSteamGame))
+			return;
+		
 		Component[] components = view.friendsWithSameGamePane.getComponents();
 		List<SteamFriendWithSameGameButton> friendWithSameGameButtons = new Vector<SteamFriendWithSameGameButton>();
 		List<SteamFriendWithSameGameButton> fullFriendWithSameGameButtons = new Vector<SteamFriendWithSameGameButton>();
@@ -3912,12 +3997,16 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 			view.loadParametersAction.loadConfiguration(configurationFilename);
 		}
 
-		// Initialize knownProfilesComboBox
-		if (currentSteamProfile.getId() != null)
-			view.knownProfilesComboBox.addProfile(currentSteamProfile);
-		
 		// Replace currentSteamProfile.steamGames by parameters.steamGamesList.steamGames
-		replaceSteamGamesList();
+		SteamGamesList steamGamesList = parameters.getSteamGamesList();
+		if (currentSteamProfile.getSteamGames() == null || currentSteamProfile.getSteamGames().size() == 0)
+			currentSteamProfile.setSteamGames(steamGamesList.getSteamGames());
+		
+		// Initialize knownProfilesComboBox
+		if (currentSteamProfile.getId() != null) {
+			view.knownProfilesComboBox.addProfile(currentSteamProfile);
+		}	
+			
 		
 		// Check if Steam Community is online
 		if (parameters.isCheckCommunityOnStartup() && !checkSteamCommunity(DisplayMode.verbose))

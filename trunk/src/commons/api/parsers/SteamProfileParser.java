@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 import commons.ColoredTee;
 import commons.GamesLibrary.LoadingSource;
 import commons.api.Parameters;
+import commons.api.Steam;
 import commons.api.SteamGame;
 import commons.api.SteamGroup;
 import commons.api.SteamLaunchMethod;
@@ -335,8 +336,18 @@ public class SteamProfileParser extends ContextualParser<SteamProfileContexts> {
 				game.setName(characters);
 			
 		} else if (qName.equalsIgnoreCase("gameLink")) {
-			if (checkContextAndStay(qName, SteamProfileContexts.MostPlayedGame) && game != null)
+			if (checkContextAndStay(qName, SteamProfileContexts.MostPlayedGame) && game != null) {
 				game.setStoreLink(characters);
+				// Extract AppId from gameLink when data is missing
+				// Mostly for MostPlayedGame.
+				// Other case could be that the SteamAPI results has changed 
+				// but parser could have crashed long before this state
+				if (game.getAppID() == null || game.getAppID().equals("")) {
+					String appID = Steam.getAppIdFromGameLink(characters);
+					if (appID != null)
+						game.setAppID(appID);
+				}
+			}
 			
 		} else if (qName.equalsIgnoreCase("gameIcon")) {
 			if (checkContextAndStay(qName, SteamProfileContexts.MostPlayedGame) && game != null)

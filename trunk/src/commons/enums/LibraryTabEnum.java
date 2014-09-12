@@ -11,7 +11,7 @@ import commons.GamesLibrary;
  * @author Naeregwen
  *
  */
-public enum LibraryTab implements TabEnum {
+public enum LibraryTabEnum implements TabEnum {
 
 	LibraryGamesList ("gotoLibraryGamesListMenuLabel", "gotoLibraryGamesListMnemonic", "gotoLibraryGamesListAccelerator", GamesLibrary.libraryMenuIcon),
 	LibraryStatistics ("gotoLibraryStatisticsMenuLabel", "gotoLibraryStatisticsMnemonic", "gotoLibraryStatisticsAccelerator", GamesLibrary.libraryStatisticsMenuIcon);
@@ -21,7 +21,7 @@ public enum LibraryTab implements TabEnum {
 	String acceleratorKey;
 	Icon icon;
 
-	LibraryTab(String labelKey, String mnemonicKey, String acceleratorKey, Icon icon) {
+	LibraryTabEnum(String labelKey, String mnemonicKey, String acceleratorKey, Icon icon) {
 		this.labelKey = labelKey;
 		this.mnemonicKey = mnemonicKey;
 		this.acceleratorKey = acceleratorKey;

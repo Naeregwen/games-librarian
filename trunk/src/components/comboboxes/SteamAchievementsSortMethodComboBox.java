@@ -9,6 +9,7 @@ import java.awt.event.ItemListener;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 
+import commons.enums.LibrarianTabEnum;
 import commons.enums.SteamAchievementsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
@@ -53,6 +54,7 @@ public class SteamAchievementsSortMethodComboBox extends JComboBox<SteamAchievem
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent itemEvent) {
+		librarian.displayMainTab(LibrarianTabEnum.Game);
 		if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 			librarian.sortSteamAchievements((SteamAchievementsSortMethod) itemEvent.getItem());
 			librarian.updateSteamAchievementsSortMethodTooltips();

@@ -13,6 +13,7 @@ import javax.swing.KeyStroke;
 import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.enums.ButtonsDisplayMode;
+import commons.enums.LibrarianTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
 import components.Librarian;
@@ -105,6 +106,7 @@ public class LoadAllAchievementsAction extends AbstractAction implements IconAnd
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		librarian.displayMainTab(LibrarianTabEnum.Game);
 		me.getLibrarian().loadAllAchievements();
 	}
 

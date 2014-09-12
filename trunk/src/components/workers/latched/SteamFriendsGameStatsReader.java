@@ -65,13 +65,13 @@ public class SteamFriendsGameStatsReader extends SwingWorker<Boolean, String> {
 			
 			for (SteamFriendWithSameGameButton friendWithSameGameButton : friendWithSameGameButtons) {
 				
-				try {
-    				Thread.sleep((long)(Math.random() * 100) + 50); // Add some delay between requests
-				} catch (InterruptedException e) {
-					cancelSteamFriendGameStatsReaders();
-					librarian.getTee().writelnInfos("SteamFriendsListReader interrupted during doInBackground sleep");
-					break;
-				}
+//				try {
+//    				Thread.sleep((long)(Math.random() * 100) + 50); // Add some delay between requests
+//				} catch (InterruptedException e) {
+//					cancelSteamFriendGameStatsReaders();
+//					librarian.getTee().writelnInfos("SteamFriendsListReader interrupted during doInBackground sleep");
+//					break;
+//				}
 				
 				SteamFriendGameStatsReader steamFriendGameStatsReader = new SteamFriendGameStatsReader(librarian, friendWithSameGameButton.getSteamProfile(), friendWithSameGameButton.getIcon(), game, initialPosition++, doneSignal);
 				steamFriendGameStatsReaders.add(steamFriendGameStatsReader);

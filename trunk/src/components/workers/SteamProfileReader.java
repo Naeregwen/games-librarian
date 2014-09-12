@@ -22,6 +22,7 @@ import commons.ColoredTee.TeeColor;
 import commons.GamesLibrary.LoadingSource;
 import commons.api.Parameters;
 import commons.api.Steam;
+import commons.api.SteamGamesList;
 import commons.api.SteamProfile;
 import commons.api.parsers.SteamProfileParser;
 import components.Librarian;
@@ -115,12 +116,14 @@ public class SteamProfileReader extends SwingWorker<SteamProfile, String> {
 						clearProgressIndicators();
 						librarian.displayErroredProfile(steamProfile);
 					} else {
+						// Replace steamProfile.steamGames by parameters.steamGamesList.steamGames, when id are matching
+						SteamGamesList steamGamesList = librarian.getParameters().getSteamGamesList();
+						if (steamGamesList != null && ((steamGamesList.getSteamID64() != null && steamGamesList.getSteamID64().equals(steamProfile.getSteamID64())
+								|| (steamGamesList.getSteamID() != null && steamGamesList.getSteamID().equals(steamProfile.getSteamID())))))
+							steamProfile.setSteamGames(steamGamesList.getSteamGames());
 						// Update profiles list
 						librarian.addProfile(steamProfile, false);
-						// Replace SteamGamesList
-						librarian.replaceSteamGamesList();
-						// Update ui profile tab
-						librarian.updateProfileTab(steamProfile);
+						// Update profile tab
 						librarian.updateSelectedSteamProfile(steamProfile);
 						// Chain with friendsList reading
 						librarian.readSteamFriendsList();

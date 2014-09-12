@@ -15,6 +15,7 @@ import javax.swing.JToolTip;
 import javax.swing.ListCellRenderer;
 import javax.swing.ToolTipManager;
 
+import commons.api.SteamGamesList;
 import commons.api.SteamProfile;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
@@ -89,7 +90,12 @@ public class KnownProfilesComboBox extends JComboBox<SteamProfile> implements It
 	@Override
 	public void itemStateChanged(ItemEvent itemEvent) {
 		if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
-			librarian.updateProfileTab((SteamProfile) itemEvent.getItem());
+			SteamProfile steamProfile = (SteamProfile) itemEvent.getItem();
+			// Update Profile Tab
+			librarian.updateProfileTab(steamProfile);
+			// Update Library Tab
+			librarian.updateGamesLibraryTab(new SteamGamesList(steamProfile));
+			// Set tool tip based on profile data
 			setToolTipText(((SteamProfile)getSelectedItem()).getTooltipText());
 		}
 	}

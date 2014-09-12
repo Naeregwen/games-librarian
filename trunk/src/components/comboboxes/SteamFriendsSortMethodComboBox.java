@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 
+import commons.enums.ProfileTabEnum;
 import commons.enums.SteamFriendsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
@@ -39,6 +40,7 @@ public class SteamFriendsSortMethodComboBox extends JComboBox<SteamFriendsSortMe
 	
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
+		librarian.displaySubTab(ProfileTabEnum.Friends);
 		if (currentSteamFriendsSortMethod != (SteamFriendsSortMethod) getSelectedItem()) {
 			currentSteamFriendsSortMethod = (SteamFriendsSortMethod) getSelectedItem();
 			librarian.sort((SteamFriendsSortMethod) getSelectedItem());
