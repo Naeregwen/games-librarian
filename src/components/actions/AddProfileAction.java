@@ -15,6 +15,7 @@ import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.api.SteamProfile;
 import commons.enums.ButtonsDisplayMode;
+import commons.enums.ProfileTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
@@ -94,6 +95,7 @@ public class AddProfileAction extends AbstractAction implements IconAndTextActio
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		librarian.displaySubTab(ProfileTabEnum.Summary);
 		SteamProfile steamProfile = requestProfileIdAndLoadProfile(null);
 		if (steamProfile != null)
 			me.getLibrarian().addNewProfile(steamProfile);

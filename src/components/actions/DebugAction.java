@@ -14,6 +14,7 @@ import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.api.Parameters;
 import commons.enums.ButtonsDisplayMode;
+import commons.enums.LibrarianTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
@@ -80,11 +81,12 @@ public class DebugAction extends AbstractAction implements IconAndTextAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Parameters parameters = me.getLibrarian().getParameters();
+		librarian.displayMainTab(LibrarianTabEnum.Controls);
+		Parameters parameters = librarian.getParameters();
 		parameters.setDebug(!parameters.isDebug());
 		translate();
 		if (me != null && me.getLibrarian() != null) // WindowBuilder 
-			me.getLibrarian().getTee().writelnInfos(me.getLibrarian().getParameters().isDebug() ? 
+			librarian.getTee().writelnInfos(librarian.getParameters().isDebug() ? 
 				BundleManager.getMessages(me, "debugOnMessage") : 
 					BundleManager.getMessages(me, "debugOffMessage"));
 	}

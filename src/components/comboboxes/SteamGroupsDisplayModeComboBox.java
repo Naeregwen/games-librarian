@@ -11,7 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import commons.enums.ProfileTab;
+import commons.enums.ProfileTabEnum;
 import commons.enums.SteamGroupsDisplayMode;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
@@ -44,10 +44,11 @@ public class SteamGroupsDisplayModeComboBox extends JComboBox<SteamGroupsDisplay
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		librarian.displaySubTab(ProfileTabEnum.Groups);
 		JPanel cards = librarian.getProfileGroupsTab();
         CardLayout cardLayout = (CardLayout)(cards.getLayout());
         cardLayout.show(cards, ((SteamGroupsDisplayMode)e.getItem()).name());
-        librarian.displaySubTab(ProfileTab.Groups);
+        librarian.displaySubTab(ProfileTabEnum.Groups);
 	}
 
 }

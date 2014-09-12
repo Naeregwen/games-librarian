@@ -106,13 +106,13 @@ public class SteamFriendsListReader extends SwingWorker<SteamFriendsList, String
 	    		
 	    		for (SteamProfile friend : steamFriendsList.getFriends()) {
 	    			
-	    			try {
-	    				Thread.sleep((long)(Math.random() * 100) + 50); // Add some delay between requests
-	    			} catch (InterruptedException e) {
-	    				cancelSteamFriendProfileReaders();
-	    				librarian.getTee().writelnInfos("SteamFriendsListReader interrupted during doInBackground sleep");
-	    				break;
-					}
+//	    			try {
+//	    				Thread.sleep((long)(Math.random() * 100) + 50); // Add some delay between requests
+//	    			} catch (InterruptedException e) {
+//	    				cancelSteamFriendProfileReaders();
+//	    				librarian.getTee().writelnInfos("SteamFriendsListReader interrupted during doInBackground sleep");
+//	    				break;
+//					}
 	
 	    			SteamFriendProfileReader steamFriendProfileReader = new SteamFriendProfileReader(librarian, friend.getSteamID64(), doneSignal, index++);
 	    			steamFriendProfileReaders.add(steamFriendProfileReader);
@@ -151,7 +151,7 @@ public class SteamFriendsListReader extends SwingWorker<SteamFriendsList, String
 					// Update friendsButtonGroup
 					librarian.updateProfileFriendsTab(librarian.getCurrentSteamProfile());
 					// Chain with friends gameLists
-					if (librarian.getCurrentSteamGame() != null)
+					if (steamFriendsList.getFriends().size() < Librarian.MaxFriendsForGamesList)
 						librarian.readSteamFriendsGameLists();
 				}
 			} catch (InterruptedException e) {

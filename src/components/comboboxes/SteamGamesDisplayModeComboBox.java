@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
+import commons.enums.LibraryTabEnum;
 import commons.enums.SteamGamesDisplayMode;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
@@ -43,6 +44,7 @@ public class SteamGamesDisplayModeComboBox extends JComboBox<SteamGamesDisplayMo
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		librarian.displaySubTab(LibraryTabEnum.LibraryGamesList);
 		JPanel cards = librarian.getLibraryPane();
         CardLayout cardLayout = (CardLayout)(cards.getLayout());
         cardLayout.show(cards, ((SteamGamesDisplayMode)e.getItem()).name());

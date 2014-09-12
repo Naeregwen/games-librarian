@@ -20,6 +20,7 @@ import commons.api.Parameters;
 import commons.api.SteamGame;
 import commons.enums.ButtonsDisplayMode;
 import commons.enums.GameChoice;
+import commons.enums.LibrarianTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
@@ -255,6 +256,7 @@ public class RollAction extends AbstractAction implements IconAndTextAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		librarian.displayMainTab(LibrarianTabEnum.Controls);
 		readOrRoll();
 	}
 

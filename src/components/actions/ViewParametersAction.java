@@ -17,6 +17,7 @@ import commons.api.SteamProfile;
 import commons.api.parsers.ParametersParser;
 import commons.api.parsers.SteamProfileParser;
 import commons.enums.ButtonsDisplayMode;
+import commons.enums.LibrarianTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
@@ -80,6 +81,7 @@ public class ViewParametersAction extends AbstractAction implements IconAndTextA
 		Librarian librarian = me.getLibrarian();
 		Parameters parameters = me.getLibrarian().getParameters();
 		SteamProfile steamProfile = me.getLibrarian().getCurrentSteamProfile();
+		librarian.displayMainTab(LibrarianTabEnum.Controls);
     	switch (parameters.getDumpMode()) {
     	case Text :
     		librarian.getTee().writelnInfos(parameters.getMessages().getString("showCurrentParametersText"));

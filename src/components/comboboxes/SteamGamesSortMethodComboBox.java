@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 
+import commons.enums.LibraryTabEnum;
 import commons.enums.SteamGamesSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
@@ -39,6 +40,7 @@ public class SteamGamesSortMethodComboBox extends JComboBox<SteamGamesSortMethod
 	
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
+		librarian.displaySubTab(LibraryTabEnum.LibraryGamesList);
 		if (currentSteamGamesSortMethod != (SteamGamesSortMethod) getSelectedItem()) {
 			currentSteamGamesSortMethod = (SteamGamesSortMethod) getSelectedItem();
 			librarian.sort((SteamGamesSortMethod) getSelectedItem());

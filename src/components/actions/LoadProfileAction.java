@@ -13,8 +13,9 @@ import javax.swing.KeyStroke;
 import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.enums.ButtonsDisplayMode;
-import components.Librarian;
+import commons.enums.ProfileTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
 
 /**
@@ -73,6 +74,7 @@ public class LoadProfileAction extends AbstractAction implements IconAndTextActi
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		librarian.displaySubTab(ProfileTabEnum.Summary);
 		me.getLibrarian().requestAndLoadProfile();
 	}
 

@@ -123,15 +123,6 @@ public class SteamGameStatsReader extends SwingWorker<SteamGameStats, String> {
             		return steamGameStats;
             }
             
-            if (steamGameStatsParser.getSteamGameStats() == null)
-            	System.err.println("NULL steamGameStatsParser.getSteamGameStats() " + game.getName());
-            else if (steamGameStatsParser.getSteamGameStats().getSteamAchievementsList() == null)
-            	System.err.println("NULL steamGameStatsParser.getSteamGameStats().getSteamAchievementsList()" + game.getName());
-            else if (steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements() == null)
-            	System.err.println("NULL steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements()" + game.getName());
-            else if (steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() == 0)
-            	System.err.println("NULL steamGameStatsParser.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() == 0" + game.getName());
-            
 		} catch (CancellationException e) {
 			publish("SteamGameStatsReader " + game.getName() + " cancelled during doInBackground");
         } catch (IOException exception) {
@@ -159,8 +150,10 @@ public class SteamGameStatsReader extends SwingWorker<SteamGameStats, String> {
 				if (doneSignal == null)
 					librarian.updateGameTab(steamGameStats);
 				// Update gameStats of currentSteamProfile in latched works
-				else 
+				else  {
 					librarian.addSteamGameStats(steamGameStats);
+					librarian.updateGameTabTitle();
+				}
 		} catch (InterruptedException e) {
 			librarian.updateSteamAchievementsPane();
 			librarian.updateGameTabTitle();

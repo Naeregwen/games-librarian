@@ -11,6 +11,7 @@ import javax.swing.KeyStroke;
 import commons.BundleManager;
 import commons.api.Parameters;
 import commons.enums.GameChoice;
+import commons.enums.LibrarianTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 
@@ -59,6 +60,7 @@ public class GameChoiceAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		Librarian librarian =  me.getLibrarian();
 		Parameters parameters = librarian.getParameters();
+		librarian.displayMainTab(LibrarianTabEnum.Controls);
 		librarian.displayLaunchButtons(gameChoice);
 		if (parameters.isDebug()) 
 			librarian.getTee().writelnInfos(String.format(parameters.getMessages().getString("gameChoiceChanged"), gameChoice.ordinal()+1));

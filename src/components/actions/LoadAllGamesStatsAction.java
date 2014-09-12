@@ -13,6 +13,7 @@ import javax.swing.KeyStroke;
 import commons.BundleManager;
 import commons.GamesLibrary;
 import commons.enums.ButtonsDisplayMode;
+import commons.enums.LibraryTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
@@ -73,6 +74,7 @@ public class LoadAllGamesStatsAction extends AbstractAction implements IconAndTe
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		librarian.displaySubTab(LibraryTabEnum.LibraryStatistics);
 		me.getLibrarian().readAllSteamGamesStats();
 	}
 

@@ -11,7 +11,7 @@ import commons.GamesLibrary;
  * @author Naeregwen
  *
  */
-public enum ProfileTab implements TabEnum {
+public enum ProfileTabEnum implements TabEnum {
 
 	Summary ("gotoSummaryMenuLabel", "gotoSummaryMnemonic", "gotoSummaryAccelerator", GamesLibrary.accountSummaryIcon),
 	Status ("gotoStatusMenuLabel", "gotoStatusMnemonic", "gotoStatusAccelerator", GamesLibrary.accountStatusIcon),
@@ -23,41 +23,48 @@ public enum ProfileTab implements TabEnum {
 	String acceleratorKey;
 	Icon icon;
 
-	ProfileTab(String labelKey, String mnemonicKey, String acceleratorKey, Icon icon) {
+	ProfileTabEnum(String labelKey, String mnemonicKey, String acceleratorKey, Icon icon) {
 		this.labelKey = labelKey;
 		this.mnemonicKey = mnemonicKey;
 		this.acceleratorKey = acceleratorKey;
 		this.icon = icon;
 	}
-	
-	/**
-	 * @return the labelKey
+
+	/* (non-Javadoc)
+	 * @see commons.enums.TabEnum#getLabelKey()
 	 */
+	@Override
 	public String getLabelKey() {
 		return labelKey;
 	}
 
-	/**
-	 * @return the mnemonicKey
+	@Override
+	/* (non-Javadoc)
+	 * @see commons.enums.TabEnum#getMnemonicKey()
 	 */
 	public String getMnemonicKey() {
 		return mnemonicKey;
 	}
 
-	/**
-	 * @return the acceleratorKey
+	/* (non-Javadoc)
+	 * @see commons.enums.TabEnum#getAcceleratorKey()
 	 */
+	@Override
 	public String getAcceleratorKey() {
 		return acceleratorKey;
 	}
 
-	/**
-	 * @return the icon
+	/* (non-Javadoc)
+	 * @see commons.enums.TabEnum#getIcon()
 	 */
+	@Override
 	public Icon getIcon() {
 		return icon;
 	}
 
+	/* (non-Javadoc)
+	 * @see commons.enums.TabEnum#isMain()
+	 */
 	@Override
 	public boolean isMain() {
 		return false;
