@@ -16,24 +16,22 @@
 package components.containers.remotes;
 
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolTip;
-import javax.swing.ToolTipManager;
 
 import commons.BundleManager;
 import commons.ColoredTee;
 import commons.GamesLibrary;
 import commons.api.SteamProfile;
 import commons.enums.OnlineState;
-import commons.enums.ProfileTabEnum;
 import components.GamesLibrarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.commons.JScrollableToolTip;
+import components.commons.adapters.SteamObjectsMouseAdapter;
+import components.commons.adapters.SteamProfileMouseAdapter;
 import components.containers.commons.RemoteIconButton;
 import components.workers.RemoteIconReader;
 
@@ -41,15 +39,13 @@ import components.workers.RemoteIconReader;
  * @author Naeregwen
  *
  */
-public class SteamFriendButton extends JButton implements RemoteIconButton, MouseListener {
+public class SteamFriendButton extends JButton implements RemoteIconButton {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = 707601786981108394L;
 	
-    private final int defaultDismissDelay = ToolTipManager.sharedInstance().getDismissDelay();
-    private final int currentDismissDelay = (int) TimeUnit.MINUTES.toMillis(10); // 10 minutes
     JScrollableToolTip tooltip;
 
 	// Controller
@@ -64,6 +60,8 @@ public class SteamFriendButton extends JButton implements RemoteIconButton, Mous
 		super(BundleManager.getUITexts(me, key));
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		setIcon(GamesLibrary.noAvatarIcon); // WindowBuilder
+		addMouseListener(new SteamObjectsMouseAdapter());
+		addMouseListener(new SteamProfileMouseAdapter(me));
 	}
 	
 	/**
@@ -116,7 +114,8 @@ public class SteamFriendButton extends JButton implements RemoteIconButton, Mous
 		setIconTextGap(getIconTextGap() + 10);
 		setHorizontalAlignment(LEFT);
 		// Set listeners
-		addMouseListener(this);
+		addMouseListener(new SteamObjectsMouseAdapter());
+		addMouseListener(new SteamProfileMouseAdapter(me));
 	}
 
 	/**
@@ -173,30 +172,6 @@ public class SteamFriendButton extends JButton implements RemoteIconButton, Mous
 	@Override
 	public String getToolTipText(MouseEvent event) {
 		return ((SteamFriendButton) event.getSource()).getSteamProfile().getTooltipText();
-	}
-	
-	@Override
-	public void mouseClicked(MouseEvent mouseEvent) {
-		if ((mouseEvent.getClickCount() == 1 || mouseEvent.getClickCount() == 2) && steamProfile != null)
-			librarian.updateProfileTab(steamProfile);
-        if (mouseEvent.getClickCount() == 2)
-        	librarian.displaySubTab(ProfileTabEnum.Summary);
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(currentDismissDelay);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(defaultDismissDelay);
 	}
 	
 }

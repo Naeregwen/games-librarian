@@ -17,33 +17,29 @@ package components.containers;
 
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
-import javax.swing.ToolTipManager;
 
 import commons.api.Steam;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.commons.JScrollableToolTip;
+import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.workers.IconPaneReader;
 
 /**
  * @author Naeregwen
  *
  */
-public class IconPane extends JPanel implements MouseListener{
+public class IconPane extends JPanel {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = -8319020237703389805L;
 
-    private final int defaultDismissDelay = ToolTipManager.sharedInstance().getDismissDelay();
-    private final int currentDismissDelay = (int) TimeUnit.MINUTES.toMillis(10); // 10 minutes
     JScrollableToolTip tooltip;
 
 	WindowBuilderMask me;
@@ -56,7 +52,7 @@ public class IconPane extends JPanel implements MouseListener{
 		this.me = me;
 		if (me != null && me.getLibrarian().getCurrentSteamProfile() != null) // WindowBuilder
 			setToolTipText(me.getLibrarian().getCurrentSteamProfile().getTooltipText());
-		addMouseListener(this);
+		addMouseListener(new SteamObjectsMouseAdapter());
 	}
 
 	/**
@@ -132,25 +128,6 @@ public class IconPane extends JPanel implements MouseListener{
 	@Override
 	public String getToolTipText(MouseEvent event) {
 		return me.getLibrarian().getCurrentSteamProfile() != null ? (me.getLibrarian().getCurrentSteamProfile()).getTooltipText() : null;
-	}
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-
-	@Override
-	public void mousePressed(MouseEvent e) {}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(currentDismissDelay);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(defaultDismissDelay);
 	}
 	
 }

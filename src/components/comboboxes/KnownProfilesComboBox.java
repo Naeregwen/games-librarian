@@ -18,14 +18,11 @@ package components.comboboxes;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JToolTip;
 import javax.swing.ListCellRenderer;
-import javax.swing.ToolTipManager;
 
 import commons.api.SteamGamesList;
 import commons.api.SteamProfile;
@@ -34,20 +31,19 @@ import components.Librarian;
 import components.comboboxes.commons.SortedComboBoxModel;
 import components.comboboxes.renderers.KnownProfilesComboBoxRenderer;
 import components.commons.JScrollableToolTip;
+import components.commons.adapters.SteamObjectsMouseAdapter;
 
 /**
  * @author Naeregwen
  *
  */
-public class KnownProfilesComboBox extends JComboBox<SteamProfile> implements ItemListener, MouseListener {
+public class KnownProfilesComboBox extends JComboBox<SteamProfile> implements ItemListener {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = -4849948849703234395L;
 
-    private final int defaultDismissDelay = ToolTipManager.sharedInstance().getDismissDelay();
-    private final int currentDismissDelay = (int) TimeUnit.MINUTES.toMillis(10); // 10 minutes
     JScrollableToolTip tooltip;
 
 	Librarian librarian;
@@ -61,7 +57,7 @@ public class KnownProfilesComboBox extends JComboBox<SteamProfile> implements It
 		if (getSelectedItem() != null)
 			setToolTipText(((SteamProfile)getSelectedItem()).getTooltipText());
 		addItemListener(this);
-		addMouseListener(this);
+		addMouseListener(new SteamObjectsMouseAdapter());
 	}
 	
 	public void addProfile(SteamProfile item) {
@@ -111,24 +107,4 @@ public class KnownProfilesComboBox extends JComboBox<SteamProfile> implements It
 			setToolTipText(((SteamProfile)getSelectedItem()).getTooltipText());
 		}
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-
-	@Override
-	public void mousePressed(MouseEvent e) {}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(currentDismissDelay);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(defaultDismissDelay);
-	}
-	
 }

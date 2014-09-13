@@ -17,15 +17,12 @@ package components.tables;
 
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JTable;
 import javax.swing.JToolTip;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
-import javax.swing.ToolTipManager;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
@@ -36,12 +33,13 @@ import commons.enums.SteamFriendsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.commons.JScrollableToolTip;
+import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.tables.cells.renderers.IconTableCellRenderer;
 import components.tables.headers.listeners.SteamFriendsHeaderListener;
 import components.tables.headers.renderers.SteamFriendsTableHeaderRenderer;
 import components.tables.models.SteamFriendsTableModel;
 
-public class SteamFriendsTable extends JTable implements MouseListener {
+public class SteamFriendsTable extends JTable {
 
 	/**
 	 * serialVersionUID
@@ -51,8 +49,6 @@ public class SteamFriendsTable extends JTable implements MouseListener {
 	WindowBuilderMask me;
 	Librarian librarian;
 	
-    private final int defaultDismissDelay = ToolTipManager.sharedInstance().getDismissDelay();
-    private final int currentDismissDelay = (int) TimeUnit.MINUTES.toMillis(10); // 10 minutes
 	JScrollableToolTip tooltip;
 	
 	public SteamFriendsTable(WindowBuilderMask me, List<SteamProfile> friends) {
@@ -74,6 +70,9 @@ public class SteamFriendsTable extends JTable implements MouseListener {
 		JTableHeader tableHeader = getTableHeader();
 		tableHeader.addMouseListener(new SteamFriendsHeaderListener(librarian, tableHeader));
 		
+        // Table listener
+		addMouseListener(new SteamObjectsMouseAdapter());
+
 		// Logo renderer
 		TableColumn logoColumn = getColumnModel().getColumn(SteamFriend.ColumnsOrder.logo.ordinal());
 		logoColumn.setCellRenderer(new IconTableCellRenderer());
@@ -81,9 +80,6 @@ public class SteamFriendsTable extends JTable implements MouseListener {
 		// Selection handlers
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-        // Table listener
-		addMouseListener(this);
-
 		// Layout & display
 		setLayout(new GridLayout(1, 0, 0, 0));
 		setRowHeight(Steam.steamFriendIconHeight);
@@ -114,25 +110,6 @@ public class SteamFriendsTable extends JTable implements MouseListener {
 		int row = rowAtPoint(event.getPoint());
 		if (row == -1) return null;
 		return ((SteamFriendsTableModel) getModel()).getFriendAtRow(convertRowIndexToModel(row)).getTooltipText();
-	}
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-
-	@Override
-	public void mousePressed(MouseEvent e) {}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(currentDismissDelay);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(defaultDismissDelay);
 	}
 	
 	public void sorter() {

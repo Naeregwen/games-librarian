@@ -17,12 +17,15 @@ package components.tables.cells.renderers;
 
 import java.awt.Component;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import commons.BundleManager;
 import commons.api.SteamLaunchMethod;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.tables.SteamGamesTable;
 
 /**
  * @author Naeregwen
@@ -37,23 +40,25 @@ public class SteamLaunchMethodTableCellRenderer extends DefaultTableCellRenderer
 
 	WindowBuilderMask me;
 	
+	private SteamGamesTable steamGamesTable;
 	
     /**
 	 * @param me
 	 */
-	public SteamLaunchMethodTableCellRenderer(WindowBuilderMask me) {
+	public SteamLaunchMethodTableCellRenderer(WindowBuilderMask me, SteamGamesTable steamGamesTable) {
 		super();
 		this.me = me;
+		this.steamGamesTable = steamGamesTable;
 	}
 
 
 	@Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-        SteamLaunchMethod steamLaunchMethod = (SteamLaunchMethod) value; 
-        // Update UI
-        setText(BundleManager.getUITexts(me, steamLaunchMethod.getLabelKey()));
-        setIcon(steamLaunchMethod.getIcon());
-        return this;
+		JComponent component = (JComponent) steamGamesTable.getCellRenderer(row, column);
+		SteamLaunchMethod steamLaunchMethod = (SteamLaunchMethod) value; 
+		setText(BundleManager.getUITexts(me, steamLaunchMethod.getLabelKey()));
+		if (component instanceof JLabel)
+	        ((JLabel) component).setIcon(steamLaunchMethod.getIcon());
+        return component;
     }	
 }

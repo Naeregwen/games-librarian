@@ -17,8 +17,6 @@ package components.comboboxes;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
@@ -29,13 +27,14 @@ import commons.api.SteamLaunchMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.adapters.LaunchButtonMouseAdapter;
 import components.containers.remotes.LaunchButton;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamLaunchMethodComboBox extends JComboBox<SteamLaunchMethod> implements ActionListener, MouseListener {
+public class SteamLaunchMethodComboBox extends JComboBox<SteamLaunchMethod> implements ActionListener {
 
 	/**
 	 * serialVersionUID
@@ -63,7 +62,7 @@ public class SteamLaunchMethodComboBox extends JComboBox<SteamLaunchMethod> impl
 		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<SteamLaunchMethod>) this.getRenderer()));
 		setMaximumRowCount(SteamLaunchMethod.values().length);
 		addActionListener(this);
-		addMouseListener(this);
+		addMouseListener(new LaunchButtonMouseAdapter(me, launchButton));
 	}
 
 	/**
@@ -115,32 +114,4 @@ public class SteamLaunchMethodComboBox extends JComboBox<SteamLaunchMethod> impl
 			}
 		}
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		if (launchButton != null)
-			librarian.enterGame(launchButton.getGame());
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		if (launchButton != null)
-			librarian.leaveGame(launchButton.getGame());
-	}
-	
 }

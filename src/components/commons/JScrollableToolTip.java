@@ -1,13 +1,23 @@
 package components.commons;
 
-import java.awt.*;
-import java.awt.event.MouseEvent;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JToolTip;
+import javax.swing.LookAndFeel;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
+
+import components.commons.adapters.JScrollableToolTipMouseAdapter;
 
 /**
  * https://forums.oracle.com/thread/2130796
@@ -18,92 +28,53 @@ public class JScrollableToolTip extends JToolTip {
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = -7294931179347650717L;
-	private final MouseWheelListener mouseWheelListener;
 	private final MouseListener mouseListener;
     private final JEditorPane tipArea;
 
     public JScrollableToolTip(final int width, final int height) {
+    	
         setLayout(new BorderLayout());
-        mouseWheelListener = createMouseWheelListener();
-        mouseListener = createMouseListener();
+        
         tipArea = new JEditorPane();
         tipArea.setPreferredSize(new Dimension(width, height));
         tipArea.setContentType("text/html");
         tipArea.setEditable(false);
+        
         LookAndFeel.installColorsAndFont(tipArea, "ToolTip.background", "ToolTip.foreground", "ToolTip.font");
+        
         JScrollPane scrollpane = new JScrollPane(tipArea);
         scrollpane.setBorder(null);
         scrollpane.getViewport().setOpaque(false);
         add(scrollpane);
+        
+        mouseListener = new JScrollableToolTipMouseAdapter(this, tipArea);
+        addMouseListener(mouseListener);
     }
 
-    protected MouseWheelListener createMouseWheelListener() {
-        return new MouseWheelListener() {
-            @Override
-            public void mouseWheelMoved(final MouseWheelEvent e) {
-                JComponent component = getComponent();
-                if(component != null) {
-                    tipArea.dispatchEvent(new MouseWheelEvent(tipArea,
-                            e.getID(), e.getWhen(), e.getModifiers(),
-                            0, 0, e.getClickCount(), e.isPopupTrigger(),
-                            e.getScrollType(), e.getScrollAmount(), e.getWheelRotation()));
-                }
-            }
-        };
-    }
-
-    protected MouseListener createMouseListener() {
-    	return new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				JComponent component = getComponent();
-			 	if(component != null) {
-                    tipArea.dispatchEvent(new MouseEvent(tipArea,
-                    		e.getID(), e.getWhen(), e.getModifiers(),
-                    		0, 0, e.getClickCount(), e.isPopupTrigger()));
-                }
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-
-			@Override
-			public void mouseExited(MouseEvent e) {}
-    		
-    	};
-    }
-    
     @Override
     public void addNotify() {
         super.addNotify();
         JComponent component = getComponent();
-        if (component != null) {
-            component.addMouseWheelListener(mouseWheelListener);
+        if (component != null)
             component.addMouseListener(mouseListener);
-        }
     }
 
     @Override
     public void removeNotify() {
         JComponent component = getComponent();
-        if(component != null) {
-            component.removeMouseWheelListener(mouseWheelListener);
+        if (component != null)
             component.removeMouseListener(mouseListener);
-       }
         super.removeNotify();
     }
 
     @Override
     public void setTipText(final String tipText) {
+    	
         String oldValue = this.tipArea.getText();
+        
         tipArea.setText(tipText);
         tipArea.setCaretPosition(0);
+        
         firePropertyChange("tiptext", oldValue, tipText);
     }
 
@@ -115,10 +86,8 @@ public class JScrollableToolTip extends JToolTip {
     @Override
     public void setComponent(JComponent c) {
         JComponent component = getComponent();
-        if(component != null) {
-            component.removeMouseWheelListener(mouseWheelListener);
+        if (component != null)
             component.removeMouseListener(mouseListener);
-        }
         super.setComponent(c);
     }
 
