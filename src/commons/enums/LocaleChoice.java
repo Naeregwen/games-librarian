@@ -1,5 +1,17 @@
 /**
- * 
+ * Copyright 2012-2014 Naeregwen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package commons.enums;
 
@@ -19,47 +31,45 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 
+import javax.swing.ImageIcon;
+
+import commons.GamesLibrary;
+import commons.enums.interfaces.GamesLibrarianActionEnum;
 import components.GamesLibrarian;
 
 /**
  * @author Naeregwen
  *
  */
-public enum LocaleChoice {
+public enum LocaleChoice implements GamesLibrarianActionEnum {
 
-	en_US ("en_USLabel", "en_USMnemonic", "en_USAccelerator", "/images/locales/en_US.png", "English (United States)"),
-	fr_FR ("fr_FRLabel", "fr_FRMnemonic", "fr_FRAccelerator", "/images/locales/fr_FR.png", "Français (France)");
+	en_US ("en_USLabel", "en_USMnemonic", "en_USAccelerator", GamesLibrary.en_USIcon, "English (United States)"),
+	fr_FR ("fr_FRLabel", "fr_FRMnemonic", "fr_FRAccelerator", GamesLibrary.fr_FRIcon, "Français (France)");
 	
 	public static Set<String> usablesLanguages = new HashSet<String>();
 	
 	String labelKey;
 	String mnemonicKey;
 	String acceleratorKey;
-	String iconPath;
+	ImageIcon icon;
 	String translation;
 	
 	public static final Pattern localePattern = Pattern.compile("^[a-z]{2}_[A-Z]{2}$");
 	public static final Pattern countryPattern = Pattern.compile("^([a-z]{2})_[A-Z]{2}$");
 	public static final Pattern languagePattern = Pattern.compile("^[a-z]{2}_([A-Z]{2})$");
 	
-	LocaleChoice(String labelKey, String mnemonicKey, String acceleratorKey, String iconPath,  String translation) {
+	LocaleChoice(String labelKey, String mnemonicKey, String acceleratorKey, ImageIcon icon,  String translation) {
 		this.labelKey = labelKey;
 		this.mnemonicKey = mnemonicKey;
 		this.acceleratorKey = acceleratorKey;
-		this.iconPath = iconPath;
+		this.icon = icon;
 		this.translation = translation;
-	}
-	
-	/**
-	 * @return the translation
-	 */
-	public String getTranslation() {
-		return translation == null ? this.name() : translation;
 	}
 	
 	/**
 	 * @return the labelKey
 	 */
+	@Override
 	public String getLabelKey() {
 		return labelKey;
 	}
@@ -79,12 +89,20 @@ public enum LocaleChoice {
 	}
 
 	/**
-	 * @return the iconPath
+	 * @return the icon
 	 */
-	public String getIconPath() {
-		return iconPath;
+	@Override
+	public ImageIcon getIcon() {
+		return icon;
 	}
 
+	/**
+	 * @return the translation
+	 */
+	public String getTranslation() {
+		return translation == null ? this.name() : translation;
+	}
+	
 	//
 	// Helpers to manage Locales <-> ResourcesBundles
 	//

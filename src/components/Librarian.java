@@ -1,5 +1,17 @@
 /**
- * 
+ * Copyright 2012-2014 Naeregwen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package components;
 
@@ -105,6 +117,7 @@ import components.comboboxes.observables.ButtonsDisplayModeObservables;
 import components.comboboxes.observables.SteamAchievementsSortMethodObservables;
 import components.comboboxes.observers.ButtonsDisplayModeObserver;
 import components.comboboxes.observers.SteamAchievementsSortMethodObserver;
+import components.commons.parsers.NumberParser;
 import components.containers.BoundedComponent;
 import components.containers.GameLauncher;
 import components.containers.MostPlayedGameLauncher;
@@ -134,6 +147,7 @@ import components.workers.latched.SteamFriendsGameStatsReader;
 import components.workers.latched.SteamFriendsListReader;
 
 /**
+ * GamesLibrarian engine
  * @author Naeregwen
  *
  */
@@ -153,13 +167,21 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	private ArrayList<ButtonsDisplayModeObserver> buttonsDisplayModeObservers;
 	private HashMap<String, SteamProfile> profiles;
 	
+	// Remember currently selected Objects
 	private SteamGame currentSteamGame;
 	private SteamProfile currentSteamProfile;
 
+	// Remember last value functionality
 	private SteamGame lastSteamGameWithStats;
-	// FIXME: Task chaining problem
-	private boolean loadAllAchievements;
+	private String selectedDirectory;
+	private String selectedFilename;
+	// Remember last game name to display between mouse moves
+	private String lastGameName;
 	
+	// Tools
+	NumberParser numberParser;
+	
+	// SwingWorkers
 	private SteamGamesListReader steamGamesListReader;
 	private SteamGameStatsReader steamGameStatsReader;
 	private SteamProfileReader steamProfileReader;
@@ -168,34 +190,29 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	private SteamFriendsGameStatsReader steamFriendsGameStatsReader;
 	private SteamFriendGameStatsReader steamFriendGameStatsReader;
 	private AllSteamGamesStatsReader allSteamGamesStatsReader;
-
-	private String selectedDirectory;
-	private String selectedFilename;
 	
 	/**
 	 * Runtime status
 	 */
-	boolean steamGamesListReading;
-	boolean steamGameStatsReading;
-	boolean steamProfileReading;
-	boolean steamFriendsListReading;
-	boolean steamFriendsGameListsReading;
-	boolean steamFriendGameStatsReading;
-	boolean allSteamGamesStatsReading;
-	
-	// Max friends of a profile to chain a readSteamFriendsList request with a readSteamFriendsGameLists request
-	public static final int MaxFriendsForGamesList = 40;
-	
-	/**
-	 * Remember last game name to display between mouse moves
-	 */
-	private static String lastGameName;
+	private boolean steamGamesListReading;
+	private boolean steamGameStatsReading;
+	private boolean loadAllAchievements; // FIXME: Task chaining problem
+	private boolean steamProfileReading;
+	private boolean steamFriendsListReading;
+	private boolean steamFriendsGameListsReading;
+	private boolean steamFriendGameStatsReading;
+	private boolean allSteamGamesStatsReading;
 	
 	/**
 	 *  Mode to display informations in console 
 	 */
 	public static enum DisplayMode { verbose, silent }
 
+	/**
+	 * Max friends of a profile to chain a readSteamFriendsList request with a readSteamFriendsGameLists request
+	 */
+	public static final int MaxFriendsForGamesList = 40;
+	
 	/**
 	 * Graphic containers
 	 */
@@ -220,12 +237,24 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		// Attach the view
 		// It is not because you a...are, ... qu'i am you, qu'i am you
 		this.view = me.me.me();
+		// Parameters will be created at setup
 		// Initialize runtime variables
 		achievementsSortMethodObservers = new ArrayList<SteamAchievementsSortMethodObserver>();
 		buttonsDisplayModeObservers = new ArrayList<ButtonsDisplayModeObserver>();
-		loadAllAchievements = false;
+		profiles = new HashMap<String, SteamProfile> (); // Create empty profiles list
+		// Initialize currently selected Objects
+		currentSteamGame = null;
+		currentSteamProfile = null;
+		// Initialize last value functionality
+		lastSteamGameWithStats = null;
 		selectedDirectory = "";
 		selectedFilename = "";
+		lastGameName = null;
+		// Initialize tools
+		numberParser = NumberParser.getInstance(me);
+		// SwingWorkers will be created when needed
+		// Runtime status variables will be created at setup
+		// Graphic containers will be created at startup or when needed
 	}
 	
 	/**
@@ -1463,11 +1492,6 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		updateLibraryMainTabTitle();
 	}
 	
-	public void updateGamesLibraryTab(SteamGamesList steamGamesList) {
-		parameters.setSteamGamesList(steamGamesList);
-		updateGamesLibraryTab();
-	}
-	
 	/**
 	 * Update display of libraryStatistics Main Tab and SubTabs
 	 */
@@ -1500,7 +1524,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 					totalGamesWithStoreLink++;
 				if (game.getHoursOnRecord() != null && !game.getHoursOnRecord().trim().equals("")) {
 					try {
-						Double hoursOnRecord = Double.parseDouble(game.getHoursOnRecord());
+						Double hoursOnRecord = numberParser.parseDouble(game.getHoursOnRecord());
 						totalWastedHours += hoursOnRecord;
 					} catch (NumberFormatException e) {
 						tee.printStackTrace(e);
@@ -1508,7 +1532,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 				}
 				if (game.getHoursLast2Weeks() != null && !game.getHoursLast2Weeks().trim().equals("")) {
 					try {
-						Double hoursLast2Weeks = Double.parseDouble(game.getHoursLast2Weeks());
+						Double hoursLast2Weeks = numberParser.parseDouble(game.getHoursLast2Weeks());
 						totalHoursLast2Weeks += hoursLast2Weeks;
 					} catch (NumberFormatException e) {
 						tee.printStackTrace(e);
@@ -1580,6 +1604,15 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	public void updateAllLibraryTabs() {
 		updateGamesLibraryTab();
 		updateLibraryStatisticsMainTab();
+	}
+	
+	/**
+	 * Update display of all Library Tabs using new steamGamesList
+	 * @param steamGamesList
+	 */
+	public void updateGamesLibraryTab(SteamGamesList steamGamesList) {
+		parameters.setSteamGamesList(steamGamesList);
+		updateAllLibraryTabs();
 	}
 	
 	/**
@@ -2386,7 +2419,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 			view.steamAchievementsScrollPane.add(steamAchievementsTable);
 			view.steamAchievementsScrollPane.setViewportView(steamAchievementsTable);
 			// FIXME: better method ?
-			view.steamAchievementsScrollPane.paintAll(view.steamAchievementsScrollPane.getGraphics());
+//			view.steamAchievementsScrollPane.paintAll(view.steamAchievementsScrollPane.getGraphics());
 		}
 	}
 	
@@ -3915,12 +3948,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		parameters.setScrollLocked(Parameters.defaultScrollLocked);
 		parameters.setXmlOverrideRegistry(Parameters.defaultXmlOverrideRegistry);
 		
-		// Create empty profiles list
-		profiles = new HashMap<String, SteamProfile> ();
-		
 		// Setup runtime status to default
 		steamGamesListReading = false;
 		steamGameStatsReading = false;
+		loadAllAchievements = false;
 		steamProfileReading = false;
 		steamFriendsListReading = false;
 		steamFriendsGameListsReading = false;

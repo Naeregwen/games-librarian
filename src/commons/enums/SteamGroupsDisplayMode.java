@@ -1,32 +1,50 @@
 /**
- * 
+ * Copyright 2012-2014 Naeregwen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package commons.enums;
+
+import javax.swing.ImageIcon;
+
+import commons.GamesLibrary;
+import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
  * @author Naeregwen
  *
  */
-public enum SteamGroupsDisplayMode {
+public enum SteamGroupsDisplayMode implements GamesLibrarianActionEnum {
 
-	List ("steamGroupsDisplayModeList", "steamGroupsDisplayModeListMnemonic", "steamGroupsDisplayModeListAccelerator", "/images/icons/application_view_list.png"),
-	Grid ("steamGroupsDisplayModeGrid", "steamGroupsDisplayModeGridMnemonic", "steamGroupsDisplayModeGridAccelerator", "/images/icons/application_view_tile.png");
+	List ("steamGroupsDisplayModeList", "steamGroupsDisplayModeListMnemonic", "steamGroupsDisplayModeListAccelerator", GamesLibrary.steamGroupsDisplayModeListIcon),
+	Grid ("steamGroupsDisplayModeGrid", "steamGroupsDisplayModeGridMnemonic", "steamGroupsDisplayModeGridAccelerator", GamesLibrary.steamGroupsDisplayModeGridIcon);
 	
 	String labelKey;
 	String mnemonicKey;
 	String acceleratorKey;
-	String iconPath;
+	ImageIcon icon;
 	
-	SteamGroupsDisplayMode(String labelKey, String mnemonicKey, String acceleratorKey, String iconPath) {
+	SteamGroupsDisplayMode(String labelKey, String mnemonicKey, String acceleratorKey, ImageIcon icon) {
 		this.labelKey = labelKey;
 		this.mnemonicKey = mnemonicKey;
 		this.acceleratorKey = acceleratorKey;
-		this.iconPath = iconPath;
+		this.icon = icon;
 	}
 
 	/**
 	 * @return the labelKey
 	 */
+	@Override
 	public String getLabelKey() {
 		return labelKey;
 	}
@@ -46,10 +64,11 @@ public enum SteamGroupsDisplayMode {
 	}
 
 	/**
-	 * @return the iconPath
+	 * @return the icon
 	 */
-	public String getIconPath() {
-		return iconPath;
+	@Override
+	public ImageIcon getIcon() {
+		return icon;
 	}
 	
 }
