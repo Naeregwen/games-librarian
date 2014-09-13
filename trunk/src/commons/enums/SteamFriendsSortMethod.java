@@ -1,46 +1,65 @@
 /**
- * 
+ * Copyright 2012-2014 Naeregwen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package commons.enums;
+
+import javax.swing.ImageIcon;
+
+import commons.GamesLibrary;
+import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
  * @author Naeregwen
  *
  */
-public enum SteamFriendsSortMethod {
+public enum SteamFriendsSortMethod implements GamesLibrarianActionEnum {
 
-	InitialAscendingOrder("initialOrder", "/images/icons/arrow_switch_bluegreen.png"),
-	NameAscendingOrder("nameAscendingOrder", "/images/icons/sort_ascending.png"),
-	NameDescendingOrder("nameDescendingOrder", "/images/icons/sort_descending.png"),
-	LogoAscendingOrder("logoAscendingOrder", "/images/icons/sort_ascending_image.png"),
-	LogoDescendingOrder("logoDescendingOrder", "/images/icons/sort_descending_image.png"),
-	OnlineStateAscendingOrder("onlineStateAscendingOrder", "/images/icons/sort_ascending_status.png"),
-	OnlineStateDescendingOrder("onlineStateDescendingOrder", "/images/icons/sort_descending_status.png"),
-	StateMessageAscendingOrder("stateMessageAscendingOrder", "/images/icons/sort_ascending_message_status.png"),
-	StateMessageDescendingOrder("stateMessageDescendingOrder", "/images/icons/sort_descending_message_status.png"),
-	SteamId64AscendingOrder("steamId64AscendingOrder", "/images/icons/sort_ascending_key.png"),
-	SteamId64DescendingOrder("steamId64DescendingOrder", "/images/icons/sort_descending_key.png");
+	InitialAscendingOrder("initialOrder", GamesLibrary.steamFriendsInitialAscendingOrderIcon),
+	NameAscendingOrder("nameAscendingOrder", GamesLibrary.steamFriendsNameAscendingOrderIcon),
+	NameDescendingOrder("nameDescendingOrder", GamesLibrary.steamFriendsNameDescendingOrderIcon),
+	LogoAscendingOrder("logoAscendingOrder", GamesLibrary.steamFriendsLogoAscendingOrderIcon),
+	LogoDescendingOrder("logoDescendingOrder", GamesLibrary.steamFriendsLogoDescendingOrderIcon),
+	OnlineStateAscendingOrder("onlineStateAscendingOrder", GamesLibrary.steamFriendsOnlineStateAscendingOrderIcon),
+	OnlineStateDescendingOrder("onlineStateDescendingOrder", GamesLibrary.steamFriendsOnlineStateDescendingOrderIcon),
+	StateMessageAscendingOrder("stateMessageAscendingOrder", GamesLibrary.steamFriendsStateMessageAscendingOrderIcon),
+	StateMessageDescendingOrder("stateMessageDescendingOrder", GamesLibrary.steamFriendsStateMessageDescendingOrderIcon),
+	SteamId64AscendingOrder("steamId64AscendingOrder", GamesLibrary.steamFriendsSteamId64AscendingOrderIcon),
+	SteamId64DescendingOrder("steamId64DescendingOrder", GamesLibrary.steamFriendsSteamId64DescendingOrderIcon);
 
 	String labelKey;
-	String iconPath;
+	ImageIcon icon;
 	
-	SteamFriendsSortMethod(String labelKey, String iconPath) {
+	SteamFriendsSortMethod(String labelKey, ImageIcon icon) {
 		this.labelKey = labelKey;
-		this.iconPath = iconPath;
+		this.icon = icon;
 	}
 
 	/**
 	 * @return the labelKey
 	 */
+	@Override
 	public String getLabelKey() {
 		return labelKey;
 	}
 
 	/**
-	 * @return the iconPath
+	 * @return the icon
 	 */
-	public String getIconPath() {
-		return iconPath;
+	@Override
+	public ImageIcon getIcon() {
+		return icon;
 	}
 	
 }

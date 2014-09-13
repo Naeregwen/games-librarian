@@ -1,5 +1,17 @@
 /**
- * 
+ * Copyright 2012-2014 Naeregwen
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package components.comboboxes;
 
@@ -12,7 +24,7 @@ import javax.swing.ListCellRenderer;
 import commons.BundleManager;
 import commons.enums.DumpMode;
 import components.GamesLibrarian.WindowBuilderMask;
-import components.comboboxes.renderers.DumpModeComboBoxRenderer;
+import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
 
 /**
  * @author Naeregwen
@@ -32,7 +44,7 @@ public class DumpModeComboBox extends JComboBox<DumpMode> implements ActionListe
 		super(DumpMode.values());
 		this.me = me;
 		// http://www.fnogol.de/archives/2008/02/07/dont-subclass-defautlistcellrenderer-for-nimbus/
-		setRenderer(new DumpModeComboBoxRenderer((ListCellRenderer<DumpMode>) this.getRenderer()));
+		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<DumpMode>) this.getRenderer()));
 		addActionListener(this);
 	}
 	
