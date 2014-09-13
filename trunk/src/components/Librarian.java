@@ -652,13 +652,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	 * @param game
 	 */
 	public void enterGame(SteamGame game) {
-		if (game == null || game.getName() == null) {
-			lastGameName = view.gameNameTextField.getText();
-			view.gameNameTextField.setText(parameters.getMessages().getString("noGameSelected"));
-			return;
-		}
 		lastGameName = view.gameNameTextField.getText();
-		view.gameNameTextField.setText(game.getName());
+		view.gameNameTextField.setText((game == null || game.getName() == null) ? 
+				BundleManager.getMessages(me, "noGameSelected") : 
+					game.getName());
 	}
 	
 	/**

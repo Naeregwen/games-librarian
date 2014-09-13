@@ -16,13 +16,10 @@
 package components.containers.remotes;
 
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolTip;
-import javax.swing.ToolTipManager;
 
 import commons.BundleManager;
 import commons.ColoredTee;
@@ -32,6 +29,7 @@ import components.GamesLibrarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.commons.JScrollableToolTip;
+import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.containers.commons.RemoteIconButton;
 import components.workers.RemoteIconReader;
 
@@ -39,15 +37,13 @@ import components.workers.RemoteIconReader;
  * @author Naeregwen
  *
  */
-public class SteamGroupButton extends JButton implements RemoteIconButton, MouseListener {
+public class SteamGroupButton extends JButton implements RemoteIconButton {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = 7750421251529628291L;
 
-    private final int defaultDismissDelay = ToolTipManager.sharedInstance().getDismissDelay();
-    private final int currentDismissDelay = (int) TimeUnit.MINUTES.toMillis(10); // 10 minutes
     JScrollableToolTip tooltip;
     
 	Librarian librarian;
@@ -61,6 +57,7 @@ public class SteamGroupButton extends JButton implements RemoteIconButton, Mouse
 		super(BundleManager.getUITexts(me, key));
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		setIcon(GamesLibrary.noAvatarIcon); // WindowBuilder
+		addMouseListener(new SteamObjectsMouseAdapter());
 	}
 	
 	/**
@@ -89,7 +86,7 @@ public class SteamGroupButton extends JButton implements RemoteIconButton, Mouse
 		// Set format
 		setHorizontalAlignment(LEFT);
 		// Set listeners
-		addMouseListener(this);
+		addMouseListener(new SteamObjectsMouseAdapter());
 	}
 
 	/**
@@ -146,25 +143,6 @@ public class SteamGroupButton extends JButton implements RemoteIconButton, Mouse
 	@Override
 	public String getToolTipText(MouseEvent event) {
 		return ((SteamGroupButton) event.getSource()).getSteamGroup().getTooltipText();
-	}
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-
-	@Override
-	public void mousePressed(MouseEvent e) {}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(currentDismissDelay);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(defaultDismissDelay);
 	}
 	
 }

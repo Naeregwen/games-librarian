@@ -81,7 +81,7 @@ public class SteamGamesTable extends JTable {
         
 		// SteamLaunchMethodComboBox handlers
 		TableColumn steamLaunchMethodColumn = getColumnModel().getColumn(SteamGame.ColumnsOrder.steamLaunchMethod.ordinal());
-		steamLaunchMethodColumn.setCellRenderer(new SteamLaunchMethodTableCellRenderer(me));
+		steamLaunchMethodColumn.setCellRenderer(new SteamLaunchMethodTableCellRenderer(me, this));
 		steamLaunchMethodColumn.setCellEditor(new SteamLaunchMethodTableCellEditor(me, launchButtons));
 		
 		// Layout & display

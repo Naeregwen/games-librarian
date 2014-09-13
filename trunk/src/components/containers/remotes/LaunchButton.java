@@ -18,21 +18,17 @@ package components.containers.remotes;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JToolTip;
-import javax.swing.ToolTipManager;
 import javax.swing.border.LineBorder;
 
 import commons.ColoredTee;
@@ -50,6 +46,8 @@ import components.GamesLibrarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.commons.ImageToolTip;
+import components.commons.adapters.LaunchButtonMouseAdapter;
+import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.commons.ui.ImageToolTipUIHelper;
 import components.containers.BoundedButton;
 import components.containers.commons.RemoteIconButton;
@@ -59,16 +57,13 @@ import components.workers.RemoteIconReader;
  * @author Naeregwen
  *
  */
-public class LaunchButton extends BoundedButton implements RemoteIconButton, ImageToolTipUIHelper, ActionListener, MouseListener {
+public class LaunchButton extends BoundedButton implements RemoteIconButton, ImageToolTipUIHelper, ActionListener {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = -2067082870581001110L;
 	
-    private final int defaultDismissDelay = ToolTipManager.sharedInstance().getDismissDelay();
-    protected int currentDismissDelay = (int) TimeUnit.MINUTES.toMillis(10); // 10 minutes
-    
 	Librarian librarian;
 	
 	private LaunchType launchType;
@@ -97,7 +92,8 @@ public class LaunchButton extends BoundedButton implements RemoteIconButton, Ima
 				setIconGameImageUnavailable();
 		}
 		addActionListener(this);
-		addMouseListener(this);
+		addMouseListener(new LaunchButtonMouseAdapter(me, this));
+		addMouseListener(new SteamObjectsMouseAdapter());
 		if (game != null) setGame(game);
 	}
 	
@@ -509,47 +505,6 @@ public class LaunchButton extends BoundedButton implements RemoteIconButton, Ima
 			selectGame();
 			break;
 		}
-	}
-
-	/*/
-	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-
-	/*/
-	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mousePressed(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mousePressed(MouseEvent e) {}
-
-	/*/
-	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseReleased(MouseEvent e) {}
-
-	/*/
-	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(currentDismissDelay);
-		librarian.enterGame(game);
-	}
-	
-	/*/
-	 * (non-Javadoc)
-	 * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
-	 */
-	@Override
-	public void mouseExited(MouseEvent e) {
-		ToolTipManager.sharedInstance().setDismissDelay(defaultDismissDelay);
-		librarian.leaveGame(game);
 	}
 
 }
