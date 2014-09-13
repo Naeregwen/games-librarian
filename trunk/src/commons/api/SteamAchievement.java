@@ -188,7 +188,7 @@ public class SteamAchievement {
 	//
 	
 	/**
-	 * get appropriate icon url
+	 * get appropriate icon URL
 	 * @return
 	 */
 	public String getIconURL() {

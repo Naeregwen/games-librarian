@@ -155,6 +155,7 @@ public class SteamFriendsListReader extends SwingWorker<SteamFriendsList, String
 	protected void done() {
 		if (isCancelled()) {
 			cancelSteamFriendProfileReaders();
+			librarian.updateProfileFriendsTab(librarian.getCurrentSteamProfile());
 			librarian.getTee().writelnInfos("SteamFriendsListReader " + steamProfile.getId() + " cancelled before done");
 		} else {
 			try {

@@ -98,12 +98,14 @@ public class ViewParametersAction extends AbstractAction implements IconAndTextA
     	case Text :
     		librarian.getTee().writelnInfos(parameters.getMessages().getString("showCurrentParametersText"));
     		librarian.getTee().writelnMessage(parameters.toStringList());
+    		librarian.getTee().writelnInfos(parameters.getMessages().getString("showCurrentProfileText"));
     		librarian.getTee().writelnMessage(steamProfile.toStringList());
     		break;
     	case XML :
 			librarian.getTee().writelnInfos(parameters.getMessages().getString("showCurrentParametersXML"));
     		ParametersParser.dump(parameters, librarian.getTee());
-    		SteamProfileParser.dump(steamProfile, librarian.getTee());
+    		librarian.getTee().writelnInfos(parameters.getMessages().getString("showCurrentProfileXML"));
+    		     		SteamProfileParser.dump(steamProfile, librarian.getTee());
     		break;
     	case Both :
     		librarian.getTee().writelnInfos(parameters.getMessages().getString("showCurrentParametersText"));

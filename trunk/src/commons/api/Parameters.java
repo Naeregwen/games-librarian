@@ -516,47 +516,51 @@ public class Parameters implements GameLeftClickActionObservables {
 	 */
 	public List<String> toStringList() {
 		
+		String prefix = "Parameters";
+		
 		List<String> result = new Vector<String>();
 		
-		result.add("OS : " + (os != null ? (os.getPrefix() != null ? os.getPrefix().name() : "os.Prefix null") : "null"));
+		result.add(prefix + " - OS : " + (os != null ? (os.getPrefix() != null ? os.getPrefix().name() : "os.Prefix null") : "null"));
 		
-		result.add("localeChoice : " + (localeChoice != null ? localeChoice + ", " + localeChoice.getTranslation() : "null"));
-		result.add("lookAndFeelInfo : " + (lookAndFeelInfo != null ? lookAndFeelInfo.getName() : UIManager.getLookAndFeel().getName()));
-		result.add("UITexts : " + (UITexts != null ? UITexts : "null"));
-		result.add("messages : " + (messages != null ? messages : "null"));
-		result.add("resources : " + (resources != null ? resources : "null"));
+		result.add(prefix + " - localeChoice : " + (localeChoice != null ? localeChoice + ", " + localeChoice.getTranslation() : "null"));
+		result.add(prefix + " - lookAndFeelInfo : " + (lookAndFeelInfo != null ? lookAndFeelInfo.getName() : UIManager.getLookAndFeel().getName()));
+		result.add(prefix + " - UITexts : " + (UITexts != null ? UITexts : "null"));
+		result.add(prefix + " - messages : " + (messages != null ? messages : "null"));
+		result.add(prefix + " - resources : " + (resources != null ? resources : "null"));
 		
-		result.add("windowsDistribution : " + (windowsDistribution != null ? windowsDistribution : "null"));
-		result.add("steamExecutable : " + (steamExecutable != null ? steamExecutable : "null"));
+		result.add(prefix + " - windowsDistribution : " + (windowsDistribution != null ? windowsDistribution : "null"));
+		result.add(prefix + " - steamExecutable : " + (steamExecutable != null ? steamExecutable : "null"));
 		
-		result.add("mainPlayerSteamId : " + (mainPlayerSteamId != null ? mainPlayerSteamId : "null"));
+		result.add(prefix + " - mainPlayerSteamId : " + (mainPlayerSteamId != null ? mainPlayerSteamId : "null"));
 		
-		result.add("gameChoice : " + (gameChoice != null ? gameChoice.name() : "null"));
-		result.add("gameLeftClickAction : " + (gameLeftClickAction != null ? gameLeftClickAction.name() : "null"));
-		result.add("defaultSteamLaunchMethod : " + (defaultSteamLaunchMethod != null ? defaultSteamLaunchMethod.name() : "null"));
-		result.add("steamGroupsDisplayMode : " + (steamGroupsDisplayMode != null ? steamGroupsDisplayMode : "null"));
-		result.add("steamFriendsDisplayMode : " + (steamFriendsDisplayMode != null ? steamFriendsDisplayMode : "null"));
-		result.add("displayTooltips : " + (displayTooltips != null ? displayTooltips : "null"));
-		result.add("buttonsDisplayMode : " + (buttonsDisplayMode != null ? buttonsDisplayMode : "null"));
+		result.add(prefix + " - gameChoice : " + (gameChoice != null ? gameChoice.name() : "null"));
+		result.add(prefix + " - gameLeftClickAction : " + (gameLeftClickAction != null ? gameLeftClickAction.name() : "null"));
+		result.add(prefix + " - defaultSteamLaunchMethod : " + (defaultSteamLaunchMethod != null ? defaultSteamLaunchMethod.name() : "null"));
+		result.add(prefix + " - steamGroupsDisplayMode : " + (steamGroupsDisplayMode != null ? steamGroupsDisplayMode : "null"));
+		result.add(prefix + " - steamFriendsDisplayMode : " + (steamFriendsDisplayMode != null ? steamFriendsDisplayMode : "null"));
+		result.add(prefix + " - displayTooltips : " + (displayTooltips != null ? displayTooltips : "null"));
+		result.add(prefix + " - buttonsDisplayMode : " + (buttonsDisplayMode != null ? buttonsDisplayMode : "null"));
 		
-		result.add("debug : " + (debug != null ? debug : "null"));
-		result.add("checkCommunityOnStartup : " + (checkCommunityOnStartup != null ? checkCommunityOnStartup : "null"));
-		result.add("dumpMode : " + (dumpMode != null ? dumpMode : "null"));
-		result.add("useConsole : " + (useConsole != null ? useConsole : "null"));
-		result.add("useDateTime : " + (useDateTime != null ? useDateTime : "null"));
-		result.add("scrollLocked : " + (scrollLocked != null ? scrollLocked : "null"));
-		result.add("xmlOverrideRegistry : " + (xmlOverrideRegistry != null ? xmlOverrideRegistry : "null"));
+		result.add(prefix + " - debug : " + (debug != null ? debug : "null"));
+		result.add(prefix + " - checkCommunityOnStartup : " + (checkCommunityOnStartup != null ? checkCommunityOnStartup : "null"));
+		result.add(prefix + " - dumpMode : " + (dumpMode != null ? dumpMode : "null"));
+		result.add(prefix + " - useConsole : " + (useConsole != null ? useConsole : "null"));
+		result.add(prefix + " - useDateTime : " + (useDateTime != null ? useDateTime : "null"));
+		result.add(prefix + " - scrollLocked : " + (scrollLocked != null ? scrollLocked : "null"));
+		result.add(prefix + " - xmlOverrideRegistry : " + (xmlOverrideRegistry != null ? xmlOverrideRegistry : "null"));
 		
 		if (steamGamesList != null) {
-			result.add("gamesList - steamID64 : " + steamGamesList.getSteamID64());
-			result.add("gamesList - steamID : " + steamGamesList.getSteamID());
+			prefix = prefix + " - gamesList";
+			result.add(prefix + " :");
+			result.add(prefix + " - steamID64 : " + steamGamesList.getSteamID64());
+			result.add(prefix + " - steamID : " + steamGamesList.getSteamID());
+			prefix = prefix + " - steamGame";
 			for (SteamGame game : steamGamesList.getSteamGames()) {
-				result.add("gameList - game :");
-				for(String string : game.toStringList())
-					result.add("gameList - game - " + string);
+				result.add(prefix + " :");
+				for (String string : game.toStringList(prefix))
+					result.add(string);
 			}
-		} else 
-			result.add("gamesList : null");
+		}
 		
 		return result;
 	}

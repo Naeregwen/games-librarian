@@ -1021,62 +1021,80 @@ public class SteamProfile implements Comparable<SteamProfile> {
 	}
 	
 	/**
-	 * Prepare a List<String> to display profile data later
+	 * Prepare a List<String> to display steamProfile data later
 	 * @return List<String>
 	 */
 	public List<String> toStringList() {
 		
+		String prefix = "SteamProfile";
+		
 		List<String> result = new Vector<String>();
 		
-		result.add("steamID64 : " + (steamID64 != null ? steamID64 : "null"));
-		result.add("steamID : " + (steamID != null ? steamID : "null"));
-		result.add("onlineState : " + (onlineState != null ? onlineState : "null"));
-		result.add("stateMessage : " + (stateMessage != null ? stateMessage : "null"));
-		result.add("privacyState : " + (privacyState != null ? privacyState : "null"));
-		result.add("visibilityState : " + (visibilityState != null ? visibilityState : "null"));
-		result.add("avatarIcon : " + (avatarIcon != null ? avatarIcon : "null"));
-		result.add("avatarMedium : " + (avatarMedium != null ? avatarMedium : "null"));
-		result.add("avatarFull : " + (avatarFull != null ? avatarFull : "null"));
-		result.add("vacBanned : " + (vacBanned != null ? vacBanned : "null"));
-		result.add("tradeBanState : " + (tradeBanState != null ? tradeBanState : "null"));
-		result.add("isLimitedAccount : " + (isLimitedAccount != null ? isLimitedAccount : "null"));
-		result.add("customURL : " + (customURL != null ? customURL : "null"));
-		result.add("memberSince : " + (memberSince != null ? memberSince : "null"));
-		result.add("steamRating : " + (steamRating != null ? steamRating : "null"));
-		result.add("hoursPlayedLast2Weeks : " + (hoursPlayedLast2Weeks != null ? hoursPlayedLast2Weeks : "null"));
-		result.add("headline : " + (headline != null ? headline : "null"));
-		result.add("location : " + (location != null ? location : "null"));
-		result.add("realname : " + (realname != null ? realname : "null"));
-		result.add("summary : " + (summary != null ? summary : "null"));
-		result.add("loadingSource : " + (loadingSource != null ? loadingSource : "null"));
-		result.add("initialPosition : " + (initialPosition != null ? initialPosition : "null"));
+		result.add(prefix + " - initialPosition : " + (initialPosition != null ? initialPosition : "null"));
+		result.add(prefix + " - steamID64 : " + (steamID64 != null ? steamID64 : "null"));
+		result.add(prefix + " - steamID : " + (steamID != null ? steamID : "null"));
+		result.add(prefix + " - onlineState : " + (onlineState != null ? onlineState : "null"));
+		result.add(prefix + " - stateMessage : " + (stateMessage != null ? stateMessage : "null"));
+		result.add(prefix + " - privacyState : " + (privacyState != null ? privacyState : "null"));
+		result.add(prefix + " - visibilityState : " + (visibilityState != null ? visibilityState : "null"));
+		result.add(prefix + " - avatarIcon : " + (avatarIcon != null ? avatarIcon : "null"));
+		result.add(prefix + " - avatarMedium : " + (avatarMedium != null ? avatarMedium : "null"));
+		result.add(prefix + " - avatarFull : " + (avatarFull != null ? avatarFull : "null"));
+		result.add(prefix + " - vacBanned : " + (vacBanned != null ? vacBanned : "null"));
+		result.add(prefix + " - tradeBanState : " + (tradeBanState != null ? tradeBanState : "null"));
+		result.add(prefix + " - isLimitedAccount : " + (isLimitedAccount != null ? isLimitedAccount : "null"));
+		result.add(prefix + " - customURL : " + (customURL != null ? customURL : "null"));
+		result.add(prefix + " - memberSince : " + (memberSince != null ? memberSince : "null"));
+		result.add(prefix + " - steamRating : " + (steamRating != null ? steamRating : "null"));
+		result.add(prefix + " - hoursPlayedLast2Weeks : " + (hoursPlayedLast2Weeks != null ? hoursPlayedLast2Weeks : "null"));
+		result.add(prefix + " - headline : " + (headline != null ? headline : "null"));
+		result.add(prefix + " - location : " + (location != null ? location : "null"));
+		result.add(prefix + " - realname : " + (realname != null ? realname : "null"));
+		result.add(prefix + " - summary : " + (summary != null ? summary : "null"));
+		result.add(prefix + " - loadingSource : " + (loadingSource != null ? loadingSource : "null"));
 		
-		result.add("mostPlayedGames :");
-		for (SteamGame game : mostplayedGames) {
-			result.add("mostPlayedGames - game :");
-			for(String string : game.toMostPlayedGameStringList())
-				result.add("mostPlayedGames - game - " + string);
+		if (mostplayedGames != null && mostplayedGames.size() >0) {
+			String subPrefix = prefix + " - MostPlayedGames";
+			result.add(subPrefix + " :");
+			subPrefix = subPrefix + " - SteamGame";
+			for (SteamGame game : mostplayedGames) {
+				result.add(subPrefix + " :");
+				for (String string : game.toMostPlayedGameStringList(subPrefix))
+					result.add(string);
+			}
 		}
 		
-		result.add("games :");
-		for (SteamGame game : steamGames) {
-			result.add("games - game :");
-			for(String string : game.toStringList())
-				result.add("games - game - " + string);
+		if (steamGames != null && steamGames.size() > 0) {
+			String subPrefix = prefix + " - SteamGames";
+			result.add(subPrefix + " :");
+			subPrefix = subPrefix + " - SteamGame";
+			for (SteamGame game : steamGames) {
+				result.add(subPrefix + " :");
+				for(String string : game.toStringList(subPrefix))
+					result.add(string);
+			}
 		}
 		
-		result.add("friends :");
-		for (SteamProfile friend : steamFriends) {
-			result.add("friends - friend :");
-			for(String string : friend.toFriendStringList())
-				result.add("friends - friend - " + string);
+		if (steamFriends != null && steamFriends.size() > 0) {
+			String subPrefix = prefix + " - SteamFriends";
+			result.add(subPrefix + " :");
+			subPrefix = subPrefix + " - SteamProfile";
+			for (SteamProfile friend : steamFriends) {
+				result.add(subPrefix + " :");
+				for (String string : friend.toFriendStringList(subPrefix))
+					result.add(string);
+			}
 		}
 		
-		result.add("groups :");
-		for (SteamGroup group : steamGroups) {
-			result.add("groups - group :");
-			for(String string : group.toStringList())
-				result.add("groups - group - " + string);
+		if (steamGroups != null && steamGroups.size() > 0) {
+			String subPrefix = prefix + " - SteamGroups";
+			result.add(subPrefix +" :");
+			subPrefix = subPrefix + " - SteamGroup";
+			for (SteamGroup group : steamGroups) {
+				result.add(subPrefix + " :");
+				for (String string : group.toStringList(subPrefix))
+					result.add(string);
+			}
 		}
 		
 		return result;
@@ -1084,13 +1102,13 @@ public class SteamProfile implements Comparable<SteamProfile> {
 
 		
 	/**
-	 * Prepare a List<String> to display friend profile data later
+	 * Prepare a List<String> to display steamFriend profile data later
 	 * @return List<String>
 	 */
-	public List<String> toFriendStringList() {
+	public List<String> toFriendStringList(String prefix) {
 		List<String> result = new Vector<String>();		
-		result.add("steamID64 : " + (steamID64 != null ? steamID64 : "null"));
-		result.add("steamID : " + (steamID != null ? steamID : "null"));
+		result.add(prefix + " - steamID64 : " + (steamID64 != null ? steamID64 : "null"));
+		result.add(prefix + " - steamID : " + (steamID != null ? steamID : "null"));
 		return result;
 	}
 
