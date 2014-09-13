@@ -15,6 +15,8 @@
  */
 package commons.api;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.Icon;
@@ -152,6 +154,37 @@ public class SteamAchievementsList {
 	//
 	// Utilities
 	//
+	
+	/**
+	 * Prepare a List<String> to display SteamAchievementsList data later
+	 * @return
+	 */
+	public List<String> toStringList(String prefix) {
+		
+		List<String> result = new Vector<String>();
+
+		result.add(prefix + " - playerSteamID64 : " + (playerSteamID64 != null ? playerSteamID64 : "null"));
+		result.add(prefix + " - playerSteamID : " + (playerSteamID != null ? playerSteamID : "null"));
+		result.add(prefix + " - initialPosition : " + (initialPosition != null ? initialPosition : "null"));
+		
+		prefix = prefix + " - steamAchievements";
+		result.add(prefix + " :");
+		prefix = prefix + " - steamAchievement";
+		Iterator<SteamAchievement> steamAchievementsIterator = steamAchievements.iterator();
+		while (steamAchievementsIterator.hasNext()) {
+			SteamAchievement steamAchievement = steamAchievementsIterator.next();
+			result.add(prefix + " :");
+			result.add(prefix + " - initialPosition : " + (steamAchievement.initialPosition != null ? steamAchievement.initialPosition : "null"));
+			result.add(prefix + " - name : " + (steamAchievement.name != null ? steamAchievement.name : "null"));
+			result.add(prefix + " - description : " + (steamAchievement.description != null ? steamAchievement.description : "null"));
+			result.add(prefix + " - unlockTimestamp : " + (steamAchievement.unlockTimestamp != null ? steamAchievement.unlockTimestamp : "null"));
+			result.add(prefix + " - iconClosed : " + (steamAchievement.iconClosed != null ? steamAchievement.iconClosed : "null"));
+			result.add(prefix + " - iconOpen : " + (steamAchievement.iconOpen != null ? steamAchievement.iconOpen : "null"));
+			result.add(prefix + " - apiname : " + (steamAchievement.apiname != null ? steamAchievement.apiname : "null"));
+		}
+
+		return result;
+	}
 	
 	public Double getAchievementsRatio() {
 		if (steamAchievements == null || steamAchievements.size() == 0)

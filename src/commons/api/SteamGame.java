@@ -390,45 +390,50 @@ public class SteamGame extends Game {
 		return diggedAppId;
 	}
 	
-	public List<String> toMostPlayedGameStringList() {
+	public List<String> toMostPlayedGameStringList(String prefix) {
 		
 		List<String> result = new Vector<String>();
 		
-		result.add("gameName :" + (name != null ? name : "null"));
-		result.add("gameLink :" + (storeLink != null ? storeLink : "null"));
-		result.add("gameIcon :" + (icon != null ? icon : "null"));
-		result.add("gameLogo :" + (logo != null ? logo : "null"));
-		result.add("gameLogoSmall :" + (logoSmall != null ? logoSmall : "null"));
-		result.add("hoursPlayedLast2Weeks :" + (hoursLast2Weeks != null ? hoursLast2Weeks : "null"));
-		result.add("statsName :" + (statsLink != null ? statsLink : "null"));
+		result.add(prefix + " - name :" + (name != null ? name : "null"));
+		result.add(prefix + " - storeLink :" + (storeLink != null ? storeLink : "null"));
+		result.add(prefix + " - icon :" + (icon != null ? icon : "null"));
+		result.add(prefix + " - logo :" + (logo != null ? logo : "null"));
+		result.add(prefix + " - logoSmall :" + (logoSmall != null ? logoSmall : "null"));
+		result.add(prefix + " - hoursLast2Weeks :" + (hoursLast2Weeks != null ? hoursLast2Weeks : "null"));
+		result.add(prefix + " - statsLink :" + (statsLink != null ? statsLink : "null"));
 		
 		return result;
 	}
 
 	/**
 	 * Prepare a List<String> to display SteamGame data later
-	 * TODO: unfinished toStringList output
 	 * @return
 	 */
-	public List<String> toStringList() {
+	public List<String> toStringList(String prefix) {
 		
 		List<String> result = new Vector<String>();
 		
-		result.add("appID : " +appID);
-		result.add("name : " + name);
-		result.add("logo : " + logo);
-		result.add("logoSmall : " + logoSmall);
-		result.add("storeLink : " + storeLink);
-		result.add("hoursLast2Weeks : " + hoursLast2Weeks);
-		result.add("hoursOnRecord : " + hoursOnRecord);
-		result.add("statsLink : " + statsLink);
-		result.add("globalStatsLink : " + globalStatsLink);
-		result.add("loadingSource : " + loadingSource);
-		result.add("arguments : " + arguments);
-		result.add("steamLaunchMethod : " + steamLaunchMethod);
-		result.add("initialPosition : " + initialPosition);
-//		result.add("games - game - steamGameStats : " + steamGameStats);
+		result.add(prefix + " - initialPosition : " + (initialPosition != null ? initialPosition : "null"));
+		result.add(prefix + " - appID : " + (appID != null ? appID : "null"));
+		result.add(prefix + " - name : " + (name != null ? name : "null"));
+		result.add(prefix + " - logo : " + (logo != null ? logo : "null"));
+		result.add(prefix + " - logoSmall : " + (logoSmall != null ? logoSmall : "null"));
+		result.add(prefix + " - storeLink : " + (storeLink != null ? storeLink : "null"));
+		result.add(prefix + " - hoursLast2Weeks : " + (hoursLast2Weeks != null ? hoursLast2Weeks : "null"));
+		result.add(prefix + " - hoursOnRecord : " + (hoursOnRecord != null ? hoursOnRecord : "null"));
+		result.add(prefix + " - statsLink : " + (statsLink != null ? statsLink : "null"));
+		result.add(prefix + " - globalStatsLink : " + (globalStatsLink != null ? globalStatsLink : "null"));
+		result.add(prefix + " - loadingSource : " + (loadingSource != null ? loadingSource : "null"));
+		result.add(prefix + " - arguments : " + (arguments != null ? arguments : "null"));
+		result.add(prefix + " - steamLaunchMethod : " + (steamLaunchMethod != null ? steamLaunchMethod : "null"));
 		
+		if (steamGameStats != null) {
+			prefix = prefix + " - steamGameStats";
+			result.add(prefix + " :");
+			for (String string : steamGameStats.toStringList(prefix))
+				result.add(string);
+		}
+
 		return result;
 	}
 }

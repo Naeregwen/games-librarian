@@ -3220,15 +3220,19 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 			}
 		}
 			
-		if (currentSteamProfile.getSteamGames().size() == 0 && currentSteamProfile.getMostplayedGames().size() != 0 && !currentSteamProfile.getMostplayedGames().contains(currentSteamGame)) {
-			JOptionPane.showMessageDialog(me != null ? me.getLibrarian().getView() : null, // WindowBuilder
-					String.format(BundleManager.getUITexts(me, "loadGameStatsEmptyGamesLibraryError"), currentSteamGame.getName(), currentSteamProfile.getId()),
-					BundleManager.getUITexts(me, "loadGameStatsTitle"),
-					JOptionPane.ERROR_MESSAGE);
-			return;
-		}
+		boolean gameInMostPlayedGames = false;
+			if (currentSteamProfile.getMostplayedGames().size() > 0 && currentSteamProfile.getMostplayedGames().contains(currentSteamGame))
+				gameInMostPlayedGames = true;
+			else
+				if (currentSteamProfile.getSteamGames().size() == 0) {
+					JOptionPane.showMessageDialog(me != null ? me.getLibrarian().getView() : null, // WindowBuilder
+							String.format(BundleManager.getUITexts(me, "loadGameStatsEmptyGamesLibraryError"), currentSteamGame.getName(), currentSteamProfile.getId()),
+							BundleManager.getUITexts(me, "loadGameStatsTitle"),
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 		
-		if (!currentSteamProfile.hasGame(currentSteamGame)) {
+		if (!gameInMostPlayedGames && !currentSteamProfile.hasGame(currentSteamGame)) {
 			JOptionPane.showMessageDialog(me != null ? me.getLibrarian().getView() : null, // WindowBuilder
 					String.format(BundleManager.getUITexts(me, "loadGameStatsGameNotOwnedError"), currentSteamProfile.getId(), currentSteamGame.getName()),
 					BundleManager.getUITexts(me, "loadGameStatsTitle"),

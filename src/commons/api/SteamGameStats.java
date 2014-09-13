@@ -15,6 +15,9 @@
  */
 package commons.api;
 
+import java.util.List;
+import java.util.Vector;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -282,4 +285,38 @@ public class SteamGameStats {
 		this.steamAchievementsList = steamAchievementsList;
 	}
 
+	//
+	// Utilities
+	//
+	
+	/**
+	 * Prepare a List<String> to display SteamGameStats data later
+	 * @return
+	 */
+	public List<String> toStringList(String prefix) {
+		
+		List<String> result = new Vector<String>();
+		
+		result.add(prefix + " - privacyState : " + (privacyState != null ? privacyState : "null"));
+		result.add(prefix + " - visibilityState : " + (visibilityState != null ? visibilityState : "null"));
+		result.add(prefix + " - gameFriendlyName : " + (gameFriendlyName != null ? gameFriendlyName : "null"));
+		result.add(prefix + " - gameName : " + (gameName != null ? gameName : "null"));
+		result.add(prefix + " - gameLink : " + (gameLink != null ? gameLink : "null"));
+		result.add(prefix + " - gameIcon : " + (gameIcon != null ? gameIcon : "null"));
+		result.add(prefix + " - gameLogo : " + (gameLogo != null ? gameLogo : "null"));
+		result.add(prefix + " - gameLogoSmall : " + (gameLogoSmall != null ? gameLogoSmall : "null"));
+		result.add(prefix + " - appID : " + (appID != null ? appID : "null"));
+		result.add(prefix + " - steamID64 : " + (steamID64 != null ? steamID64 : "null"));
+		result.add(prefix + " - playerSteamID : " + (playerSteamID != null ? playerSteamID : "null"));
+		result.add(prefix + " - customURL : " + (customURL != null ? customURL : "null"));
+		result.add(prefix + " - hoursPlayed : " + (hoursPlayed != null ? hoursPlayed : "null"));
+		
+		prefix = prefix + " - steamAchievementsList";
+		result.add(prefix + " :");
+		for (String string : steamAchievementsList.toStringList(prefix))
+			result.add(string);
+
+		return result;
+	}
+	
 }

@@ -323,22 +323,22 @@ public class SteamGroup {
 		return tooltipText.toString();
 	}
 
-	public List<String> toStringList() {
+	public List<String> toStringList(String prefix) {
 		
 		List<String> result = new Vector<String>();
 		
-		result.add("groupID64 :" + (groupID64 != null ? groupID64 : "null"));
-		result.add("groupName :" + (groupName != null ? groupName : "null"));
-		result.add("groupURL :" + (groupURL != null ? groupURL : "null"));
-		result.add("headline :" + (headline != null ? headline : "null"));
-		result.add("summary :" + (summary != null ? summary : "null"));
-		result.add("tavatarIcon :" + (avatarIcon != null ? avatarIcon : "null"));
-		result.add("avatarMedium :" + (avatarMedium != null ? avatarMedium : "null"));
-		result.add("avatarFull :" + (avatarFull != null ? avatarFull : "null"));
-		result.add("memberCount :" + (memberCount != null ? memberCount : "null"));
-		result.add("membersInChat :" + (membersInChat != null ? membersInChat : "null"));
-		result.add("membersInGame :" + (membersInGame != null ? membersInGame : "null"));
-		result.add("membersOnline :" + (membersOnline != null ? membersOnline : "null"));
+		result.add(prefix + " - groupID64 :" + (groupID64 != null ? groupID64 : "null"));
+		result.add(prefix + " - groupName :" + (groupName != null ? groupName : "null"));
+		result.add(prefix + " - groupURL :" + (groupURL != null ? groupURL : "null"));
+		result.add(prefix + " - headline :" + (headline != null ? headline : "null"));
+		result.add(prefix + " - summary :" + (summary != null ? summary : "null"));
+		result.add(prefix + " - tavatarIcon :" + (avatarIcon != null ? avatarIcon : "null"));
+		result.add(prefix + " - avatarMedium :" + (avatarMedium != null ? avatarMedium : "null"));
+		result.add(prefix + " - avatarFull :" + (avatarFull != null ? avatarFull : "null"));
+		result.add(prefix + " - memberCount :" + (memberCount != null ? memberCount : "null"));
+		result.add(prefix + " - membersInChat :" + (membersInChat != null ? membersInChat : "null"));
+		result.add(prefix + " - membersInGame :" + (membersInGame != null ? membersInGame : "null"));
+		result.add(prefix + " - membersOnline :" + (membersOnline != null ? membersOnline : "null"));
 		
 		return result;
 	}
