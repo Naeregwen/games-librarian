@@ -204,7 +204,7 @@ public class AskForConfigurationFileDialog extends JDialog {
 	 * 
 	 * @return true if fileChooser has been set
 	 *  
-	 * FIXME: difference btw load (canRead) & save (canWrite)
+	 * FIXME: Target directory difference between load (canRead) & save (canWrite) ?
 	 */
 	private boolean setDirectory(CenteredFileChooser fileChooser, File file) {
 		if (file.exists() && file.canRead()) {

@@ -818,6 +818,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	
 	/**
 	 * Sort libraryGames (2 panes)
+	 * FIXME: Sort does not match in two tables for hoursPlayedLast2Weeks/hoursOnRecord
 	 * @param librarySortMethod
 	 */
 	public void sort(SteamGamesSortMethod librarySortMethod) {
@@ -878,8 +879,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 			view.buttonsLibraryPane.add(button);
 		}
 		
-		// FIXME: Fixed the bug ? Pane not refreshed when table contains startup data
-		view.buttonsLibraryPane.revalidate();
+		// Update display
+		view.buttonsLibraryPane.validate();
 		
 		// Sort steamGamesTable
 		Integer column = null;
@@ -2076,9 +2077,10 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 						tee.printStackTrace(e);
 					}
 				}
-			} else
+			} else {
 				view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("gameTabTitle")));
-			view.mainPane.setIconAt(index, null); // FIXME: ??
+				view.mainPane.setIconAt(index, null);
+			}
 		}
 	}
 	
