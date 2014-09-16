@@ -25,13 +25,15 @@ import commons.BundleManager;
 import commons.enums.LibraryTabEnum;
 import commons.enums.ProfileTabEnum;
 import commons.enums.TabEnum;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class GotoAction extends AbstractAction {
+public class GotoAction extends AbstractAction implements Translatable {
 
 	/**
 	 * 
@@ -39,6 +41,8 @@ public class GotoAction extends AbstractAction {
 	private static final long serialVersionUID = -2835382948936353366L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	TabEnum tabEnum;
 
 	/**
@@ -47,12 +51,16 @@ public class GotoAction extends AbstractAction {
 	public GotoAction(WindowBuilderMask me, TabEnum tabEnum) {
 		this.me = me;
 		this.tabEnum = tabEnum;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, tabEnum.getMnemonicKey()) != null && !BundleManager.getUITexts(me, tabEnum.getMnemonicKey()).equals("")) // WindowBuilder

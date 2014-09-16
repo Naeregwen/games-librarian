@@ -48,6 +48,7 @@ import components.Librarian;
 import components.commons.ImageToolTip;
 import components.commons.adapters.LaunchButtonMouseAdapter;
 import components.commons.adapters.SteamObjectsMouseAdapter;
+import components.commons.interfaces.Translatable;
 import components.commons.ui.ImageToolTipUIHelper;
 import components.containers.BoundedButton;
 import components.containers.commons.RemoteIconButton;
@@ -57,7 +58,7 @@ import components.workers.RemoteIconReader;
  * @author Naeregwen
  *
  */
-public class LaunchButton extends BoundedButton implements RemoteIconButton, ImageToolTipUIHelper, ActionListener {
+public class LaunchButton extends BoundedButton implements Translatable, RemoteIconButton, ImageToolTipUIHelper, ActionListener {
 
 	/**
 	 * serialVersionUID
@@ -81,6 +82,8 @@ public class LaunchButton extends BoundedButton implements RemoteIconButton, Ima
 	public LaunchButton(WindowBuilderMask me, String label, LaunchType launchType, GameChoice gameChoice, SteamGame game) {
 		super(label, Steam.steamGameIconWidth, Steam.steamGameIconHeight);
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		this.launchType = launchType;
 		this.gameChoice = gameChoice;
 		if (this.librarian != null) { // WindowBuilder
@@ -483,6 +486,14 @@ public class LaunchButton extends BoundedButton implements RemoteIconButton, Ima
 				if (game != null) updateIconAndTooltip(); // WindowBuilder
 			}
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
+	 */
+	@Override
+	public void translate() {
+		updateIconAndTooltip();
 	}
 
 	/*/

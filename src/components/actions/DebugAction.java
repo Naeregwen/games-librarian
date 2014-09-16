@@ -30,12 +30,13 @@ import commons.enums.LibrarianTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class DebugAction extends AbstractAction implements IconAndTextAction {
+public class DebugAction extends AbstractAction implements Translatable, IconAndTextAction {
 
 	/**
 	 * 
@@ -51,12 +52,15 @@ public class DebugAction extends AbstractAction implements IconAndTextAction {
 	public DebugAction(WindowBuilderMask me) {
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using the BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "debugMnemonic") != null && !BundleManager.getUITexts(me, "debugMnemonic").equals("")) // WindowBuilder
@@ -74,6 +78,9 @@ public class DebugAction extends AbstractAction implements IconAndTextAction {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getLabelKey()
+	 */
 	@Override
 	public String getLabelKey() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
@@ -81,6 +88,9 @@ public class DebugAction extends AbstractAction implements IconAndTextAction {
 		return librarian.getParameters().isDebug() ? "debugOffMenuLabel" : "debugOnMenuLabel";
 	}
 
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getIcon()
+	 */
 	@Override
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))

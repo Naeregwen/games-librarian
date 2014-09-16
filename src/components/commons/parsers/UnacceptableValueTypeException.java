@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.labels;
+package components.commons.parsers;
 
-import javax.swing.JLabel;
-
-import commons.BundleManager;
-import components.GamesLibrarian.WindowBuilderMask;
+import commons.enums.exceptions.AcceptableValueType;
 
 /**
  * @author Naeregwen
  *
  */
-public class Label extends JLabel {
+public class UnacceptableValueTypeException extends Exception {
 
 	/**
-	 * serialVersionUID
+	 * 
 	 */
-	private static final long serialVersionUID = 4096860122866218141L;
+	private static final long serialVersionUID = -6003932071606778764L;
+
+	AcceptableValueType acceptableValueType;
 	
-	public Label(WindowBuilderMask me, String key) {
-		super(BundleManager.getUITexts(me, key));
+	/**
+	 * 
+	 */
+	public UnacceptableValueTypeException(AcceptableValueType acceptableValueType) {
+		this.acceptableValueType = acceptableValueType;
 	}
 
 }

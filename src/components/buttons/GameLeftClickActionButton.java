@@ -26,34 +26,67 @@ import commons.enums.GameLeftClickAction;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.buttons.observers.GameLeftClickActionObserver;
+import components.commons.interfaces.Translatable;
+import components.labels.TranslatableLabel;
 
 /**
  * @author Naeregwen
  *
  */
-public class GameLeftClickActionButton extends JToggleButton implements ItemListener, GameLeftClickActionObserver {
+public class GameLeftClickActionButton extends JToggleButton implements Translatable, ItemListener, GameLeftClickActionObserver {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = 1193478661179172687L;
 	
+	WindowBuilderMask me;
 	Librarian librarian;
+	
 	GameLeftClickAction action;
 	
+	String labelKey;
+	TranslatableLabel translatableLabel;
+	
 	/**
-	 * 
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param action the linked action
+	 * @param labelKey the labelKey for label translation
+	 * @param translatableLabel the linked label for toolTip translation
 	 */
-	public GameLeftClickActionButton(WindowBuilderMask me, String key, GameLeftClickAction action) {
-		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+	public GameLeftClickActionButton(WindowBuilderMask me, GameLeftClickAction action, String labelKey, TranslatableLabel translatableLabel) {
+		this.me = me;
 		this.action = action;
-		setText(BundleManager.getUITexts(me, key));
-		if (librarian != null) // WindowBuilder
+		this.labelKey = labelKey;
+		this.translatableLabel = translatableLabel;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) { // WindowBuilder
+			librarian.addTranslatable(this);
 			librarian.getParameters().addGameLeftClickActionObserver(this);
+		}
 		setIcon(action.getIcon());
 		addItemListener(this);
+		translate();
 	}
 
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
+	 */
+	@Override
+	public void translate() {
+		setText(BundleManager.getUITexts(me, labelKey));
+		if (librarian != null) { // WindowBuilder
+			String tooltipText = librarian.getParameters().getGameLeftClickAction().equals(GameLeftClickAction.Select) ?
+					BundleManager.getUITexts(me, "leftClickActionTooltipSelect") : 
+						BundleManager.getUITexts(me, "leftClickActionTooltipLaunch");
+			setToolTipText(tooltipText);
+			translatableLabel.setToolTipText(tooltipText);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
+	 */
 	@Override
 	public void itemStateChanged(ItemEvent event) {
 		if (event.getStateChange() == ItemEvent.SELECTED)

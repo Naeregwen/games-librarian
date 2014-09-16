@@ -13,43 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.actions.texts;
+package components.textfields;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.JTextField;
 
 import commons.BundleManager;
-import commons.GamesLibrary;
-import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
-import components.comboboxes.interfaces.TextAction;
+import components.Librarian;
+import components.commons.adapters.LaunchButtonMouseAdapter;
 import components.commons.interfaces.Translatable;
+import components.containers.remotes.LaunchButton;
 
 /**
  * @author Naeregwen
  *
  */
-public class LookAndFeelAction extends AbstractAction implements Translatable, TextAction<LookAndFeelInfo> {
+public class TranslatableGameArgumentsTextField extends JTextField implements Translatable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3004202897304167371L;
+	private static final long serialVersionUID = -5013384168738432216L;
 
 	WindowBuilderMask me;
 	Librarian librarian;
 	
-	LookAndFeelInfo lookAndFeelInfo;
-
+	LaunchButton launchButton;
+	
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
-	 * @param lookAndFeelInfo the binded LookAndFeelInfo
+	 * @param launchButton the LaunchButton when applicable
 	 */
-	public LookAndFeelAction(WindowBuilderMask me, LookAndFeelInfo lookAndFeelInfo) {
+	public TranslatableGameArgumentsTextField(WindowBuilderMask me, LaunchButton launchButton) {
 		this.me = me;
-		this.lookAndFeelInfo = lookAndFeelInfo;
+		this.launchButton = launchButton;
+		addMouseListener(new LaunchButtonMouseAdapter(me, launchButton));
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		if (librarian != null) // WindowBuilder
 			librarian.addTranslatable(this);
@@ -61,23 +59,8 @@ public class LookAndFeelAction extends AbstractAction implements Translatable, T
 	 */
 	@Override
 	public void translate() {
-		putValue(NAME, lookAndFeelInfo.getName());
-		putValue(SMALL_ICON, GamesLibrary.lookAndFeelIcon);
-		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "lookAndFeelToolTip") + " = " + lookAndFeelInfo.getName());
+		if (launchButton == null)
+			setToolTipText(BundleManager.getUITexts(me, "gameNameTextFieldToolTip"));
 	}
-	
-	/* (non-Javadoc)
-	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
-	 */
-	@Override
-	public LookAndFeelInfo getObject() {
-		return lookAndFeelInfo;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {}
 
 }

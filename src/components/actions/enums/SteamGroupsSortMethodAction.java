@@ -21,14 +21,16 @@ import javax.swing.AbstractAction;
 
 import commons.BundleManager;
 import commons.enums.SteamGroupsSortMethod;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.EnumAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamGroupsSortMethodAction extends AbstractAction implements EnumAction<SteamGroupsSortMethod> {
+public class SteamGroupsSortMethodAction extends AbstractAction implements Translatable, EnumAction<SteamGroupsSortMethod> {
 
 	/**
 	 * 
@@ -36,34 +38,44 @@ public class SteamGroupsSortMethodAction extends AbstractAction implements EnumA
 	private static final long serialVersionUID = 5509739286728380202L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	SteamGroupsSortMethod steamGroupsSortMethod;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param steamGroupsSortMethod the binded SteamGroupsSortMethod enumeration element
 	 */
 	public SteamGroupsSortMethodAction(WindowBuilderMask me, SteamGroupsSortMethod steamGroupsSortMethod) {
 		this.me = me;
 		this.steamGroupsSortMethod = steamGroupsSortMethod;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		putValue(NAME, BundleManager.getUITexts(me, steamGroupsSortMethod.getLabelKey()));
 		putValue(SMALL_ICON, steamGroupsSortMethod.getIcon());
 	}
 	
 	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
 	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {}
-
 	@Override
 	public SteamGroupsSortMethod getCurrentItem() {
 		return steamGroupsSortMethod;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {}
 
 }

@@ -31,12 +31,13 @@ import commons.enums.ProfileTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class AddProfileAction extends AbstractAction implements IconAndTextAction {
+public class AddProfileAction extends AbstractAction implements Translatable, IconAndTextAction {
 
 	/**
 	 * 
@@ -54,12 +55,15 @@ public class AddProfileAction extends AbstractAction implements IconAndTextActio
 	public AddProfileAction(WindowBuilderMask me) {
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "addProfileMnemonic") != null && !BundleManager.getUITexts(me, "addProfileMnemonic").equals("")) // WindowBuilder
@@ -71,6 +75,9 @@ public class AddProfileAction extends AbstractAction implements IconAndTextActio
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "addProfileTooltip"));
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getLabelKey()
+	 */
 	@Override
 	public String getLabelKey() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
@@ -78,6 +85,9 @@ public class AddProfileAction extends AbstractAction implements IconAndTextActio
 		return "addProfileMenuLabel";
 	}
 
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getIcon()
+	 */
 	@Override
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))

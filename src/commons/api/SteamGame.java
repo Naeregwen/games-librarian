@@ -21,9 +21,11 @@ import java.util.Vector;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import commons.GamesLibrary.LoadingSource;
+import components.commons.parsers.NumberParser;
 
 /**
  * @author Naeregwen
@@ -46,6 +48,10 @@ import commons.GamesLibrary.LoadingSource;
 	"arguments",
 	"steamLaunchMethod",
 	"initialPosition",
+	
+	"totalAchievements",
+	"totalUnlockedAchievements",
+	
 	"steamGameStats"
 })
 public class SteamGame extends Game {
@@ -95,14 +101,22 @@ public class SteamGame extends Game {
 	SteamLaunchMethod steamLaunchMethod;
 	Integer initialPosition;
 	
+	Integer totalAchievements = 0;
+	Integer totalUnlockedAchievements = 0;
+	
+	// Tools
+	private NumberParser numberParser;
+	
 	SteamGameStats steamGameStats;
 	
 	public SteamGame() {
 		this.loadingSource = LoadingSource.Preloading;
+		setStatistics();
 	}
 	
 	public SteamGame(LoadingSource loadingSource) {
 		this.loadingSource = loadingSource;
+		setStatistics();
 	}
 	
 	/**
@@ -316,6 +330,51 @@ public class SteamGame extends Game {
 	}
 
 	/**
+	 * @return the totalAchievements
+	 */
+	public Integer getTotalAchievements() {
+		return totalAchievements;
+	}
+
+	/**
+	 * @param totalAchievements the totalAchievements to set
+	 */
+	@XmlElement
+	public void setTotalAchievements(Integer totalAchievements) {
+		this.totalAchievements = totalAchievements;
+	}
+
+	/**
+	 * @return the totalUnlockedAchievements
+	 */
+	public Integer getTotalUnlockedAchievements() {
+		return totalUnlockedAchievements;
+	}
+
+	/**
+	 * @param totalUnlockedAchievements the totalUnlockedAchievements to set
+	 */
+	@XmlElement
+	public void setTotalUnlockedAchievements(Integer totalUnlockedAchievements) {
+		this.totalUnlockedAchievements = totalUnlockedAchievements;
+	}
+
+	/**
+	 * @return the numberParser
+	 */
+	protected NumberParser getNumberParser() {
+		return numberParser;
+	}
+
+	/**
+	 * @param numberParser the numberParser to set
+	 */
+	@XmlTransient
+	protected void setNumberParser(NumberParser numberParser) {
+		this.numberParser = numberParser;
+	}
+
+	/**
 	 * @return the steamGameStats
 	 */
 	public SteamGameStats getSteamGameStats() {
@@ -328,11 +387,37 @@ public class SteamGame extends Game {
 	@XmlElement
 	public void setSteamGameStats(SteamGameStats steamGameStats) {
 		this.steamGameStats = steamGameStats;
+		setStatistics();
 	}
 
 	//
 	// Utilities
 	//
+	
+	/**
+	 * Reset all game statistics counters to zero
+	 */
+	private void resetStatistics() {
+		totalAchievements = 0;
+		totalUnlockedAchievements = 0;
+	}
+	
+	/**
+	 * Set game statistics counters
+	 */
+	private void setStatistics() {
+		resetStatistics();
+		if (steamGameStats != null
+				&& steamGameStats.getSteamAchievementsList() != null 
+				&& steamGameStats.getSteamAchievementsList().getSteamAchievements() != null
+				&& steamGameStats.getSteamAchievementsList().getSteamAchievements().size() > 0) {
+			for (SteamAchievement steamAchievement : steamGameStats.getSteamAchievementsList().getSteamAchievements()) {
+				totalAchievements++;
+				if (steamAchievement.isClosed())
+					totalUnlockedAchievements++;
+			}
+		}
+	}
 	
 	/**
 	 * Determine ID between name and appID in this order
@@ -390,6 +475,11 @@ public class SteamGame extends Game {
 		return diggedAppId;
 	}
 	
+	/**
+	 * Prepare a List<String> to display SteamGame data later with only data as MostPlayedGame
+	 * @param prefix
+	 * @return
+	 */
 	public List<String> toMostPlayedGameStringList(String prefix) {
 		
 		List<String> result = new Vector<String>();
@@ -407,6 +497,7 @@ public class SteamGame extends Game {
 
 	/**
 	 * Prepare a List<String> to display SteamGame data later
+	 * @param prefix
 	 * @return
 	 */
 	public List<String> toStringList(String prefix) {
@@ -423,6 +514,8 @@ public class SteamGame extends Game {
 		result.add(prefix + " - hoursOnRecord : " + (hoursOnRecord != null ? hoursOnRecord : "null"));
 		result.add(prefix + " - statsLink : " + (statsLink != null ? statsLink : "null"));
 		result.add(prefix + " - globalStatsLink : " + (globalStatsLink != null ? globalStatsLink : "null"));
+		result.add(prefix + " - totalAchievements : " + (totalAchievements != null ? totalAchievements : "null"));
+		result.add(prefix + " - totalUnlockedAchievements : " + (totalUnlockedAchievements != null ? totalUnlockedAchievements : "null"));
 		result.add(prefix + " - loadingSource : " + (loadingSource != null ? loadingSource : "null"));
 		result.add(prefix + " - arguments : " + (arguments != null ? arguments : "null"));
 		result.add(prefix + " - steamLaunchMethod : " + (steamLaunchMethod != null ? steamLaunchMethod : "null"));

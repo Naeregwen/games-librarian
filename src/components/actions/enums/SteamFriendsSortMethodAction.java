@@ -21,14 +21,16 @@ import javax.swing.AbstractAction;
 
 import commons.BundleManager;
 import commons.enums.SteamFriendsSortMethod;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.EnumAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamFriendsSortMethodAction extends AbstractAction implements EnumAction<SteamFriendsSortMethod> {
+public class SteamFriendsSortMethodAction extends AbstractAction implements Translatable, EnumAction<SteamFriendsSortMethod> {
 
 	/**
 	 * 
@@ -36,34 +38,44 @@ public class SteamFriendsSortMethodAction extends AbstractAction implements Enum
 	private static final long serialVersionUID = 1762321151814627032L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	SteamFriendsSortMethod steamFriendsSortMethod;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param steamFriendsSortMethod the binded SteamFriendsSortMethod enumeration element
 	 */
 	public SteamFriendsSortMethodAction(WindowBuilderMask me, SteamFriendsSortMethod steamFriendsSortMethod) {
 		this.me = me;
 		this.steamFriendsSortMethod = steamFriendsSortMethod;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		putValue(NAME, BundleManager.getUITexts(me, steamFriendsSortMethod.getLabelKey()));
 		putValue(SMALL_ICON, steamFriendsSortMethod.getIcon());
 	}
 	
 	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
 	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {}
-
 	@Override
 	public SteamFriendsSortMethod getCurrentItem() {
 		return steamFriendsSortMethod;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {}
 
 }

@@ -21,14 +21,16 @@ import javax.swing.AbstractAction;
 
 import commons.BundleManager;
 import commons.enums.LocaleChoice;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.EnumAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class LocaleChoiceAction extends AbstractAction implements EnumAction<LocaleChoice> {
+public class LocaleChoiceAction extends AbstractAction implements Translatable, EnumAction<LocaleChoice> {
 
 	/**
 	 * 
@@ -36,34 +38,44 @@ public class LocaleChoiceAction extends AbstractAction implements EnumAction<Loc
 	private static final long serialVersionUID = 2182803923157642657L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	LocaleChoice localeChoice;
 
 	/**
-	 * 
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param localeChoice the binded LocaleChoice
 	 */
 	public LocaleChoiceAction(WindowBuilderMask me, LocaleChoice localeChoice) {
 		this.me = me;
 		this.localeChoice = localeChoice;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		putValue(NAME, BundleManager.getUITexts(me, localeChoice.getLabelKey()));
 		putValue(SMALL_ICON, localeChoice.getIcon());
 	}
 	
 	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
 	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {}
-
 	@Override
 	public LocaleChoice getCurrentItem() {
 		return localeChoice;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {}
 
 }

@@ -28,13 +28,14 @@ import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
 import components.commons.adapters.LaunchButtonMouseAdapter;
+import components.commons.interfaces.Translatable;
 import components.containers.remotes.LaunchButton;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamLaunchMethodComboBox extends JComboBox<SteamLaunchMethod> implements ActionListener {
+public class SteamLaunchMethodComboBox extends JComboBox<SteamLaunchMethod> implements Translatable, ActionListener {
 
 	/**
 	 * serialVersionUID
@@ -49,20 +50,29 @@ public class SteamLaunchMethodComboBox extends JComboBox<SteamLaunchMethod> impl
 	
 	WindowBuilderMask me;
 	Librarian librarian;
+	
 	LaunchButton launchButton;
 	Type type;
 	
+	/**
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param launchButton the linked LaunchButton to determine action
+	 * @param type the SteamLaunchMethodComboBox type to determine action
+	 */
 	@SuppressWarnings("unchecked")
 	public SteamLaunchMethodComboBox(WindowBuilderMask me, LaunchButton launchButton, Type type) {
 		super(SteamLaunchMethod.values());
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		this.launchButton = launchButton;
 		this.type = type;
-		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<SteamLaunchMethod>) this.getRenderer()));
-		setMaximumRowCount(SteamLaunchMethod.values().length);
 		addActionListener(this);
+		setMaximumRowCount(SteamLaunchMethod.values().length);
 		addMouseListener(new LaunchButtonMouseAdapter(me, launchButton));
+		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<SteamLaunchMethod>) this.getRenderer()));
+		translate();
 	}
 
 	/**
@@ -79,10 +89,18 @@ public class SteamLaunchMethodComboBox extends JComboBox<SteamLaunchMethod> impl
 		this.launchButton = launchButton;
 	}
 
-	/*/
-	 * (non-Javadoc)
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
+	 */
+	@Override
+	public void translate() {
+		setToolTipText(BundleManager.getUITexts(me, "defaultSteamLaunchMethodComboBoxTootlTip"));
+	}
+	
+	/* (non-Javadoc)
 	 * @see javax.swing.JComboBox#actionPerformed(java.awt.event.ActionEvent)
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		Parameters parameters = librarian.getParameters();
@@ -114,4 +132,5 @@ public class SteamLaunchMethodComboBox extends JComboBox<SteamLaunchMethod> impl
 			}
 		}
 	}
+
 }

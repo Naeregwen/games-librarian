@@ -21,38 +21,61 @@ import java.awt.event.ItemListener;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 
+import commons.BundleManager;
 import commons.enums.LibrarianTabEnum;
 import commons.enums.SteamAchievementsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.comboboxes.observers.SteamAchievementsSortMethodObserver;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.interfaces.Translatable;
+import components.labels.TranslatableLabel;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamAchievementsSortMethodComboBox extends JComboBox<SteamAchievementsSortMethod> implements ItemListener, SteamAchievementsSortMethodObserver {
+public class SteamAchievementsSortMethodComboBox extends JComboBox<SteamAchievementsSortMethod> implements Translatable, ItemListener, SteamAchievementsSortMethodObserver {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = -1503901705561301531L;
 
+	WindowBuilderMask me;
 	Librarian librarian;
+	TranslatableLabel translatableLabel;
 	
+	/**
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param translatableLabel the linked label for toolTip translation
+	 */
 	@SuppressWarnings("unchecked")
-	public SteamAchievementsSortMethodComboBox(WindowBuilderMask me) {
+	public SteamAchievementsSortMethodComboBox(WindowBuilderMask me, TranslatableLabel translatableLabel) {
 		super(SteamAchievementsSortMethod.values());
+		this.me = me;
+		this.translatableLabel = translatableLabel;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
-		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<SteamAchievementsSortMethod>) this.getRenderer()));
-		if (librarian != null) // WindowBuilder
+		if (librarian != null) { // WindowBuilder
+			librarian.addTranslatable(this);
 			librarian.addSteamAchievementsSortMethodObserver(this);
+		}
+		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<SteamAchievementsSortMethod>) this.getRenderer()));
 		addItemListener(this);
 	}
 	
-	/*
-	 * (non-Javadoc)
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
+	 */
+	@Override
+	public void translate() {
+		String tooltipText = String.format(BundleManager.getUITexts(me, "achievementsSortMethodTooltip"), 
+				BundleManager.getUITexts(me, ((SteamAchievementsSortMethod) getSelectedItem()).getLabelKey()));
+		setToolTipText(tooltipText);
+		translatableLabel.setToolTipText(tooltipText);
+	}
+
+	/* (non-Javadoc)
 	 * @see components.comboboxes.observers.SteamAchievementsSortMethodObserver#update()
 	 */
 	@Override
@@ -60,8 +83,7 @@ public class SteamAchievementsSortMethodComboBox extends JComboBox<SteamAchievem
 		setSelectedItem(librarian.getSteamAchievementsSortMethod());
 	}
 
-	/**
-	 * (non-Javadoc)
+	/* (non-Javadoc)
 	 * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
 	 */
 	@Override
@@ -69,7 +91,7 @@ public class SteamAchievementsSortMethodComboBox extends JComboBox<SteamAchievem
 		librarian.displayMainTab(LibrarianTabEnum.Game);
 		if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 			librarian.sortSteamAchievements((SteamAchievementsSortMethod) itemEvent.getItem());
-			librarian.updateSteamAchievementsSortMethodTooltips();
+			translate();
 		}
 	}
 

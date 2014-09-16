@@ -114,7 +114,7 @@ public class SteamFriendsGameStatsReader extends SwingWorker<Boolean, String> {
 		} else {
 			try {
 				get();
-				librarian.getView().translateLoadAllAchievements();
+				librarian.getView().updateLoadAllAchievements();
 //				if (librarian.isLoadAllAchievements())
 //					librarian.loadAllAchievements();
 			} catch (InterruptedException e) {

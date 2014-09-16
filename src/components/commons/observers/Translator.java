@@ -13,31 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.labels;
+package components.commons.observers;
 
-import java.awt.Font;
-
-import javax.swing.JLabel;
-import javax.swing.UIManager;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class TitleLabel extends JLabel {
+public interface Translator {
 
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = 4172290672637965066L;
-	
-	/**
-	 * @param me the WindowBuilderMask to use for creating/managing this instance
-	 * @param labelKey the labelKey for label translation
-	 */
-	public TitleLabel() {
-		super();
-		setFont(new Font(UIManager.getFont("Label.font").getFontName(), Font.BOLD, UIManager.getFont("Label.font").getSize() + 4));
-	}
-
+	public void addTranslatable(Translatable translatable);
+	public void updateTranslatables();
+	public void removeTranslatable(Translatable translatable);
 }

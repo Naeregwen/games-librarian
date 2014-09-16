@@ -29,12 +29,13 @@ import commons.enums.LibrarianTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class LoadGameStatsAction extends AbstractAction implements IconAndTextAction {
+public class LoadGameStatsAction extends AbstractAction implements Translatable, IconAndTextAction {
 
 	/**
 	 * 
@@ -50,12 +51,15 @@ public class LoadGameStatsAction extends AbstractAction implements IconAndTextAc
 	public LoadGameStatsAction(WindowBuilderMask me) {
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "loadGameStatsMnemonic") != null && !BundleManager.getUITexts(me, "loadGameStatsMnemonic").equals("")) // WindowBuilder
@@ -67,6 +71,9 @@ public class LoadGameStatsAction extends AbstractAction implements IconAndTextAc
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "loadGameStatsTooltip"));
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getLabelKey()
+	 */
 	@Override
 	public String getLabelKey() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
@@ -74,6 +81,9 @@ public class LoadGameStatsAction extends AbstractAction implements IconAndTextAc
 		return "loadGameStatsMenuLabel";
 	}
 
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getIcon()
+	 */
 	@Override
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))

@@ -21,14 +21,16 @@ import javax.swing.AbstractAction;
 
 import commons.BundleManager;
 import commons.api.SteamLaunchMethod;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.EnumAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class DefaultSteamLaunchMethodAction extends AbstractAction implements EnumAction<SteamLaunchMethod> {
+public class DefaultSteamLaunchMethodAction extends AbstractAction implements Translatable, EnumAction<SteamLaunchMethod> {
 
 	/**
 	 * 
@@ -36,6 +38,8 @@ public class DefaultSteamLaunchMethodAction extends AbstractAction implements En
 	private static final long serialVersionUID = 8470378462316545406L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	SteamLaunchMethod steamLaunchMethod;
 
 	/**
@@ -44,12 +48,16 @@ public class DefaultSteamLaunchMethodAction extends AbstractAction implements En
 	public DefaultSteamLaunchMethodAction(WindowBuilderMask me, SteamLaunchMethod steamLaunchMethod) {
 		this.me = me;
 		this.steamLaunchMethod = steamLaunchMethod;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		putValue(NAME, BundleManager.getUITexts(me, steamLaunchMethod.getLabelKey()));
 		putValue(SMALL_ICON, steamLaunchMethod.getIcon());
@@ -57,14 +65,17 @@ public class DefaultSteamLaunchMethodAction extends AbstractAction implements En
 	}
 	
 	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
 	 */
-	@Override
-	public void actionPerformed(ActionEvent arg0) {}
-
 	@Override
 	public SteamLaunchMethod getCurrentItem() {
 		return steamLaunchMethod;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent arg0) {}
 
 }

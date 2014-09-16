@@ -131,7 +131,7 @@ public class SteamFriendWithSameGameButton extends JToggleButton implements Remo
 		} else {
 			librarian.removeFriendAchievements(steamProfile);
 		}
-		librarian.getView().translateLoadAllAchievements();
+		librarian.getView().updateLoadAllAchievements();
 	}
 
 }

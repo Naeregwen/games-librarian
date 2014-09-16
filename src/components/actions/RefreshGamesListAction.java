@@ -28,12 +28,13 @@ import commons.enums.ButtonsDisplayMode;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class RefreshGamesListAction extends AbstractAction implements IconAndTextAction {
+public class RefreshGamesListAction extends AbstractAction implements Translatable, IconAndTextAction {
 
 	/**
 	 * 
@@ -49,12 +50,15 @@ public class RefreshGamesListAction extends AbstractAction implements IconAndTex
 	public RefreshGamesListAction(WindowBuilderMask me) {
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using the BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "refreshGamesListMnemonic") != null && !BundleManager.getUITexts(me, "refreshGamesListMnemonic").equals("")) // WindowBuilder
@@ -66,6 +70,9 @@ public class RefreshGamesListAction extends AbstractAction implements IconAndTex
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "refreshGamesListToolTip"));
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getLabelKey()
+	 */
 	@Override
 	public String getLabelKey() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
@@ -73,6 +80,9 @@ public class RefreshGamesListAction extends AbstractAction implements IconAndTex
 		return "refreshGamesListMenuLabel";
 	}
 
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getIcon()
+	 */
 	@Override
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))

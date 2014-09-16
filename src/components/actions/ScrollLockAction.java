@@ -29,12 +29,13 @@ import commons.enums.LibrarianTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class ScrollLockAction extends AbstractAction implements IconAndTextAction {
+public class ScrollLockAction extends AbstractAction implements Translatable, IconAndTextAction {
 
 	/**
 	 * 
@@ -50,12 +51,15 @@ public class ScrollLockAction extends AbstractAction implements IconAndTextActio
 	public ScrollLockAction(WindowBuilderMask me) {
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 	
-	/**
-	 * Translate using the BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "scrollLockMnemonic") != null && !BundleManager.getUITexts(me, "scrollLockMnemonic").equals("")) // WindowBuilder
@@ -73,6 +77,9 @@ public class ScrollLockAction extends AbstractAction implements IconAndTextActio
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getLabelKey()
+	 */
 	@Override
 	public String getLabelKey() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
@@ -81,6 +88,9 @@ public class ScrollLockAction extends AbstractAction implements IconAndTextActio
 			
 	}
 
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getIcon()
+	 */
 	@Override
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))

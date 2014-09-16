@@ -26,6 +26,8 @@ import javax.swing.KeyStroke;
 import commons.BundleManager;
 import commons.GamesLibrary;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.Librarian;
+import components.commons.interfaces.Translatable;
 
 /**
  * http://tips4java.wordpress.com/2009/05/01/closing-an-application/
@@ -37,7 +39,7 @@ import components.GamesLibrarian.WindowBuilderMask;
  * from the system menu also invoke the WindowListener, this will provide a
  * common exit point for the application.
  */
-public class ExitAction extends AbstractAction {
+public class ExitAction extends AbstractAction implements Translatable {
 	
 	/**
 	 * 
@@ -45,18 +47,23 @@ public class ExitAction extends AbstractAction {
 	private static final long serialVersionUID = 5557767388339055126L;
 	
 	WindowBuilderMask me;
+	Librarian librarian;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
 	 */
 	public ExitAction(WindowBuilderMask me) {
 		this.me = me;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "exitMnemonic") != null && !BundleManager.getUITexts(me, "exitMnemonic").equals("")) // WindowBuilder
@@ -77,6 +84,9 @@ public class ExitAction extends AbstractAction {
 			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Find the active frame before creating and dispatching the event

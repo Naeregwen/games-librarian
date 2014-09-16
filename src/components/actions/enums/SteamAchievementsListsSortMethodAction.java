@@ -21,14 +21,16 @@ import javax.swing.AbstractAction;
 
 import commons.BundleManager;
 import commons.enums.SteamAchievementsListsSortMethod;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.EnumAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamAchievementsListsSortMethodAction extends AbstractAction implements EnumAction<SteamAchievementsListsSortMethod> {
+public class SteamAchievementsListsSortMethodAction extends AbstractAction implements Translatable, EnumAction<SteamAchievementsListsSortMethod> {
 
 	/**
 	 * 
@@ -36,34 +38,44 @@ public class SteamAchievementsListsSortMethodAction extends AbstractAction imple
 	private static final long serialVersionUID = -7694709428361055363L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	SteamAchievementsListsSortMethod steamAchievementsListsSortMethod;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param steamAchievementsListsSortMethod the binded SteamAchievementsListsSortMethod enumeration element
 	 */
 	public SteamAchievementsListsSortMethodAction(WindowBuilderMask me, SteamAchievementsListsSortMethod steamAchievementsListsSortMethod) {
 		this.me = me;
 		this.steamAchievementsListsSortMethod = steamAchievementsListsSortMethod;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		putValue(NAME, BundleManager.getUITexts(me, steamAchievementsListsSortMethod.getLabelKey()));
 		putValue(SMALL_ICON, steamAchievementsListsSortMethod.getIcon());
 	}
 	
 	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
 	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {}
-
 	@Override
 	public SteamAchievementsListsSortMethod getCurrentItem() {
 		return steamAchievementsListsSortMethod;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {}
 
 }

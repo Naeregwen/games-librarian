@@ -13,42 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.actions.enums;
+package components.menus;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
+import javax.swing.JMenu;
 
 import commons.BundleManager;
-import commons.enums.SteamAchievementsSortMethod;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
-import components.actions.interfaces.EnumAction;
 import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamAchievementsSortMethodAction extends AbstractAction implements Translatable, EnumAction<SteamAchievementsSortMethod> {
+public class TranslatableMenu extends JMenu implements Translatable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3400334735104641987L;
+	private static final long serialVersionUID = 7844470654218183780L;
 
 	WindowBuilderMask me;
 	Librarian librarian;
 	
-	SteamAchievementsSortMethod steamAchievementsSortMethod;
-
+	String labelKey;
+	
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
-	 * @param steamAchievementsSortMethod the binded SteamAchievementsSortMethod enumeration element
+	 * @param labelKey the labelKey for label translation
 	 */
-	public SteamAchievementsSortMethodAction(WindowBuilderMask me, SteamAchievementsSortMethod steamAchievementsSortMethod) {
+	public TranslatableMenu(WindowBuilderMask me, String labelKey) {
 		this.me = me;
-		this.steamAchievementsSortMethod = steamAchievementsSortMethod;
+		this.labelKey = labelKey;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		if (librarian != null) // WindowBuilder
 			librarian.addTranslatable(this);
@@ -60,22 +56,7 @@ public class SteamAchievementsSortMethodAction extends AbstractAction implements
 	 */
 	@Override
 	public void translate() {
-		putValue(NAME, BundleManager.getUITexts(me, steamAchievementsSortMethod.getLabelKey()));
-		putValue(SMALL_ICON, steamAchievementsSortMethod.getIcon());
+		setText(BundleManager.getUITexts(me, labelKey));
 	}
-	
-	/* (non-Javadoc)
-	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
-	 */
-	@Override
-	public SteamAchievementsSortMethod getCurrentItem() {
-		return steamAchievementsSortMethod;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {}
 
 }

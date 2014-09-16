@@ -23,13 +23,15 @@ import javax.swing.KeyStroke;
 
 import commons.BundleManager;
 import commons.enums.SteamFriendsDisplayMode;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamFriendsDisplayModeAction extends AbstractAction {
+public class SteamFriendsDisplayModeAction extends AbstractAction implements Translatable {
 
 	/**
 	 * 
@@ -37,14 +39,20 @@ public class SteamFriendsDisplayModeAction extends AbstractAction {
 	private static final long serialVersionUID = -2802644000915935385L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	SteamFriendsDisplayMode steamFriendsDisplayMode;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param steamFriendsDisplayMode the binded SteamFriendsDisplayMode enumeration element
 	 */
 	public SteamFriendsDisplayModeAction(WindowBuilderMask me, SteamFriendsDisplayMode steamFriendsDisplayMode) {
 		this.me = me;
 		this.steamFriendsDisplayMode = steamFriendsDisplayMode;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
@@ -64,9 +72,10 @@ public class SteamFriendsDisplayModeAction extends AbstractAction {
 						BundleManager.getUITexts(me,me.getLibrarian().getParameters().getSteamFriendsDisplayMode().getLabelKey())) : "");
 	}
 	
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, steamFriendsDisplayMode.getMnemonicKey()) != null && !BundleManager.getUITexts(me, steamFriendsDisplayMode.getMnemonicKey()).equals("")) // WindowBuilder
