@@ -23,7 +23,7 @@ import commons.enums.ButtonsDisplayMode;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
-import components.comboboxes.observers.ButtonsDisplayModeObservable;
+import components.comboboxes.observables.ButtonsDisplayModeObservable;
 
 /**
  * @author Naeregwen
