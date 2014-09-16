@@ -29,8 +29,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import commons.ColoredTee;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
+import components.commons.ColoredTee;
 import components.containers.commons.RemoteIconComponent;
 import components.workers.responsehandlers.ImageIconResponseHandler;
 
@@ -58,7 +58,7 @@ public class RemoteIconComponentReader extends SwingWorker<ImageIcon, String> {
 	@Override
 	protected ImageIcon doInBackground() throws Exception {
 		
-		if ((remoteIconComponent.getIcon() != null && !remoteIconComponent.getIcon().equals(GamesLibrary.noAvatarIcon))
+		if ((remoteIconComponent.getIcon() != null && !remoteIconComponent.getIcon().equals(GamesLibrarianIcons.noAvatarIcon))
 				|| (remoteIconComponent.getIconURL() != null && !remoteIconComponent.getIconURL().trim().equals("")))
 			return null;
 		
@@ -86,7 +86,7 @@ public class RemoteIconComponentReader extends SwingWorker<ImageIcon, String> {
 	 */
 	@Override
 	protected void done() {
-		if (remoteIconComponent.getIcon() != null && !remoteIconComponent.getIcon().equals(GamesLibrary.noAvatarIcon))
+		if (remoteIconComponent.getIcon() != null && !remoteIconComponent.getIcon().equals(GamesLibrarianIcons.noAvatarIcon))
 			return;
 		try {
 			ImageIcon icon = get();

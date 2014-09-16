@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.Icon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 
 /**
  * @author Naeregwen
@@ -25,10 +25,10 @@ import commons.GamesLibrary;
  */
 public enum ProfileTabEnum implements TabEnum {
 
-	Summary ("gotoSummaryMenuLabel", "gotoSummaryMnemonic", "gotoSummaryAccelerator", GamesLibrary.accountSummaryIcon),
-	Status ("gotoStatusMenuLabel", "gotoStatusMnemonic", "gotoStatusAccelerator", GamesLibrary.accountStatusIcon),
-	Groups ("gotoGroupsMenuLabel", "gotoGroupsMnemonic", "gotoGroupsAccelerator", GamesLibrary.groupsIcon),
-	Friends ("gotoFriendsMenuLabel", "gotoFriendsMnemonic", "gotoFriendsAccelerator", GamesLibrary.friendsIcon);
+	Summary ("gotoSummaryMenuLabel", "gotoSummaryMnemonic", "gotoSummaryAccelerator", GamesLibrarianIcons.accountSummaryIcon),
+	Status ("gotoStatusMenuLabel", "gotoStatusMnemonic", "gotoStatusAccelerator", GamesLibrarianIcons.accountStatusIcon),
+	Groups ("gotoGroupsMenuLabel", "gotoGroupsMnemonic", "gotoGroupsAccelerator", GamesLibrarianIcons.groupsIcon),
+	Friends ("gotoFriendsMenuLabel", "gotoFriendsMnemonic", "gotoFriendsAccelerator", GamesLibrarianIcons.friendsIcon);
 	
 	String labelKey;
 	String mnemonicKey;

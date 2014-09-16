@@ -32,14 +32,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import commons.ColoredTee;
-import commons.ColoredTee.TeeColor;
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons.LoadingSource;
 import commons.api.Parameters;
 import commons.api.Steam;
 import commons.api.SteamGamesList;
 import commons.api.parsers.SteamGamesListParser;
 import components.Librarian;
+import components.commons.ColoredTee;
+import components.commons.ColoredTee.TeeColor;
 import components.workers.responsehandlers.XMLResponseHandler;
 
 /**

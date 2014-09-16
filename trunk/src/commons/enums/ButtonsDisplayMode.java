@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
@@ -26,9 +26,9 @@ import commons.enums.interfaces.GamesLibrarianActionEnum;
  */
 public enum ButtonsDisplayMode implements GamesLibrarianActionEnum {
 	
-	IconAndText ("buttonsDisplayModeIconAndTextLabel", "buttonsDisplayModeIconAndTextMnemonic", "buttonsDisplayModeIconAndTextAccelerator", GamesLibrary.buttonsDisplayModeIconAndTextIcon), 
-	Icon ("buttonsDisplayModeIconLabel", "buttonsDisplayModeIconMnemonic", "buttonsDisplayModeIconAccelerator", GamesLibrary.buttonsDisplayModeIconIcon), 
-	Text ("buttonsDisplayModeTextLabel", "buttonsDisplayModeTextMnemonic", "buttonsDisplayModeTextAccelerator", GamesLibrary.buttonsDisplayModeTextIcon);
+	IconAndText ("buttonsDisplayModeIconAndTextLabel", "buttonsDisplayModeIconAndTextMnemonic", "buttonsDisplayModeIconAndTextAccelerator", GamesLibrarianIcons.buttonsDisplayModeIconAndTextIcon), 
+	Icon ("buttonsDisplayModeIconLabel", "buttonsDisplayModeIconMnemonic", "buttonsDisplayModeIconAccelerator", GamesLibrarianIcons.buttonsDisplayModeIconIcon), 
+	Text ("buttonsDisplayModeTextLabel", "buttonsDisplayModeTextMnemonic", "buttonsDisplayModeTextAccelerator", GamesLibrarianIcons.buttonsDisplayModeTextIcon);
 	
 	String labelKey;
 	String mnemonicKey;

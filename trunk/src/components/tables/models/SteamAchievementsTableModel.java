@@ -31,7 +31,7 @@ import commons.comparators.SteamAchievementsComparator;
 import commons.comparators.SteamAchievementsListsComparator;
 import commons.enums.SteamAchievementsListsSortMethod;
 import commons.enums.SteamAchievementsSortMethod;
-import commons.sortables.SortableAchievementsList;
+import components.commons.sortables.SortableAchievementsList;
 
 /**
  * DefaultTableModel has been reversed to allow transposed store, display and sorting of data,

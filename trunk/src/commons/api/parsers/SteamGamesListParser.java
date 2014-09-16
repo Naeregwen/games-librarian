@@ -19,7 +19,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons.LoadingSource;
 import commons.api.SteamGame;
 import commons.api.SteamGamesList;
 import commons.api.SteamLaunchMethod;

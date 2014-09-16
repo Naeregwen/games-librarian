@@ -47,8 +47,7 @@ import javax.swing.border.LineBorder;
 
 import net.miginfocom.swing.MigLayout;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.Parameters;
 import commons.api.Steam;
 import commons.api.SteamLaunchMethod;
@@ -69,9 +68,6 @@ import commons.enums.SteamGamesDisplayMode;
 import commons.enums.SteamGamesSortMethod;
 import commons.enums.SteamGroupsDisplayMode;
 import commons.enums.SteamGroupsSortMethod;
-import commons.groups.ActionGroup;
-import commons.groups.ActionGroupFactory;
-import commons.layouts.WrapLayout;
 import components.actions.AboutAction;
 import components.actions.AddProfileAction;
 import components.actions.ClearConsoleAction;
@@ -125,6 +121,10 @@ import components.comboboxes.SteamGroupsSortMethodComboBox;
 import components.comboboxes.SteamLaunchMethodComboBox;
 import components.comboboxes.adapters.EnumSelectionStateAdapter;
 import components.comboboxes.adapters.TextSelectionStateAdapter;
+import components.commons.BundleManager;
+import components.commons.groups.ActionGroup;
+import components.commons.groups.ActionGroupFactory;
+import components.commons.layouts.WrapLayout;
 import components.containers.ArrowedComboBox;
 import components.containers.GameLauncher;
 import components.containers.IconPane;
@@ -770,7 +770,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		fileMenu = new TranslatableMenu(me, "fileMenuLabel");
-		fileMenu.setIcon(GamesLibrary.fileMenuIcon);
+		fileMenu.setIcon(GamesLibrarianIcons.fileMenuIcon);
 		mainMenuBar.add(fileMenu);
 		
 		// loadParametersMenuItem
@@ -792,7 +792,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		gotoMenu = new TranslatableMenu(me, "gotoMenuLabel");
-		gotoMenu.setIcon(GamesLibrary.gotoMenuIcon);
+		gotoMenu.setIcon(GamesLibrarianIcons.gotoMenuIcon);
 		mainMenuBar.add(gotoMenu);
 		
 		// gotoMenuItems
@@ -844,7 +844,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		controlsMenu = new TranslatableMenu(me, "controlsTabTitle");
-		controlsMenu.setIcon(GamesLibrary.controlsMenuIcon);
+		controlsMenu.setIcon(GamesLibrarianIcons.controlsMenuIcon);
 		mainMenuBar.add(controlsMenu);
 		
 		// rollMenuItem
@@ -853,7 +853,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// gameChoiceMenu
 		gameChoiceMenu = new TranslatableMenu(me, "gameChoiceMenuLabel");
-		gameChoiceMenu.setIcon(GamesLibrary.gameChoiceIcon);
+		gameChoiceMenu.setIcon(GamesLibrarianIcons.gameChoiceIcon);
 		controlsMenu.add(gameChoiceMenu);
 		
 		// gameChoiceMenuItems
@@ -903,7 +903,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		libraryMenu = new TranslatableMenu(me, "libraryMenuLabel");
-		libraryMenu.setIcon(GamesLibrary.libraryMenuIcon);
+		libraryMenu.setIcon(GamesLibrarianIcons.libraryMenuIcon);
 		mainMenuBar.add(libraryMenu);
 		
 		// loadLibraryMenuItem
@@ -917,7 +917,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// libraryDisplayModeMenu
 		libraryDisplayModeMenu = new TranslatableMenu(me, "libraryDisplayModeMenuLabel");
-		libraryDisplayModeMenu.setIcon(GamesLibrary.libraryDisplayMode);
+		libraryDisplayModeMenu.setIcon(GamesLibrarianIcons.libraryDisplayMode);
 		libraryMenu.add(libraryDisplayModeMenu);
 		
 		libraryDisplayModeActionGroup = new ActionGroup();
@@ -929,7 +929,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// librarySortMethodMenu
 		librarySortMethodMenu = new TranslatableMenu(me, "librarySortMethodMenuLabel");
-		librarySortMethodMenu.setIcon(GamesLibrary.librarySortMethod);
+		librarySortMethodMenu.setIcon(GamesLibrarianIcons.librarySortMethod);
 		libraryMenu.add(librarySortMethodMenu);
 		
 		librarySortMethodActionGroup = new ActionGroup();
@@ -944,7 +944,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		gameMenu = new TranslatableMenu(me, "gameMenuLabel");
-		gameMenu.setIcon(GamesLibrary.gameMenuIcon);
+		gameMenu.setIcon(GamesLibrarianIcons.gameMenuIcon);
 		mainMenuBar.add(gameMenu);
 		
 		// loadGameStatsMenuItem
@@ -959,7 +959,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// achievementsSortMethodMenu
 		steamAchievementsSortMethodMenu = new TranslatableMenu(me, "steamAchievementsSortMethodMenuLabel");
-		steamAchievementsSortMethodMenu.setIcon(GamesLibrary.librarySortMethod);
+		steamAchievementsSortMethodMenu.setIcon(GamesLibrarianIcons.librarySortMethod);
 		gameMenu.add(steamAchievementsSortMethodMenu);
 		
 		steamAchievementsSortMethodActionGroup = new ActionGroup();
@@ -971,7 +971,7 @@ public class GamesLibrarian extends JFrame {
 
 		// steamAchievementsListsSortMethodMenu
 		steamAchievementsListsSortMethodMenu = new TranslatableMenu(me, "steamAchievementsListsSortMethodMenuLabel");
-		steamAchievementsListsSortMethodMenu.setIcon(GamesLibrary.librarySortMethod);
+		steamAchievementsListsSortMethodMenu.setIcon(GamesLibrarianIcons.librarySortMethod);
 		gameMenu.add(steamAchievementsListsSortMethodMenu);
 		
 		steamAchievementsListsSortMethodActionGroup = new ActionGroup();
@@ -986,7 +986,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		profileMenu = new TranslatableMenu(me, "profileMenuLabel");
-		profileMenu.setIcon(GamesLibrary.profileMenuIcon);
+		profileMenu.setIcon(GamesLibrarianIcons.profileMenuIcon);
 		mainMenuBar.add(profileMenu);
 		
 		// loadProfileMenuItem
@@ -1001,7 +1001,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// steamGroupsSortMethodMenu
 		steamGroupsSortMethodMenu = new TranslatableMenu(me, "steamGroupsSortMethodMenuLabel");
-		steamGroupsSortMethodMenu.setIcon(GamesLibrary.librarySortMethod);
+		steamGroupsSortMethodMenu.setIcon(GamesLibrarianIcons.librarySortMethod);
 		profileMenu.add(steamGroupsSortMethodMenu);
 		
 		steamGroupsSortMethodActionGroup = new ActionGroup();
@@ -1013,7 +1013,7 @@ public class GamesLibrarian extends JFrame {
 
 		// steamFriendsSortMethodMenu
 		steamFriendsSortMethodMenu = new TranslatableMenu(me, "steamFriendsSortMethodMenuLabel");
-		steamFriendsSortMethodMenu.setIcon(GamesLibrary.librarySortMethod);
+		steamFriendsSortMethodMenu.setIcon(GamesLibrarianIcons.librarySortMethod);
 		profileMenu.add(steamFriendsSortMethodMenu);
 		
 		steamFriendsSortMethodActionGroup = new ActionGroup();
@@ -1027,7 +1027,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// steamGroupsDisplayModeMenu
 		steamGroupsDisplayModeMenu = new TranslatableMenu(me, "steamGroupsDisplayModeMenuLabel");
-		steamGroupsDisplayModeMenu.setIcon(GamesLibrary.groupsIcon);
+		steamGroupsDisplayModeMenu.setIcon(GamesLibrarianIcons.groupsIcon);
 		profileMenu.add(steamGroupsDisplayModeMenu);
 		
 		steamGroupsDisplayModeListAction = new SteamGroupsDisplayModeAction(me, SteamGroupsDisplayMode.List); // WindowBuilder
@@ -1045,7 +1045,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// steamFriendsDisplayModeMenu
 		steamFriendsDisplayModeMenu = new TranslatableMenu(me, "steamFriendsDisplayModeMenuLabel");
-		steamFriendsDisplayModeMenu.setIcon(GamesLibrary.friendsIcon);
+		steamFriendsDisplayModeMenu.setIcon(GamesLibrarianIcons.friendsIcon);
 		profileMenu.add(steamFriendsDisplayModeMenu);
 		
 		steamFriendsDisplayModeListAction = new SteamFriendsDisplayModeAction(me, SteamFriendsDisplayMode.List); // WindowBuilder
@@ -1066,7 +1066,7 @@ public class GamesLibrarian extends JFrame {
 		//
 		
 		optionsMenu = new TranslatableMenu(me, "optionsMenuLabel");
-		optionsMenu.setIcon(GamesLibrary.optionsMenuIcon);
+		optionsMenu.setIcon(GamesLibrarianIcons.optionsMenuIcon);
 		mainMenuBar.add(optionsMenu);
 		
 		// resetOptionsMenuItem
@@ -1081,7 +1081,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// defaultSteamLaunchMethodMenu
 		defaultSteamLaunchMethodMenu = new TranslatableMenu(me, "defaultSteamLaunchMethodMenuLabel");
-		defaultSteamLaunchMethodMenu.setIcon(GamesLibrary.defaultSteamLaunchMethodIcon);
+		defaultSteamLaunchMethodMenu.setIcon(GamesLibrarianIcons.defaultSteamLaunchMethodIcon);
 		optionsMenu.add(defaultSteamLaunchMethodMenu);
 
 		defaultSteamLaunchMethodActionGroup = new ActionGroup();
@@ -1093,7 +1093,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// dumpModeMenu
 		dumpModeMenu = new TranslatableMenu(me, "dumpModeMenuLabel");
-		dumpModeMenu.setIcon(GamesLibrary.dumpModeIcon);
+		dumpModeMenu.setIcon(GamesLibrarianIcons.dumpModeIcon);
 		optionsMenu.add(dumpModeMenu);
 		
 		dumpModeActionGroup = new ActionGroup();
@@ -1105,7 +1105,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// displayToolTipsMenu
 		displayToolTipsMenu = new TranslatableMenu(me, "displayToolTipsMenuLabel");
-		displayToolTipsMenu.setIcon(GamesLibrary.displayToolTipsIcon);
+		displayToolTipsMenu.setIcon(GamesLibrarianIcons.displayToolTipsIcon);
 		optionsMenu.add(displayToolTipsMenu);
 
 		displayToolTipsYesAction = new DisplayToolTipsAction(me, true);
@@ -1120,7 +1120,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// buttonsDisplayModeMenu
 		buttonsDisplayModeMenu = new TranslatableMenu(me, "buttonsDisplayModeMenuLabel");
-		buttonsDisplayModeMenu.setIcon(GamesLibrary.buttonsDisplayModeIcon);
+		buttonsDisplayModeMenu.setIcon(GamesLibrarianIcons.buttonsDisplayModeIcon);
 		optionsMenu.add(buttonsDisplayModeMenu);
 
 		buttonsDisplayModeIconAndTextAction = new ButtonsDisplayModeAction(me, ButtonsDisplayMode.IconAndText);
@@ -1140,7 +1140,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// localeChoiceMenu
 		localeChoiceMenu = new TranslatableMenu(me, "localeChoiceMenuLabel");
-		localeChoiceMenu.setIcon(GamesLibrary.localeChoiceIcon);
+		localeChoiceMenu.setIcon(GamesLibrarianIcons.localeChoiceIcon);
 		optionsMenu.add(localeChoiceMenu);
 		
 		localeChoiceActionGroup = new ActionGroup();
@@ -1152,7 +1152,7 @@ public class GamesLibrarian extends JFrame {
 		
 		// lookAndFeelMenu
 		lookAndFeelMenu = new TranslatableMenu(me, "lookAndFeelMenuLabel");
-		lookAndFeelMenu.setIcon(GamesLibrary.lookAndFeelIcon);
+		lookAndFeelMenu.setIcon(GamesLibrarianIcons.lookAndFeelIcon);
 		optionsMenu.add(lookAndFeelMenu);
 		
 		lookAndFeelActionGroup = new ActionGroup();
@@ -1373,7 +1373,7 @@ public class GamesLibrarian extends JFrame {
 		libraryPane.setName("libraryTab");
 		libraryPane.setLayout(libraryPaneCardLayout);
 		
-		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryMainTabTitle")), GamesLibrary.libraryMenuIcon, libraryPane, null);
+		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryMainTabTitle")), GamesLibrarianIcons.libraryMenuIcon, libraryPane, null);
 		
 		// libraryPane
 		buttonsLibraryPane = new JPanel();
@@ -1391,42 +1391,42 @@ public class GamesLibrarian extends JFrame {
 		List<LaunchButton> launchButtons = new Vector<LaunchButton>();
 		
 		launchButton1 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton1.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		launchButton1.setIcon(GamesLibrarianIcons.gameImageUnavailableIcon);
 		
 		buttonsLibraryPane.add(launchButton1);
 		gamesLibraryButtonGroup.add(launchButton1);
 		launchButtons.add(launchButton1);
 		
 		launchButton2 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton2.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		launchButton2.setIcon(GamesLibrarianIcons.gameImageUnavailableIcon);
 		
 		buttonsLibraryPane.add(launchButton2);
 		gamesLibraryButtonGroup.add(launchButton2);
 		launchButtons.add(launchButton2);
 		
 		launchButton3 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton3.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		launchButton3.setIcon(GamesLibrarianIcons.gameImageUnavailableIcon);
 		
 		buttonsLibraryPane.add(launchButton3);
 		gamesLibraryButtonGroup.add(launchButton3);
 		launchButtons.add(launchButton3);
 		
 		launchButton4 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton4.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		launchButton4.setIcon(GamesLibrarianIcons.gameImageUnavailableIcon);
 		
 		buttonsLibraryPane.add(launchButton4);
 		gamesLibraryButtonGroup.add(launchButton4);
 		launchButtons.add(launchButton4);
 		
 		launchButton5 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton5.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		launchButton5.setIcon(GamesLibrarianIcons.gameImageUnavailableIcon);
 		
 		buttonsLibraryPane.add(launchButton5);
 		gamesLibraryButtonGroup.add(launchButton5);
 		launchButtons.add(launchButton5);
 		
 		launchButton6 = new LaunchButton(me, "", LaunchType.library, null, null);
-		launchButton6.setIcon(GamesLibrary.gameImageUnavailableIcon);
+		launchButton6.setIcon(GamesLibrarianIcons.gameImageUnavailableIcon);
 		
 		buttonsLibraryPane.add(launchButton6);
 		gamesLibraryButtonGroup.add(launchButton6);
@@ -1451,7 +1451,7 @@ public class GamesLibrarian extends JFrame {
 		libraryStatisticsMainPane.setName("libraryStatisticsTab");
 		libraryStatisticsMainPane.setLayout(new MigLayout("", "[][][]", "[][][][][][][][][][][]"));
 		
-		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsTabTitle")), GamesLibrary.libraryStatisticsMenuIcon, libraryStatisticsMainPane, null);
+		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsTabTitle")), GamesLibrarianIcons.libraryStatisticsMenuIcon, libraryStatisticsMainPane, null);
 		
 		// libraryTotalGames
 		libraryTotalGamesLabel = new TranslatableLabel(me, "libraryTotalGamesLabel");

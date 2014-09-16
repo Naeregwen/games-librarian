@@ -26,12 +26,12 @@ import javax.xml.bind.Marshaller;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import commons.ColoredTee;
 import commons.api.Parameters;
 import commons.api.SteamFriendsList;
 import commons.api.SteamProfile;
 import commons.api.parsers.contexts.ContextualParser;
 import commons.api.parsers.contexts.SteamFriendsListContexts;
+import components.commons.ColoredTee;
 
 /**
  * @author Naeregwen

@@ -26,8 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.Parameters;
 import commons.api.SteamGame;
 import commons.enums.ButtonsDisplayMode;
@@ -36,6 +35,7 @@ import commons.enums.LibrarianTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 import components.containers.GameLauncher;
 
@@ -78,7 +78,7 @@ public class RollAction extends AbstractAction implements Translatable, IconAndT
 		if (BundleManager.getUITexts(me, "rollAccelerator") != null && !BundleManager.getUITexts(me, "rollAccelerator").equals("")) // WindowBuilder
 			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "rollAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "rollMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.rollIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.rollIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "rollToolTip"));
 	}
 	
@@ -99,7 +99,7 @@ public class RollAction extends AbstractAction implements Translatable, IconAndT
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.rollIcon;
+		return GamesLibrarianIcons.rollIcon;
 	}
 
 	/**

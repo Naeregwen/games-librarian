@@ -40,14 +40,14 @@ import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.Parameters;
 import commons.api.SteamGame;
 import commons.enums.ButtonsDisplayMode;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -88,7 +88,7 @@ public class SaveParametersAction extends AbstractAction implements Translatable
 		if (BundleManager.getUITexts(me, "saveParametersAccelerator") != null && !BundleManager.getUITexts(me, "saveParametersAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "saveParametersAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "saveParametersMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.saveParametersIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.saveParametersIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "saveParametersToolTip"));
 	}
 	
@@ -109,7 +109,7 @@ public class SaveParametersAction extends AbstractAction implements Translatable
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.saveParametersIcon;
+		return GamesLibrarianIcons.saveParametersIcon;
 	}
 
 	/* (non-Javadoc)

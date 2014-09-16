@@ -21,14 +21,14 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.Parameters;
 import commons.enums.ButtonsDisplayMode;
 import commons.enums.LibrarianTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -68,11 +68,11 @@ public class ScrollLockAction extends AbstractAction implements Translatable, Ic
 			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "scrollLockAccelerator")));
 		if (librarian == null || librarian.getParameters().isScrollLocked()) { // WindowBuilder
 			putValue(NAME, BundleManager.getUITexts(me, "scrollLockStopMenuLabel"));
-			putValue(SMALL_ICON, GamesLibrary.lockStopIcon);
+			putValue(SMALL_ICON, GamesLibrarianIcons.lockStopIcon);
 			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "scrollLockStopToolTip"));
 		} else {
 			putValue(NAME, BundleManager.getUITexts(me, "scrollLockStarMenutLabel"));
-			putValue(SMALL_ICON, GamesLibrary.lockStartIcon);
+			putValue(SMALL_ICON, GamesLibrarianIcons.lockStartIcon);
 			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "scrollLockStartToolTip"));
 		}
 	}
@@ -95,7 +95,7 @@ public class ScrollLockAction extends AbstractAction implements Translatable, Ic
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return librarian.getParameters().isScrollLocked() ? GamesLibrary.lockStopIcon : GamesLibrary.lockStartIcon;
+		return librarian.getParameters().isScrollLocked() ? GamesLibrarianIcons.lockStopIcon : GamesLibrarianIcons.lockStartIcon;
 	}
 
 	/* (non-Javadoc)

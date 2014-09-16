@@ -59,10 +59,8 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import commons.BundleManager;
-import commons.ColoredTee;
-import commons.GamesLibrary;
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons;
+import commons.GamesLibrarianIcons.LoadingSource;
 import commons.OS;
 import commons.Strings;
 import commons.api.Parameters;
@@ -76,7 +74,6 @@ import commons.api.SteamGroup;
 import commons.api.SteamProfile;
 import commons.api.parsers.SteamGameStatsParser;
 import commons.api.parsers.SteamProfileParser;
-import commons.comparators.ComparisonDirection;
 import commons.comparators.LaunchButtonsComparator;
 import commons.comparators.SteamFriendButtonsComparator;
 import commons.comparators.SteamFriendsComparator;
@@ -84,6 +81,7 @@ import commons.comparators.SteamGamesComparator;
 import commons.comparators.SteamGroupButtonsComparator;
 import commons.comparators.SteamGroupsComparator;
 import commons.enums.ButtonsDisplayMode;
+import commons.enums.ComparisonDirection;
 import commons.enums.DumpMode;
 import commons.enums.GameChoice;
 import commons.enums.LaunchType;
@@ -102,7 +100,6 @@ import commons.enums.SteamGamesSortMethod;
 import commons.enums.SteamGroupsDisplayMode;
 import commons.enums.SteamGroupsSortMethod;
 import commons.enums.TabEnum;
-import commons.layouts.WrapLayout;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.RollAction;
 import components.actions.SteamFriendsDisplayModeAction;
@@ -114,7 +111,10 @@ import components.comboboxes.observables.ButtonsDisplayModeObservable;
 import components.comboboxes.observables.SteamAchievementsSortMethodObservable;
 import components.comboboxes.observers.ButtonsDisplayModeObserver;
 import components.comboboxes.observers.SteamAchievementsSortMethodObserver;
+import components.commons.BundleManager;
+import components.commons.ColoredTee;
 import components.commons.interfaces.Translatable;
+import components.commons.layouts.WrapLayout;
 import components.commons.observers.Translator;
 import components.containers.BoundedComponent;
 import components.containers.GameLauncher;
@@ -1677,7 +1677,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		if (steamProfile.getAvatarFull() != null)
 			view.gamerProfileIconFull.setImage(steamProfile.getAvatarFull());
 		else
-			view.gamerProfileIconFull.setImage(GamesLibrary.noAvatarFull);
+			view.gamerProfileIconFull.setImage(GamesLibrarianIcons.noAvatarFull);
 		
 		// Update MostPlayedGamePane
 		updateMostPlayedGamesPane(steamProfile);
@@ -1952,20 +1952,20 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (steamGamesListReading || allSteamGamesStatsReading) {
 			String title = GamesLibrarian.getTabTitle(UITexts.getString("libraryMainTabTitle"));
-			view.mainPane.setIconAt(index, GamesLibrary.ajaxLoaderIcon);
+			view.mainPane.setIconAt(index, GamesLibrarianIcons.ajaxLoaderIcon);
 			view.mainPane.setTitleAt(index, title);
 			if (steamGamesListReading) {
-				view.libraryMainPane.setIconAt(libraryTabIndex, GamesLibrary.ajaxLoaderIcon);
+				view.libraryMainPane.setIconAt(libraryTabIndex, GamesLibrarianIcons.ajaxLoaderIcon);
 				view.libraryMainPane.setTitleAt(libraryTabIndex, title);
 			} else if (allSteamGamesStatsReading) {
 				title = GamesLibrarian.getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsTabTitle"));
-				view.libraryMainPane.setIconAt(libraryStatisticsTabIndex, GamesLibrary.ajaxLoaderIcon);
+				view.libraryMainPane.setIconAt(libraryStatisticsTabIndex, GamesLibrarianIcons.ajaxLoaderIcon);
 				view.libraryMainPane.setTitleAt(libraryStatisticsTabIndex, title);
 			}
 		} else {
 			view.mainPane.setIconAt(index, null);
-			view.libraryMainPane.setIconAt(libraryTabIndex, GamesLibrary.libraryMenuIcon);
-			view.libraryMainPane.setIconAt(libraryStatisticsTabIndex, GamesLibrary.libraryStatisticsMenuIcon);
+			view.libraryMainPane.setIconAt(libraryTabIndex, GamesLibrarianIcons.libraryMenuIcon);
+			view.libraryMainPane.setIconAt(libraryStatisticsTabIndex, GamesLibrarianIcons.libraryStatisticsMenuIcon);
 			String statisticsTitle = GamesLibrarian.getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsTabTitle"));
 			if (parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamGames() != null) {
 				String title = GamesLibrarian.getTabTitle(String.format(UITexts.getString("libraryMainTabTitleWithNumber"), steamId, parameters.getSteamGamesList().getSteamGames().size()));
@@ -2013,7 +2013,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (steamGameStatsReading) {
 			updateGameTabTitleId(steamId, index, game);
-			view.mainPane.setIconAt(index, GamesLibrary.ajaxLoaderIcon);
+			view.mainPane.setIconAt(index, GamesLibrarianIcons.ajaxLoaderIcon);
 		} else {
 			if (view.getLibrarian() != null && view.getLibrarian().getCurrentSteamGame() != null && !view.getLibrarian().getCurrentSteamGame().getName().equals("")) {
 				updateGameTabTitleId(steamId, index, game);
@@ -2056,7 +2056,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		ResourceBundle UITexts = parameters.getUITexts();
 		if (steamProfileReading || steamFriendsListReading || steamFriendsGameListsReading) {
 			view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(parameters.getUITexts().getString("currentProfileTitleLabelReading"), steamId)));
-			view.mainPane.setIconAt(index, GamesLibrary.ajaxLoaderIcon);
+			view.mainPane.setIconAt(index, GamesLibrarianIcons.ajaxLoaderIcon);
 		} else {
 			if (currentSteamProfile != null && steamId!= null && !steamId.trim().equals("")) {
 				view.mainPane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileTabTitleWithName"), steamId)));
@@ -2091,7 +2091,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 			view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileGroupsTabTitleWithNumber"), steamId, currentSteamProfile.getSteamGroups().size())));
 		else
 			view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("profileGroupsTabTitle")));
-		view.profilePane.setIconAt(index, GamesLibrary.groupsIcon);
+		view.profilePane.setIconAt(index, GamesLibrarianIcons.groupsIcon);
 	}
 	
 	/**
@@ -2107,15 +2107,15 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		if (steamProfileReading || steamFriendsListReading || steamFriendsGameListsReading) {
 			if (steamFriendsListReading || steamFriendsGameListsReading) {
 				updateProfileTabTitle();
-				view.profilePane.setIconAt(index, GamesLibrary.ajaxLoaderIcon);
+				view.profilePane.setIconAt(index, GamesLibrarianIcons.ajaxLoaderIcon);
 			} else
-				view.profilePane.setIconAt(index, GamesLibrary.friendsIcon);
+				view.profilePane.setIconAt(index, GamesLibrarianIcons.friendsIcon);
 			if (steamFriendsListReading)
 				view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileFriendsTabTitleWithNumber"), steamId, view.profileFriendsPane.getComponentCount())));
 			else
 				view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(UITexts.getString("profileFriendsTabTitle")));
 		} else {
-			view.profilePane.setIconAt(index, GamesLibrary.friendsIcon);
+			view.profilePane.setIconAt(index, GamesLibrarianIcons.friendsIcon);
 			if (currentSteamProfile != null && currentSteamProfile.getSteamFriends().size() >= 0)
 				view.profilePane.setTitleAt(index, GamesLibrarian.getTabTitle(String.format(UITexts.getString("profileFriendsTabTitleWithNumber"), steamId, currentSteamProfile.getSteamFriends().size())));
 			else
@@ -3262,7 +3262,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		ResourceBundle UITexts = parameters.getUITexts();
 		title = UITexts.getString("loadConfigurationFilenameTitle");
 		askMessage = UITexts.getString("askLoadConfigurationFilename");
-		ImageIcon loadIcon = BoundedComponent.resizeAndCenterIcon(GamesLibrary.loadParametersIcon, 32, 32);
+		ImageIcon loadIcon = BoundedComponent.resizeAndCenterIcon(GamesLibrarianIcons.loadParametersIcon, 32, 32);
 		
 		while (selectionConfirmation.option != JOptionPane.CANCEL_OPTION && (!fileExists || !fileValid)) {
 			
@@ -3309,7 +3309,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		ResourceBundle UITexts = parameters.getUITexts();
 		title = UITexts.getString("saveConfigurationFilenameTitle");
 		askMessage = UITexts.getString("askSaveConfigurationFilename");
-		ImageIcon saveIcon = BoundedComponent.resizeAndCenterIcon(GamesLibrary.saveParametersIcon, 32, 32);
+		ImageIcon saveIcon = BoundedComponent.resizeAndCenterIcon(GamesLibrarianIcons.saveParametersIcon, 32, 32);
 		
 		while (selectionConfirmation.option != JOptionPane.CANCEL_OPTION) {
 			

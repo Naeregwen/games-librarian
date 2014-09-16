@@ -22,9 +22,9 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import commons.BundleManager;
 import commons.api.SteamLaunchMethod;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.BundleManager;
 import components.tables.SteamGamesTable;
 
 /**

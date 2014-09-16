@@ -21,13 +21,13 @@ import java.awt.event.ItemListener;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 
-import commons.BundleManager;
 import commons.enums.LibrarianTabEnum;
 import commons.enums.SteamAchievementsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.comboboxes.observables.SteamAchievementsSortMethodObservable;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 import components.labels.TranslatableLabel;
 

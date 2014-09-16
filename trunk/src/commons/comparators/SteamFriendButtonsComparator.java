@@ -17,6 +17,7 @@ package commons.comparators;
 
 import java.util.Comparator;
 
+import commons.enums.ComparisonDirection;
 import commons.enums.SteamFriendsSortMethod;
 import components.containers.remotes.SteamFriendButton;
 

@@ -22,14 +22,14 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.Parameters;
 import commons.enums.ButtonsDisplayMode;
 import commons.enums.LibrarianTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -69,11 +69,11 @@ public class DebugAction extends AbstractAction implements Translatable, IconAnd
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "debugAccelerator")));
 		if (librarian == null || librarian.getParameters().isDebug()) { // WindowBuilder 
 			putValue(NAME, BundleManager.getUITexts(me, "debugOffMenuLabel"));
-			putValue(SMALL_ICON, GamesLibrary.debugStopIcon);
+			putValue(SMALL_ICON, GamesLibrarianIcons.debugStopIcon);
 			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "debugOffToolTip"));
 		} else {
 			putValue(NAME, BundleManager.getUITexts(me, "debugOnMenuLabel"));
-			putValue(SMALL_ICON, GamesLibrary.debugStartIcon);
+			putValue(SMALL_ICON, GamesLibrarianIcons.debugStartIcon);
 			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "debugOnToolTip"));
 		}
 	}
@@ -95,7 +95,7 @@ public class DebugAction extends AbstractAction implements Translatable, IconAnd
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return librarian.getParameters().isDebug() ? GamesLibrary.debugStopIcon : GamesLibrary.debugStartIcon;
+		return librarian.getParameters().isDebug() ? GamesLibrarianIcons.debugStopIcon : GamesLibrarianIcons.debugStartIcon;
 	}
 
 	/* (non-Javadoc)

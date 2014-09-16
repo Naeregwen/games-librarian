@@ -20,12 +20,12 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
 import commons.api.Parameters;
 import commons.enums.GameChoice;
 import commons.enums.LibrarianTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**

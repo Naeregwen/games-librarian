@@ -17,7 +17,7 @@ package commons.api;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
@@ -35,7 +35,7 @@ public enum SteamLaunchMethod implements GamesLibrarianActionEnum {
 			"steamProtocolOptionSelectionMessage",
 			"steamProtocolOptionDefaultSelectionMessage",
 			"/images/icons/application_lightning.png",
-			GamesLibrary.steamLaunchMethodSteamProtocolIcon),
+			GamesLibrarianIcons.steamLaunchMethodSteamProtocolIcon),
 			
 	SteamExecutable (
 			"steamExecutableLaunchOptionLabel", 
@@ -43,7 +43,7 @@ public enum SteamLaunchMethod implements GamesLibrarianActionEnum {
 			"steamExecutableOptionSelectionMessage",
 			"steamExecutableOptionDefaultSelectionMessage",
 			"/images/icons/application_xp_terminal.png",
-			GamesLibrary.steamLaunchMethodSteamExecutableIcon);
+			GamesLibrarianIcons.steamLaunchMethodSteamExecutableIcon);
 	
 	String labelKey;
 	String toolTipKey;

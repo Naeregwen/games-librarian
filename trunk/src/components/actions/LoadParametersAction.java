@@ -23,13 +23,13 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.Parameters;
 import commons.api.parsers.ParametersParser;
 import commons.enums.ButtonsDisplayMode;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 import components.Librarian;
 
@@ -71,7 +71,7 @@ public class LoadParametersAction extends AbstractAction implements Translatable
 		if (BundleManager.getUITexts(me, "loadParametersAccelerator") != null && !BundleManager.getUITexts(me, "loadParametersAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "loadParametersAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "loadParametersMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.loadParametersIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.loadParametersIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "loadParametersToolTip"));
 	}
 	
@@ -92,7 +92,7 @@ public class LoadParametersAction extends AbstractAction implements Translatable
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.loadParametersIcon;
+		return GamesLibrarianIcons.loadParametersIcon;
 	}
 
 	/**

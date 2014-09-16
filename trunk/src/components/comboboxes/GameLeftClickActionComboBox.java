@@ -21,13 +21,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 
-import commons.BundleManager;
 import commons.api.Parameters;
 import commons.enums.GameLeftClickAction;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.buttons.observers.GameLeftClickActionObserver;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**

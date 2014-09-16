@@ -20,12 +20,12 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JToggleButton;
 
-import commons.BundleManager;
 import commons.api.Parameters;
 import commons.enums.GameLeftClickAction;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.buttons.observers.GameLeftClickActionObserver;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 import components.labels.TranslatableLabel;
 

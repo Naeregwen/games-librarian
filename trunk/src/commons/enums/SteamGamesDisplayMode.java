@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
@@ -26,8 +26,8 @@ import commons.enums.interfaces.GamesLibrarianActionEnum;
  */
 public enum SteamGamesDisplayMode implements GamesLibrarianActionEnum {
 
-	LaunchPane ("steamGamesDisplayModeLaunchPane", GamesLibrary.steamGamesDisplayModeLaunchPaneIcon),
-	ConfigurationPane ("steamGamesDisplayModeConfigurationPane", GamesLibrary.steamGamesDisplayModeConfigurationPaneIcon);
+	LaunchPane ("steamGamesDisplayModeLaunchPane", GamesLibrarianIcons.steamGamesDisplayModeLaunchPaneIcon),
+	ConfigurationPane ("steamGamesDisplayModeConfigurationPane", GamesLibrarianIcons.steamGamesDisplayModeConfigurationPaneIcon);
 	
 	String labelKey;
 	ImageIcon icon;

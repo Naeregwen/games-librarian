@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 import components.GamesLibrarian;
 
@@ -43,8 +43,8 @@ import components.GamesLibrarian;
  */
 public enum LocaleChoice implements GamesLibrarianActionEnum {
 
-	en_US ("en_USLabel", "en_USMnemonic", "en_USAccelerator", GamesLibrary.en_USIcon, "English (United States)"),
-	fr_FR ("fr_FRLabel", "fr_FRMnemonic", "fr_FRAccelerator", GamesLibrary.fr_FRIcon, "Français (France)");
+	en_US ("en_USLabel", "en_USMnemonic", "en_USAccelerator", GamesLibrarianIcons.en_USIcon, "English (United States)"),
+	fr_FR ("fr_FRLabel", "fr_FRMnemonic", "fr_FRAccelerator", GamesLibrarianIcons.fr_FRIcon, "Français (France)");
 	
 	public static Set<String> usablesLanguages = new HashSet<String>();
 	

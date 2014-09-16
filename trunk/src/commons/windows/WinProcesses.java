@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import commons.ColoredTee;
+import components.commons.ColoredTee;
 
 
 public class WinProcesses {

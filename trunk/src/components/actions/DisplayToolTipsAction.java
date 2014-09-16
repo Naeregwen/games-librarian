@@ -21,10 +21,10 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -70,7 +70,7 @@ public class DisplayToolTipsAction extends AbstractAction implements Translatabl
 		if (BundleManager.getUITexts(me, displayToolTipsAccelerator) != null && !BundleManager.getUITexts(me, displayToolTipsAccelerator).equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, displayToolTipsAccelerator)));
 		putValue(NAME, BundleManager.getUITexts(me, displayToolTipName));
-		putValue(SMALL_ICON, displayToolTips ? GamesLibrary.displayToolTipsYesIcon : GamesLibrary.displayToolTipsNoIcon);
+		putValue(SMALL_ICON, displayToolTips ? GamesLibrarianIcons.displayToolTipsYesIcon : GamesLibrarianIcons.displayToolTipsNoIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "displayToolTipsToolTip"));
 	}
 	

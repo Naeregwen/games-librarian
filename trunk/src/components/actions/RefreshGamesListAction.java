@@ -22,12 +22,12 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.ButtonsDisplayMode;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -66,7 +66,7 @@ public class RefreshGamesListAction extends AbstractAction implements Translatab
 		if (BundleManager.getUITexts(me, "refreshGamesListAccelerator") != null && !BundleManager.getUITexts(me, "refreshGamesListAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "refreshGamesListAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "refreshGamesListMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.refreshGamesListIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.refreshGamesListIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "refreshGamesListToolTip"));
 	}
 	
@@ -87,7 +87,7 @@ public class RefreshGamesListAction extends AbstractAction implements Translatab
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.refreshGamesListIcon;
+		return GamesLibrarianIcons.refreshGamesListIcon;
 	}
 
 	/* (non-Javadoc)

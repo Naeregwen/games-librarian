@@ -32,15 +32,15 @@ import org.apache.http.impl.client.HttpClients;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import commons.ColoredTee;
-import commons.ColoredTee.TeeColor;
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons.LoadingSource;
 import commons.api.Steam;
 import commons.api.SteamGame;
 import commons.api.SteamLaunchMethod;
 import commons.api.SteamProfile;
 import commons.api.parsers.SteamGamesListParser;
 import components.Librarian;
+import components.commons.ColoredTee;
+import components.commons.ColoredTee.TeeColor;
 import components.workers.responsehandlers.XMLResponseHandler;
 
 /**

@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
@@ -26,11 +26,11 @@ import commons.enums.interfaces.GamesLibrarianActionEnum;
  */
 public enum SteamAchievementsSortMethod implements GamesLibrarianActionEnum {
 
-	InitialAscendingOrder("initialOrder", GamesLibrary.achievementsInitialAscendingOrderIcon),
-	NameAscendingOrder("nameAscendingOrder", GamesLibrary.achievementsNameAscendingOrderIcon),
-	NameDescendingOrder("nameDescendingOrder", GamesLibrary.achievementsNameDescendingOrderIcon),
-	UnlockDateAscendingOrder("unlockDateAscendingOrder", GamesLibrary.achievementsUnlockDateAscendingOrderIcon),
-	UnlockDateDescendingOrder("unlockDateDescendingOrder", GamesLibrary.achievementsUnlockDateDescendingOrderIcon);
+	InitialAscendingOrder("initialOrder", GamesLibrarianIcons.achievementsInitialAscendingOrderIcon),
+	NameAscendingOrder("nameAscendingOrder", GamesLibrarianIcons.achievementsNameAscendingOrderIcon),
+	NameDescendingOrder("nameDescendingOrder", GamesLibrarianIcons.achievementsNameDescendingOrderIcon),
+	UnlockDateAscendingOrder("unlockDateAscendingOrder", GamesLibrarianIcons.achievementsUnlockDateAscendingOrderIcon),
+	UnlockDateDescendingOrder("unlockDateDescendingOrder", GamesLibrarianIcons.achievementsUnlockDateDescendingOrderIcon);
 	
 	String labelKey;
 	ImageIcon icon;

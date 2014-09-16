@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 
 /**
  * @author Naeregwen
@@ -296,7 +296,7 @@ public class SteamGroup {
 		if (getAvatarFull() != null)
 			tooltipText.append("<img src='"+getAvatarFull()+"'/>");
 		else
-			tooltipText.append("<img src='"+GamesLibrary.noAvatarFull+"'/>");
+			tooltipText.append("<img src='"+GamesLibrarianIcons.noAvatarFull+"'/>");
 		tooltipText.append("</td>");
 		tooltipText.append("<td>");
 		tooltipText.append("<h1>");

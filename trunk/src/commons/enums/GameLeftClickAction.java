@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
@@ -26,8 +26,8 @@ import commons.enums.interfaces.GamesLibrarianActionEnum;
  */
 public enum GameLeftClickAction implements GamesLibrarianActionEnum {
 
-	Select ("gameLeftClickActionSelectLabel", "gameLeftClickActionSelectLabel", GamesLibrary.gameLeftClickSelectIcon),
-	Launch ("gameLeftClickActionLaunchLabel", "gameLeftClickActionLaunchLabel", GamesLibrary.gameLeftClickLaunchIcon);
+	Select ("gameLeftClickActionSelectLabel", "gameLeftClickActionSelectLabel", GamesLibrarianIcons.gameLeftClickSelectIcon),
+	Launch ("gameLeftClickActionLaunchLabel", "gameLeftClickActionLaunchLabel", GamesLibrarianIcons.gameLeftClickLaunchIcon);
 	
 	String labelKey;
 	String translationKey;

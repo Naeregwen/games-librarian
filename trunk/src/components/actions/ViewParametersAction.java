@@ -22,8 +22,7 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.Parameters;
 import commons.api.SteamProfile;
 import commons.api.parsers.ParametersParser;
@@ -33,6 +32,7 @@ import commons.enums.LibrarianTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -70,7 +70,7 @@ public class ViewParametersAction extends AbstractAction implements Translatable
 		if (BundleManager.getUITexts(me, "viewParametersAccelerator") != null && !BundleManager.getUITexts(me, "viewParametersAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "viewParametersAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "viewParametersMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.viewParametersIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.viewParametersIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "viewParametersToolTip"));
 	}
 	
@@ -91,7 +91,7 @@ public class ViewParametersAction extends AbstractAction implements Translatable
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.viewParametersIcon;
+		return GamesLibrarianIcons.viewParametersIcon;
 	}
 
 	/* (non-Javadoc)

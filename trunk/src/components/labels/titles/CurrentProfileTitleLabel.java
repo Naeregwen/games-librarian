@@ -15,11 +15,11 @@
  */
 package components.labels.titles;
 
-import commons.BundleManager;
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons.LoadingSource;
 import commons.api.SteamProfile;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 import components.labels.TitleLabel;
 

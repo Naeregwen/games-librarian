@@ -22,10 +22,10 @@ import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import commons.BundleManager;
 import commons.api.Parameters;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.comboboxes.renderers.LookAndFeelInfoComboBoxRenderer;
+import components.commons.BundleManager;
 
 /**
  * @author Naeregwen

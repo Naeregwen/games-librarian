@@ -33,8 +33,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import commons.ColoredTee;
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons.LoadingSource;
 import commons.Strings;
 import commons.api.Parameters;
 import commons.api.SteamGame;
@@ -50,6 +49,7 @@ import commons.enums.LocaleChoice;
 import commons.enums.SteamFriendsDisplayMode;
 import commons.enums.SteamGroupsDisplayMode;
 import commons.enums.helpers.ParsableEnum;
+import components.commons.ColoredTee;
 
 /**
  * @author Naeregwen

@@ -23,10 +23,10 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -71,7 +71,7 @@ public class ExitAction extends AbstractAction implements Translatable {
 		if (BundleManager.getUITexts(me, "exitAccelerator") != null && !BundleManager.getUITexts(me, "exitAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "exitAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "exitMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.exitIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.exitIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "exitToolTip"));
 	}
 	

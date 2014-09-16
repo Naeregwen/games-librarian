@@ -17,9 +17,9 @@ package components.labels;
 
 import javax.swing.JLabel;
 
-import commons.BundleManager;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**

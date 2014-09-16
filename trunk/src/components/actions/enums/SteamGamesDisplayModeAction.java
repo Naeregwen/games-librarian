@@ -19,11 +19,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import commons.BundleManager;
 import commons.enums.SteamGamesDisplayMode;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.EnumAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**

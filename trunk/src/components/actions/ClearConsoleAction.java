@@ -22,13 +22,13 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.ButtonsDisplayMode;
 import commons.enums.LibrarianTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -68,7 +68,7 @@ public class ClearConsoleAction extends AbstractAction implements Translatable, 
 		if (BundleManager.getUITexts(me, "clearConsoleAccelerator") != null && !BundleManager.getUITexts(me, "clearConsoleAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "clearConsoleAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "clearConsoleMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.clearConsoleIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.clearConsoleIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "clearConsoleToolTip"));
 	}
 	
@@ -89,7 +89,7 @@ public class ClearConsoleAction extends AbstractAction implements Translatable, 
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.clearConsoleIcon;
+		return GamesLibrarianIcons.clearConsoleIcon;
 	}
 
 	/* (non-Javadoc)

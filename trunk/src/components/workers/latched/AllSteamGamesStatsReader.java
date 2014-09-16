@@ -23,11 +23,11 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
 
-import commons.ColoredTee;
 import commons.api.SteamGame;
 import commons.api.SteamGamesList;
 import commons.api.SteamProfile;
 import components.Librarian;
+import components.commons.ColoredTee;
 import components.workers.SteamGameStatsReader;
 
 /**

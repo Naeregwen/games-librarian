@@ -26,12 +26,12 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
 
-import commons.ColoredTee;
-import commons.ColoredTee.TeeColor;
 import commons.api.SteamGame;
 import commons.api.SteamLaunchMethod;
 import commons.api.SteamProfile;
 import components.Librarian;
+import components.commons.ColoredTee;
+import components.commons.ColoredTee.TeeColor;
 import components.workers.SteamFriendGameListReader;
 
 /**

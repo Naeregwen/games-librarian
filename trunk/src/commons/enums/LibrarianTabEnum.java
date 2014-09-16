@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.Icon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 
 /**
  * @author Naeregwen
@@ -25,11 +25,11 @@ import commons.GamesLibrary;
  */
 public enum LibrarianTabEnum implements TabEnum {
 
-	Controls ("gotoControlsMenuLabel", "gotoControlsMnemonic", "gotoControlsAccelerator", GamesLibrary.controlsMenuIcon),
-	Library ("gotoLibraryMenuLabel", "gotoLibraryMnemonic", "gotoLibraryAccelerator", GamesLibrary.libraryMenuIcon),
-	Game ("gotoGameMenuLabel", "gotoGameMnemonic", "gotoGameAccelerator", GamesLibrary.gameMenuIcon),
-	Profile ("gotoProfileMenuLabel", "gotoProfileMnemonic", "gotoProfileAccelerator", GamesLibrary.profileMenuIcon),
-	Options ("gotoOptionsMenuLabel", "gotoOptionsMnemonic", "gotoOptionsAccelerator", GamesLibrary.optionsMenuIcon);
+	Controls ("gotoControlsMenuLabel", "gotoControlsMnemonic", "gotoControlsAccelerator", GamesLibrarianIcons.controlsMenuIcon),
+	Library ("gotoLibraryMenuLabel", "gotoLibraryMnemonic", "gotoLibraryAccelerator", GamesLibrarianIcons.libraryMenuIcon),
+	Game ("gotoGameMenuLabel", "gotoGameMnemonic", "gotoGameAccelerator", GamesLibrarianIcons.gameMenuIcon),
+	Profile ("gotoProfileMenuLabel", "gotoProfileMnemonic", "gotoProfileAccelerator", GamesLibrarianIcons.profileMenuIcon),
+	Options ("gotoOptionsMenuLabel", "gotoOptionsMnemonic", "gotoOptionsAccelerator", GamesLibrarianIcons.optionsMenuIcon);
 	
 	String labelKey;
 	String mnemonicKey;

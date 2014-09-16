@@ -23,9 +23,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.Action;
 import javax.swing.JComboBox;
 
-import commons.groups.ActionConstants;
-import commons.groups.ActionGroup;
 import components.comboboxes.interfaces.TextAction;
+import components.commons.groups.ActionConstants;
+import components.commons.groups.ActionGroup;
 
 /**
  * @author Naeregwen

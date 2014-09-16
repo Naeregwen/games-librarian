@@ -19,11 +19,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import commons.BundleManager;
 import commons.enums.DumpMode;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.EnumAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**

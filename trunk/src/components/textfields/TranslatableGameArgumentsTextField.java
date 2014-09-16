@@ -17,9 +17,9 @@ package components.textfields;
 
 import javax.swing.JTextField;
 
-import commons.BundleManager;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
+import components.commons.BundleManager;
 import components.commons.adapters.LaunchButtonMouseAdapter;
 import components.commons.interfaces.Translatable;
 import components.containers.remotes.LaunchButton;

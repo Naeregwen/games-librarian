@@ -22,12 +22,12 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.ButtonsDisplayMode;
 import commons.enums.LibrarianTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 import components.Librarian;
 
@@ -74,17 +74,17 @@ public class LoadAllAchievementsAction extends AbstractAction implements Transla
 		
 		if (librarian == null || librarian.getCurrentSteamGame() == null) {
 			putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "loadAllAchievementsTooltipNoGameSelected"));
-			putValue(SMALL_ICON, GamesLibrary.unableToloadAllAchievements);
+			putValue(SMALL_ICON, GamesLibrarianIcons.unableToloadAllAchievements);
 		} else
 			if (achievementsLoaded == -1) {
 				putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "loadAllAchievementsTooltipNoFriendsWithSameGame"));
-				putValue(SMALL_ICON, GamesLibrary.unableToloadAllAchievements);
+				putValue(SMALL_ICON, GamesLibrarianIcons.unableToloadAllAchievements);
 			} else if (achievementsLoaded == friendsWithSameGame) {
 				putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "unloadAllAchievementsTooltip"));
-				putValue(SMALL_ICON, GamesLibrary.unloadAllAchievements);
+				putValue(SMALL_ICON, GamesLibrarianIcons.unloadAllAchievements);
 			} else {
 				putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "loadAllAchievementsTooltip"));
-				putValue(SMALL_ICON, GamesLibrary.loadAllAchievements);
+				putValue(SMALL_ICON, GamesLibrarianIcons.loadAllAchievements);
 			}
 	}
 	
@@ -116,11 +116,11 @@ public class LoadAllAchievementsAction extends AbstractAction implements Transla
 		int achievementsLoaded = librarian != null ? librarian.achievementsLoaded() : -1; // WindowBuilder
 		
 		if (achievementsLoaded == -1)
-			return GamesLibrary.unableToloadAllAchievements;
+			return GamesLibrarianIcons.unableToloadAllAchievements;
 		else if (achievementsLoaded == friendsWithSameGame)
-			return GamesLibrary.unloadAllAchievements;
+			return GamesLibrarianIcons.unloadAllAchievements;
 		else
-			return GamesLibrary.loadAllAchievements;
+			return GamesLibrarianIcons.loadAllAchievements;
 	}
 
 	/* (non-Javadoc)

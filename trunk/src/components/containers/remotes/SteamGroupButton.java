@@ -21,13 +21,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolTip;
 
-import commons.BundleManager;
-import commons.ColoredTee;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.SteamGroup;
 import components.GamesLibrarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
+import components.commons.BundleManager;
+import components.commons.ColoredTee;
 import components.commons.JScrollableToolTip;
 import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.containers.commons.RemoteIconButton;
@@ -56,7 +56,7 @@ public class SteamGroupButton extends JButton implements RemoteIconButton {
 	public SteamGroupButton(WindowBuilderMask me, String key) {
 		super(BundleManager.getUITexts(me, key));
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
-		setIcon(GamesLibrary.noAvatarIcon); // WindowBuilder
+		setIcon(GamesLibrarianIcons.noAvatarIcon); // WindowBuilder
 		addMouseListener(new SteamObjectsMouseAdapter());
 	}
 	
@@ -78,7 +78,7 @@ public class SteamGroupButton extends JButton implements RemoteIconButton {
 		}
 		setText("<html>"+groupName+"<br/>"+groupHeadline+"</html>");
 		// Set icon
-		setIcon(GamesLibrary.noAvatarIcon);
+		setIcon(GamesLibrarianIcons.noAvatarIcon);
 		if (steamGroup != null && steamGroup.getAvatarIcon() != null)
 			(new RemoteIconReader(tee, this)).execute();
 		// Set tooltip

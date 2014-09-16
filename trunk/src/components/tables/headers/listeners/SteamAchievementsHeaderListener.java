@@ -21,8 +21,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
-import commons.sortables.SortableAchievementsList;
 import components.Librarian;
+import components.commons.sortables.SortableAchievementsList;
 
 /**
  * @author Naeregwen

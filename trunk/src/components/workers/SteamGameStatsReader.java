@@ -33,8 +33,6 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import commons.ColoredTee;
-import commons.ColoredTee.TeeColor;
 import commons.api.Steam;
 import commons.api.SteamAchievement;
 import commons.api.SteamAchievementsList;
@@ -45,6 +43,8 @@ import commons.api.Steam.SteamResponseLanguage;
 import commons.api.parsers.SteamGameStatsParser;
 import commons.api.scrapers.SteamAchievementsListScraper;
 import components.Librarian;
+import components.commons.ColoredTee;
+import components.commons.ColoredTee.TeeColor;
 import components.workers.responsehandlers.XMLResponseHandler;
 
 /**
