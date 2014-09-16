@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.comboboxes.observers;
+package components.comboboxes.observables;
+
+import components.comboboxes.observers.ButtonsDisplayModeObservable;
 
 /**
  * @author Naeregwen
@@ -21,5 +23,7 @@ package components.comboboxes.observers;
  */
 public interface ButtonsDisplayModeObserver {
 
-	public void update();
+	public void addButtonsDisplayModeObservable(ButtonsDisplayModeObservable buttonsDisplayModeObservable);
+	public void updateButtonsDisplayModeObservables();
+	public void removeButtonsDisplayModeObservable(ButtonsDisplayModeObservable buttonsDisplayModeObservable);
 }

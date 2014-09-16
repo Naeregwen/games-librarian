@@ -42,7 +42,7 @@ public class SteamAchievementsHeaderListener extends MouseAdapter {
 		TableModel model = header.getTable().getModel();
 		if (model instanceof SortableAchievementsList) {
 			((SortableAchievementsList) model).reverseSort();
-			librarian.updateSteamAchievementsSortMethodObservers();
+			librarian.updateSteamAchievementsSortMethodObservables();
 		}
 	}
 }
