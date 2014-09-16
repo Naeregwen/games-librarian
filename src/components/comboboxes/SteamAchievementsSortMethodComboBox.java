@@ -26,7 +26,7 @@ import commons.enums.LibrarianTabEnum;
 import commons.enums.SteamAchievementsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
-import components.comboboxes.observers.SteamAchievementsSortMethodObservable;
+import components.comboboxes.observables.SteamAchievementsSortMethodObservable;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
 import components.commons.interfaces.Translatable;
 import components.labels.TranslatableLabel;

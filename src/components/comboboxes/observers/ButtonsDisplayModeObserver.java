@@ -15,11 +15,16 @@
  */
 package components.comboboxes.observers;
 
+import components.comboboxes.observables.ButtonsDisplayModeObservable;
+
+
 /**
  * @author Naeregwen
  *
  */
-public interface SteamAchievementsSortMethodObservable {
+public interface ButtonsDisplayModeObserver {
 
-	public void update();
+	public void addButtonsDisplayModeObservable(ButtonsDisplayModeObservable buttonsDisplayModeObservable);
+	public void updateButtonsDisplayModeObservables();
+	public void removeButtonsDisplayModeObservable(ButtonsDisplayModeObservable buttonsDisplayModeObservable);
 }

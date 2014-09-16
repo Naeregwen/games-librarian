@@ -15,15 +15,11 @@
  */
 package components.comboboxes.observables;
 
-import components.comboboxes.observers.ButtonsDisplayModeObservable;
-
 /**
  * @author Naeregwen
  *
  */
-public interface ButtonsDisplayModeObserver {
+public interface ButtonsDisplayModeObservable {
 
-	public void addButtonsDisplayModeObservable(ButtonsDisplayModeObservable buttonsDisplayModeObservable);
-	public void updateButtonsDisplayModeObservables();
-	public void removeButtonsDisplayModeObservable(ButtonsDisplayModeObservable buttonsDisplayModeObservable);
+	public void update();
 }

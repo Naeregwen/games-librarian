@@ -15,15 +15,11 @@
  */
 package components.comboboxes.observables;
 
-import components.comboboxes.observers.SteamAchievementsSortMethodObservable;
-
 /**
  * @author Naeregwen
  *
  */
-public interface SteamAchievementsSortMethodObserver {
+public interface SteamAchievementsSortMethodObservable {
 
-	public void addSteamAchievementsSortMethodObservable(SteamAchievementsSortMethodObservable steamAchievementsSortMethodObservable);
-	public void updateSteamAchievementsSortMethodObservables();
-	public void removeSteamAchievementsSortMethodObservable(SteamAchievementsSortMethodObservable steamAchievementsSortMethodObservable);
+	public void update();
 }
