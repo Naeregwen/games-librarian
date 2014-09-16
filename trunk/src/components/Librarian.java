@@ -110,10 +110,10 @@ import components.actions.SteamGroupsDisplayModeAction;
 import components.comboboxes.SteamFriendsSortMethodComboBox;
 import components.comboboxes.SteamGamesSortMethodComboBox;
 import components.comboboxes.SteamGroupsSortMethodComboBox;
-import components.comboboxes.observables.ButtonsDisplayModeObservables;
-import components.comboboxes.observables.SteamAchievementsSortMethodObservables;
-import components.comboboxes.observers.ButtonsDisplayModeObserver;
-import components.comboboxes.observers.SteamAchievementsSortMethodObserver;
+import components.comboboxes.observables.ButtonsDisplayModeObserver;
+import components.comboboxes.observables.SteamAchievementsSortMethodObserver;
+import components.comboboxes.observers.ButtonsDisplayModeObservable;
+import components.comboboxes.observers.SteamAchievementsSortMethodObservable;
 import components.commons.interfaces.Translatable;
 import components.commons.observers.Translator;
 import components.containers.BoundedComponent;
@@ -148,7 +148,7 @@ import components.workers.latched.SteamFriendsListReader;
  * @author Naeregwen
  *
  */
-public class Librarian implements SteamAchievementsSortMethodObservables, ButtonsDisplayModeObservables, Translator {
+public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDisplayModeObserver, Translator {
 
 	/**
 	 * Setup data
@@ -160,8 +160,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	/**
 	 * Runtime variables
 	 */
-	private ArrayList<SteamAchievementsSortMethodObserver> achievementsSortMethodObservers;
-	private ArrayList<ButtonsDisplayModeObserver> buttonsDisplayModeObservers;
+	private ArrayList<SteamAchievementsSortMethodObservable> achievementsSortMethodObservables;
+	private ArrayList<ButtonsDisplayModeObservable> buttonsDisplayModeObservables;
 	HashMap<String, SteamProfile> profiles;
 	
 	// I18n
@@ -237,8 +237,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 		this.view = me.me.me();
 		// Parameters will be created at setup
 		// Initialize runtime variables
-		achievementsSortMethodObservers = new ArrayList<SteamAchievementsSortMethodObserver>();
-		buttonsDisplayModeObservers = new ArrayList<ButtonsDisplayModeObserver>();
+		achievementsSortMethodObservables = new ArrayList<SteamAchievementsSortMethodObservable>();
+		buttonsDisplayModeObservables = new ArrayList<ButtonsDisplayModeObservable>();
 		profiles = new HashMap<String, SteamProfile> (); // Create empty profiles list
 		// Initialize I18n
 		translatables = new ArrayList<Translatable>();
@@ -2499,7 +2499,7 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	 */
 	public void updateCommandButtons(ButtonsDisplayMode buttonsDisplayMode) {
 		parameters.setButtonsDisplayMode(buttonsDisplayMode);
-		updateButtonsDisplayModeObservers();
+		updateButtonsDisplayModeObservables();
 	}
 
 	/**
@@ -3539,6 +3539,9 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 			index += 1;
 		}
 		
+		// Update CommandButtons display
+		updateButtonsDisplayModeObservables();
+		
 		// UpdateUI on entire view
         SwingUtilities.updateComponentTreeUI(view);
 	}
@@ -3719,43 +3722,42 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 	// SteamAchievementsSortMethod
 	
 	@Override
-	public void addSteamAchievementsSortMethodObserver(SteamAchievementsSortMethodObserver achievementsSortMethodObserver) {
-		achievementsSortMethodObservers.add(achievementsSortMethodObserver);
+	public void addSteamAchievementsSortMethodObservable(SteamAchievementsSortMethodObservable achievementsSortMethodObservable) {
+		achievementsSortMethodObservables.add(achievementsSortMethodObservable);
 	}
 
 	@Override
-	public void updateSteamAchievementsSortMethodObservers() {
-		for (SteamAchievementsSortMethodObserver observer : achievementsSortMethodObservers)
-			observer.update();
+	public void updateSteamAchievementsSortMethodObservables() {
+		for (SteamAchievementsSortMethodObservable observable : achievementsSortMethodObservables)
+			observable.update();
 	}
 
 	@Override
-	public void removeSteamAchievementsSortMethodObserver(SteamAchievementsSortMethodObserver achievementsSortMethodObserver) {
-		achievementsSortMethodObservers.remove(achievementsSortMethodObserver);
+	public void removeSteamAchievementsSortMethodObservable(SteamAchievementsSortMethodObservable achievementsSortMethodObservable) {
+		achievementsSortMethodObservables.remove(achievementsSortMethodObservable);
 	}
 
 	// ButtonsDisplayMode
 	
 	@Override
-	public void addButtonsDisplayModeObserver(ButtonsDisplayModeObserver buttonsDisplayModeObserver) {
-		buttonsDisplayModeObservers.add(buttonsDisplayModeObserver);
+	public void addButtonsDisplayModeObservable(ButtonsDisplayModeObservable buttonsDisplayModeObservable) {
+		buttonsDisplayModeObservables.add(buttonsDisplayModeObservable);
 		
 	}
 
 	@Override
-	public void updateButtonsDisplayModeObservers() {
-		for (ButtonsDisplayModeObserver observer : buttonsDisplayModeObservers)
-			observer.update();
+	public void updateButtonsDisplayModeObservables() {
+		for (ButtonsDisplayModeObservable observable : buttonsDisplayModeObservables)
+			observable.update();
 	}
 
 	@Override
-	public void removeButtonsDisplayModeObserver(ButtonsDisplayModeObserver buttonsDisplayModeObserver) {
-		buttonsDisplayModeObservers.remove(buttonsDisplayModeObserver);
+	public void removeButtonsDisplayModeObservable(ButtonsDisplayModeObservable buttonsDisplayModeObservable) {
+		buttonsDisplayModeObservables.remove(buttonsDisplayModeObservable);
 	}
 	
-	/**
-	 * Translator
-	 */
+	// Translator
+	
 	@Override
 	public void addTranslatable(Translatable translatable) {
 		translatables.add(translatable);
@@ -3763,8 +3765,8 @@ public class Librarian implements SteamAchievementsSortMethodObservables, Button
 
 	@Override
 	public void updateTranslatables() {
-		for (int index = 0; index < translatables.size(); index++)
-			translatables.get(index).translate();
+		for (Translatable translatable : translatables)
+			translatable.translate();
 	}
 
 	@Override

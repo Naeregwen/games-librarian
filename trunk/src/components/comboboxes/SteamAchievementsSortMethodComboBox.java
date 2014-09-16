@@ -26,7 +26,7 @@ import commons.enums.LibrarianTabEnum;
 import commons.enums.SteamAchievementsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
-import components.comboboxes.observers.SteamAchievementsSortMethodObserver;
+import components.comboboxes.observers.SteamAchievementsSortMethodObservable;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
 import components.commons.interfaces.Translatable;
 import components.labels.TranslatableLabel;
@@ -35,7 +35,7 @@ import components.labels.TranslatableLabel;
  * @author Naeregwen
  *
  */
-public class SteamAchievementsSortMethodComboBox extends JComboBox<SteamAchievementsSortMethod> implements Translatable, ItemListener, SteamAchievementsSortMethodObserver {
+public class SteamAchievementsSortMethodComboBox extends JComboBox<SteamAchievementsSortMethod> implements Translatable, ItemListener, SteamAchievementsSortMethodObservable {
 
 	/**
 	 * serialVersionUID
@@ -58,7 +58,7 @@ public class SteamAchievementsSortMethodComboBox extends JComboBox<SteamAchievem
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		if (librarian != null) { // WindowBuilder
 			librarian.addTranslatable(this);
-			librarian.addSteamAchievementsSortMethodObserver(this);
+			librarian.addSteamAchievementsSortMethodObservable(this);
 		}
 		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<SteamAchievementsSortMethod>) this.getRenderer()));
 		addItemListener(this);

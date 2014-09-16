@@ -23,13 +23,13 @@ import commons.enums.ButtonsDisplayMode;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
-import components.comboboxes.observers.ButtonsDisplayModeObserver;
+import components.comboboxes.observers.ButtonsDisplayModeObservable;
 
 /**
  * @author Naeregwen
  *
  */
-public class CommandButton extends JButton implements ButtonsDisplayModeObserver {
+public class CommandButton extends JButton implements ButtonsDisplayModeObservable {
 
 	/**
 	 * 
@@ -44,7 +44,7 @@ public class CommandButton extends JButton implements ButtonsDisplayModeObserver
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		if (librarian != null) // WindowBuilder
-			librarian.addButtonsDisplayModeObserver(this);
+			librarian.addButtonsDisplayModeObservable(this);
 	}
 	
 	/* (non-Javadoc)

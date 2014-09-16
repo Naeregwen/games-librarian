@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.comboboxes.observers;
+package components.comboboxes.observables;
+
+import components.comboboxes.observers.SteamAchievementsSortMethodObservable;
 
 /**
  * @author Naeregwen
@@ -21,5 +23,7 @@ package components.comboboxes.observers;
  */
 public interface SteamAchievementsSortMethodObserver {
 
-	public void update();
+	public void addSteamAchievementsSortMethodObservable(SteamAchievementsSortMethodObservable steamAchievementsSortMethodObservable);
+	public void updateSteamAchievementsSortMethodObservables();
+	public void removeSteamAchievementsSortMethodObservable(SteamAchievementsSortMethodObservable steamAchievementsSortMethodObservable);
 }

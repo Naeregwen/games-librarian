@@ -13,17 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.comboboxes.observables;
-
-import components.comboboxes.observers.ButtonsDisplayModeObserver;
+package components.comboboxes.observers;
 
 /**
  * @author Naeregwen
  *
  */
-public interface ButtonsDisplayModeObservables {
+public interface SteamAchievementsSortMethodObservable {
 
-	public void addButtonsDisplayModeObserver(ButtonsDisplayModeObserver buttonsDisplayModeObserver);
-	public void updateButtonsDisplayModeObservers();
-	public void removeButtonsDisplayModeObserver(ButtonsDisplayModeObserver buttonsDisplayModeObserver);
+	public void update();
 }
