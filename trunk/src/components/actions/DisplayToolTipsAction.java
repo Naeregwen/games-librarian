@@ -23,13 +23,15 @@ import javax.swing.KeyStroke;
 
 import commons.BundleManager;
 import commons.GamesLibrary;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class DisplayToolTipsAction extends AbstractAction {
+public class DisplayToolTipsAction extends AbstractAction implements Translatable {
 
 	/**
 	 * 
@@ -37,20 +39,27 @@ public class DisplayToolTipsAction extends AbstractAction {
 	private static final long serialVersionUID = -1302582245153154899L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	Boolean displayToolTips;
 	
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param displayToolTips the binded Boolean displayToolTips value
 	 */
 	public DisplayToolTipsAction(WindowBuilderMask me, Boolean displayToolTips) {
 		this.me = me;
 		this.displayToolTips = displayToolTips;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		String displayToolTipsMnemonic = displayToolTips ? "displayToolTipsYesMnemonic" : "displayToolTipsNoMnemonic";

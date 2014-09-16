@@ -20,51 +20,40 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import commons.BundleManager;
-import components.GamesLibrarian.WindowBuilderMask;
+import commons.enums.exceptions.AcceptableValueType;
 
 /**
  * @author Naeregwen
- * 
+ * http://www.ibm.com/developerworks/library/j-numberformat/
  */
 public class NumberParser {
 
-	NumberFormat defaultDoubleNumberFormat = NumberFormat.getNumberInstance();
-	NumberFormat defaultIntegerNumberFormat = NumberFormat.getIntegerInstance();
+	private static final NumberFormat defaultDoubleNumberFormat = NumberFormat.getNumberInstance();
+	private static final NumberFormat defaultIntegerNumberFormat = NumberFormat.getIntegerInstance();
 
-	NumberFormat englishDoubleNumberFormat = NumberFormat.getNumberInstance(Locale.ENGLISH);
-	NumberFormat englishIntegerNumberFormat = NumberFormat.getIntegerInstance(Locale.ENGLISH);
+	private static final NumberFormat englishDoubleNumberFormat = NumberFormat.getNumberInstance(Locale.ENGLISH);
+	private static final NumberFormat englishIntegerNumberFormat = NumberFormat.getIntegerInstance(Locale.ENGLISH);
 
-	ParsePosition parsePosition = new ParsePosition(0);
-	
-	private static NumberParser numberParser;
-	private static WindowBuilderMask me;
-	
-	/**
-	 * @param me 
-	 * @return the NumberParser instance
-	 */
-	public static NumberParser getInstance(WindowBuilderMask me) {
-		NumberParser.me = me;
-		if (numberParser == null)
-			numberParser = new NumberParser();
-		return numberParser;
+	static {
+		defaultDoubleNumberFormat.setMinimumFractionDigits(1);
+		englishDoubleNumberFormat.setMinimumFractionDigits(1);
 	}
+	
+	ParsePosition parsePosition;
 	
 	/**
 	 * Create the NumberParser instance 
 	 */
-	private NumberParser() {
-		super();
-		defaultDoubleNumberFormat.setMinimumFractionDigits(1);
-		englishDoubleNumberFormat.setMinimumFractionDigits(1);
+	public NumberParser() {		
+		parsePosition = new ParsePosition(0);
 	}
 
 	/**
 	 * Parse double with ParsePosition
 	 * @param doubleStringValue
+	 * @throws UnacceptableValueTypeException 
 	 */
-	public Double parseDouble(String doubleStringValue) {
+	public Double parseDouble(String doubleStringValue) throws UnacceptableValueTypeException {
 
 		Number number;
 
@@ -75,7 +64,8 @@ public class NumberParser {
 			parsePosition.setIndex(0);
 			number = englishDoubleNumberFormat.parse(doubleStringValue, parsePosition);
 			if (doubleStringValue.length() != parsePosition.getIndex() || number == null)
-				throw new NumberFormatException(String.format(BundleManager.getMessages(me, "doubleStringValueError"), doubleStringValue));
+				throw new UnacceptableValueTypeException(AcceptableValueType.Double);
+//			throw new NumberFormatException(String.format(BundleManager.getMessages(me, "doubleStringValueError"), doubleStringValue));
 			return number.doubleValue();
 		}
 		
@@ -85,8 +75,9 @@ public class NumberParser {
 	/**
 	 * Parse integer with ParsePosition
 	 * @param integerStringValue
+	 * @throws UnacceptableValueTypeException 
 	 */
-	public Integer parseInteger(String integerStringValue) {
+	public Integer parseInteger(String integerStringValue) throws UnacceptableValueTypeException {
 
 		Number number;
 
@@ -96,7 +87,8 @@ public class NumberParser {
 			parsePosition.setIndex(0);
 			number = englishIntegerNumberFormat.parse(integerStringValue, parsePosition);
 			if (integerStringValue.length() != parsePosition.getIndex() || number == null)
-				throw new NumberFormatException(String.format(BundleManager.getMessages(me, "integerStringValueError"), integerStringValue));
+				throw new UnacceptableValueTypeException(AcceptableValueType.Integer);
+//			throw new NumberFormatException(String.format(BundleManager.getMessages(me, "integerStringValueError"), integerStringValue));
 			return number.intValue();
 		}
 			

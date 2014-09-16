@@ -23,14 +23,16 @@ import javax.swing.ListCellRenderer;
 
 import commons.BundleManager;
 import commons.enums.ButtonsDisplayMode;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class ButtonsDisplayModeComboBox extends JComboBox<ButtonsDisplayMode> implements ActionListener {
+public class ButtonsDisplayModeComboBox extends JComboBox<ButtonsDisplayMode> implements Translatable, ActionListener {
 
 	/**
 	 * 
@@ -38,18 +40,33 @@ public class ButtonsDisplayModeComboBox extends JComboBox<ButtonsDisplayMode> im
 	private static final long serialVersionUID = 3634423743186840715L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
 	
+	/**
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 */
 	@SuppressWarnings("unchecked")
 	public ButtonsDisplayModeComboBox(WindowBuilderMask me) {
 		super(ButtonsDisplayMode.values());
 		this.me = me;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		// http://www.fnogol.de/archives/2008/02/07/dont-subclass-defautlistcellrenderer-for-nimbus/
 		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<ButtonsDisplayMode>) this.getRenderer()));
 		addActionListener(this);
+		translate();
 	}
 	
-	/*/
-	 * (non-Javadoc)
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
+	 */
+	@Override
+	public void translate() {
+		setToolTipText(BundleManager.getUITexts(me, "buttonsDisplayModeToolTip"));
+	}
+
+	/* (non-Javadoc)
 	 * @see javax.swing.JComboBox#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {

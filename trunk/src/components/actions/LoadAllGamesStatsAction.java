@@ -29,12 +29,13 @@ import commons.enums.LibraryTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class LoadAllGamesStatsAction extends AbstractAction implements IconAndTextAction {
+public class LoadAllGamesStatsAction extends AbstractAction implements Translatable, IconAndTextAction {
 
 	/**
 	 * 
@@ -50,12 +51,15 @@ public class LoadAllGamesStatsAction extends AbstractAction implements IconAndTe
 	public LoadAllGamesStatsAction(WindowBuilderMask me) {
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using the BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "loadAllGamesStatsMnemonic") != null && !BundleManager.getUITexts(me, "loadAllGamesStatsMnemonic").equals("")) // WindowBuilder
@@ -67,6 +71,9 @@ public class LoadAllGamesStatsAction extends AbstractAction implements IconAndTe
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "loadAllGamesStatsTooltip"));
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getLabelKey()
+	 */
 	@Override
 	public String getLabelKey() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
@@ -74,6 +81,9 @@ public class LoadAllGamesStatsAction extends AbstractAction implements IconAndTe
 		return "loadAllGamesStatsMenuLabel";
 	}
 
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getIcon()
+	 */
 	@Override
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))

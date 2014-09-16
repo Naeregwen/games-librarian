@@ -13,31 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.labels;
-
-import java.awt.Font;
-
-import javax.swing.JLabel;
-import javax.swing.UIManager;
+package commons.enums.exceptions;
 
 /**
  * @author Naeregwen
  *
  */
-public class TitleLabel extends JLabel {
-
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = 4172290672637965066L;
+public enum AcceptableValueType {
 	
-	/**
-	 * @param me the WindowBuilderMask to use for creating/managing this instance
-	 * @param labelKey the labelKey for label translation
-	 */
-	public TitleLabel() {
-		super();
-		setFont(new Font(UIManager.getFont("Label.font").getFontName(), Font.BOLD, UIManager.getFont("Label.font").getSize() + 4));
-	}
-
+	// NumberParser acceptable value type
+	Integer,
+	Double;
 }

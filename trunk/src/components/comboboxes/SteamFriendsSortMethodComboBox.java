@@ -21,35 +21,64 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 
+import commons.BundleManager;
 import commons.enums.ProfileTabEnum;
 import commons.enums.SteamFriendsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.interfaces.Translatable;
+import components.labels.TranslatableLabel;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamFriendsSortMethodComboBox extends JComboBox<SteamFriendsSortMethod> implements ActionListener {
+public class SteamFriendsSortMethodComboBox extends JComboBox<SteamFriendsSortMethod> implements Translatable, ActionListener {
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = -2309717919379074157L;
 
+	WindowBuilderMask me;
 	Librarian librarian;
+	TranslatableLabel translatableLabel;
+	
 	SteamFriendsSortMethod currentSteamFriendsSortMethod;
 	
+	/**
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param translatableLabel the linked label for toolTip translation
+	 */
 	@SuppressWarnings("unchecked")
-	public SteamFriendsSortMethodComboBox(WindowBuilderMask me) {
+	public SteamFriendsSortMethodComboBox(WindowBuilderMask me, TranslatableLabel translatableLabel) {
 		super(SteamFriendsSortMethod.values());
+		this.me = me;
+		this.translatableLabel = translatableLabel;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		this.currentSteamFriendsSortMethod = (SteamFriendsSortMethod) getSelectedItem();
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<SteamFriendsSortMethod>) this.getRenderer()));
 		addActionListener(this);
-		currentSteamFriendsSortMethod = (SteamFriendsSortMethod) getSelectedItem();
+		translate();
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
+	 */
+	@Override
+	public void translate() {
+		String tooltipText = String.format(BundleManager.getUITexts(me, "steamFriendsSortMethodTooltip"), 
+				BundleManager.getUITexts(me, ((SteamFriendsSortMethod) getSelectedItem()).getLabelKey()));
+		setToolTipText(tooltipText);
+		translatableLabel.setToolTipText(tooltipText);
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.swing.JComboBox#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent actionEvent) {
 		librarian.displaySubTab(ProfileTabEnum.Friends);
@@ -58,5 +87,5 @@ public class SteamFriendsSortMethodComboBox extends JComboBox<SteamFriendsSortMe
 			librarian.sort((SteamFriendsSortMethod) getSelectedItem());
 		}
     }
-	
+
 }

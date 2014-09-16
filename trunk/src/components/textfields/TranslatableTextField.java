@@ -13,43 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.actions.texts;
+package components.textfields;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.JTextField;
 
 import commons.BundleManager;
-import commons.GamesLibrary;
-import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
-import components.comboboxes.interfaces.TextAction;
+import components.Librarian;
 import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class LookAndFeelAction extends AbstractAction implements Translatable, TextAction<LookAndFeelInfo> {
+public class TranslatableTextField extends JTextField implements Translatable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3004202897304167371L;
+	private static final long serialVersionUID = 2889747520227466865L;
 
 	WindowBuilderMask me;
 	Librarian librarian;
 	
-	LookAndFeelInfo lookAndFeelInfo;
-
+	String toolTipKey;
+	
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
-	 * @param lookAndFeelInfo the binded LookAndFeelInfo
+	 * @param toolTipKey the toolTipKey to use for in translate process
 	 */
-	public LookAndFeelAction(WindowBuilderMask me, LookAndFeelInfo lookAndFeelInfo) {
+	public TranslatableTextField(WindowBuilderMask me, String toolTipKey) {
 		this.me = me;
-		this.lookAndFeelInfo = lookAndFeelInfo;
+		this.toolTipKey = toolTipKey;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		if (librarian != null) // WindowBuilder
 			librarian.addTranslatable(this);
@@ -61,23 +56,7 @@ public class LookAndFeelAction extends AbstractAction implements Translatable, T
 	 */
 	@Override
 	public void translate() {
-		putValue(NAME, lookAndFeelInfo.getName());
-		putValue(SMALL_ICON, GamesLibrary.lookAndFeelIcon);
-		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "lookAndFeelToolTip") + " = " + lookAndFeelInfo.getName());
+		setToolTipText(BundleManager.getUITexts(me, toolTipKey));
 	}
-	
-	/* (non-Javadoc)
-	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
-	 */
-	@Override
-	public LookAndFeelInfo getObject() {
-		return lookAndFeelInfo;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {}
 
 }

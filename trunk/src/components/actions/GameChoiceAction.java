@@ -24,14 +24,15 @@ import commons.BundleManager;
 import commons.api.Parameters;
 import commons.enums.GameChoice;
 import commons.enums.LibrarianTabEnum;
-import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.Librarian;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class GameChoiceAction extends AbstractAction {
+public class GameChoiceAction extends AbstractAction implements Translatable {
 
 	/**
 	 * 
@@ -39,6 +40,8 @@ public class GameChoiceAction extends AbstractAction {
 	private static final long serialVersionUID = 7585072116154627162L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	GameChoice gameChoice;
 	
 	/**
@@ -48,12 +51,16 @@ public class GameChoiceAction extends AbstractAction {
 	public GameChoiceAction(WindowBuilderMask me, GameChoice gameChoice) {
 		this.me = me;
 		this.gameChoice = gameChoice;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 	
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, gameChoice.getMnemonicKey()) != null && !BundleManager.getUITexts(me, gameChoice.getMnemonicKey()).equals("")) // WindowBuilder
@@ -70,7 +77,6 @@ public class GameChoiceAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Librarian librarian =  me.getLibrarian();
 		Parameters parameters = librarian.getParameters();
 		librarian.displayMainTab(LibrarianTabEnum.Controls);
 		librarian.displayLaunchButtons(gameChoice);

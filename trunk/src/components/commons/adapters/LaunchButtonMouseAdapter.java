@@ -46,7 +46,8 @@ public class LaunchButtonMouseAdapter extends MouseAdapter {
 	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		librarian.enterGame(launchButton.getGame());
+		if (launchButton != null)
+			librarian.enterGame(launchButton.getGame());
 	}
 
 	/* (non-Javadoc)
@@ -54,7 +55,8 @@ public class LaunchButtonMouseAdapter extends MouseAdapter {
 	 */
 	@Override
 	public void mouseExited(MouseEvent e) {
-		librarian.leaveGame(launchButton.getGame());
+		if (launchButton != null)
+			librarian.leaveGame(launchButton.getGame());
 	}
 
 }

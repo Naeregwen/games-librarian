@@ -23,14 +23,16 @@ import javax.swing.ListCellRenderer;
 
 import commons.BundleManager;
 import commons.enums.DumpMode;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class DumpModeComboBox extends JComboBox<DumpMode> implements ActionListener {
+public class DumpModeComboBox extends JComboBox<DumpMode> implements Translatable, ActionListener {
 
 	/**
 	 * serialVersionUID
@@ -38,18 +40,33 @@ public class DumpModeComboBox extends JComboBox<DumpMode> implements ActionListe
 	private static final long serialVersionUID = 4867071782938050126L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
 	
+	/**
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 */
 	@SuppressWarnings("unchecked")
 	public DumpModeComboBox(WindowBuilderMask me) {
 		super(DumpMode.values());
 		this.me = me;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		// http://www.fnogol.de/archives/2008/02/07/dont-subclass-defautlistcellrenderer-for-nimbus/
 		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<DumpMode>) this.getRenderer()));
 		addActionListener(this);
+		translate();
 	}
 	
-	/*/
-	 * (non-Javadoc)
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
+	 */
+	@Override
+	public void translate() {
+		setToolTipText(BundleManager.getUITexts(me, "dumpModeToolTip"));
+	}
+
+	/* (non-Javadoc)
 	 * @see javax.swing.JComboBox#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {

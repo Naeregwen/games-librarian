@@ -21,14 +21,16 @@ import javax.swing.AbstractAction;
 
 import commons.BundleManager;
 import commons.enums.SteamGamesSortMethod;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.EnumAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamGamesSortMethodAction extends AbstractAction implements EnumAction<SteamGamesSortMethod> {
+public class SteamGamesSortMethodAction extends AbstractAction implements Translatable, EnumAction<SteamGamesSortMethod> {
 
 	/**
 	 * 
@@ -36,23 +38,38 @@ public class SteamGamesSortMethodAction extends AbstractAction implements EnumAc
 	private static final long serialVersionUID = 3475539144253951584L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+
 	SteamGamesSortMethod steamGamesSortMethod;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param steamGamesSortMethod the binded SteamGamesSortMethod enumeration element
 	 */
 	public SteamGamesSortMethodAction(WindowBuilderMask me, SteamGamesSortMethod steamGamesSortMethod) {
 		this.me = me;
 		this.steamGamesSortMethod = steamGamesSortMethod;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		putValue(NAME, BundleManager.getUITexts(me, steamGamesSortMethod.getLabelKey()));
 		putValue(SMALL_ICON, steamGamesSortMethod.getIcon());
+	}
+	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
+	 */
+	@Override
+	public SteamGamesSortMethod getCurrentItem() {
+		return steamGamesSortMethod;
 	}
 	
 	/* (non-Javadoc)
@@ -60,10 +77,5 @@ public class SteamGamesSortMethodAction extends AbstractAction implements EnumAc
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {}
-
-	@Override
-	public SteamGamesSortMethod getCurrentItem() {
-		return steamGamesSortMethod;
-	}
 
 }

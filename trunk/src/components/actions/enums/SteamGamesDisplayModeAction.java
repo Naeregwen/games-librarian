@@ -21,14 +21,16 @@ import javax.swing.AbstractAction;
 
 import commons.BundleManager;
 import commons.enums.SteamGamesDisplayMode;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.EnumAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamGamesDisplayModeAction extends AbstractAction implements EnumAction<SteamGamesDisplayMode> {
+public class SteamGamesDisplayModeAction extends AbstractAction implements Translatable, EnumAction<SteamGamesDisplayMode> {
 
 	/**
 	 * 
@@ -36,31 +38,44 @@ public class SteamGamesDisplayModeAction extends AbstractAction implements EnumA
 	private static final long serialVersionUID = -3276704701609360287L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	SteamGamesDisplayMode steamGamesDisplayMode;
 
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param steamGamesDisplayMode the binded SteamGamesDisplayMode enumeration element
 	 */
 	public SteamGamesDisplayModeAction(WindowBuilderMask me, SteamGamesDisplayMode steamGamesDisplayMode) {
 		this.me = me;
 		this.steamGamesDisplayMode = steamGamesDisplayMode;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		putValue(NAME, BundleManager.getUITexts(me, steamGamesDisplayMode.getLabelKey()));
 		putValue(SMALL_ICON, steamGamesDisplayMode.getIcon());
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {}
-
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
+	 */
 	@Override
 	public SteamGamesDisplayMode getCurrentItem() {
 		return steamGamesDisplayMode;
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {}
 
 }

@@ -48,12 +48,13 @@ import commons.enums.ButtonsDisplayMode;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class SaveParametersAction extends AbstractAction implements IconAndTextAction {
+public class SaveParametersAction extends AbstractAction implements Translatable, IconAndTextAction {
 
 	/**
 	 * 
@@ -71,12 +72,15 @@ public class SaveParametersAction extends AbstractAction implements IconAndTextA
 	public SaveParametersAction(WindowBuilderMask me) {
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
-	/**
-	 * Translate using the BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "saveParametersMnemonic") != null && !BundleManager.getUITexts(me, "saveParametersMnemonic").equals("")) // WindowBuilder
@@ -88,6 +92,9 @@ public class SaveParametersAction extends AbstractAction implements IconAndTextA
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "saveParametersToolTip"));
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getLabelKey()
+	 */
 	@Override
 	public String getLabelKey() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
@@ -95,6 +102,9 @@ public class SaveParametersAction extends AbstractAction implements IconAndTextA
 		return "saveParametersMenuLabel";
 	}
 
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getIcon()
+	 */
 	@Override
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))

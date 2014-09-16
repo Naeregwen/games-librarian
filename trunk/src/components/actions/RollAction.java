@@ -36,13 +36,14 @@ import commons.enums.LibrarianTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.interfaces.Translatable;
 import components.containers.GameLauncher;
 
 /**
  * @author Naeregwen
  *
  */
-public class RollAction extends AbstractAction implements IconAndTextAction {
+public class RollAction extends AbstractAction implements Translatable, IconAndTextAction {
 
 	/**
 	 * 
@@ -61,12 +62,15 @@ public class RollAction extends AbstractAction implements IconAndTextAction {
 	public RollAction(WindowBuilderMask me) {
 		this.me = me;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 	
-	/**
-	 * Translate using the BundleManager
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, "rollMnemonic") != null && !BundleManager.getUITexts(me, "rollMnemonic").equals("")) // WindowBuilder
@@ -78,6 +82,9 @@ public class RollAction extends AbstractAction implements IconAndTextAction {
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "rollToolTip"));
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getLabelKey()
+	 */
 	@Override
 	public String getLabelKey() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Icon))
@@ -85,6 +92,9 @@ public class RollAction extends AbstractAction implements IconAndTextAction {
 		return "rollMenuLabel";
 	}
 
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getIcon()
+	 */
 	@Override
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))

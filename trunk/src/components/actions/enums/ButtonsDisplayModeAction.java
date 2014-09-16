@@ -24,15 +24,17 @@ import javax.swing.KeyStroke;
 
 import commons.BundleManager;
 import commons.enums.ButtonsDisplayMode;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.EnumAction;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class ButtonsDisplayModeAction extends AbstractAction implements IconAndTextAction, EnumAction<ButtonsDisplayMode> {
+public class ButtonsDisplayModeAction extends AbstractAction implements Translatable, IconAndTextAction, EnumAction<ButtonsDisplayMode> {
 
 	/**
 	 * 
@@ -40,20 +42,27 @@ public class ButtonsDisplayModeAction extends AbstractAction implements IconAndT
 	private static final long serialVersionUID = 1582737327957441107L;
 	
 	WindowBuilderMask me;
+	Librarian librarian;
+	
 	ButtonsDisplayMode buttonsDisplayMode;
 
 	/**
-	 * 
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param buttonsDisplayMode the binded ButtonsDisplayMode enumeration element
 	 */
 	public ButtonsDisplayModeAction(WindowBuilderMask me, ButtonsDisplayMode buttonsDisplayMode) {
 		this.me = me;
 		this.buttonsDisplayMode = buttonsDisplayMode;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		translate();
 	}
 
 	/* (non-Javadoc)
-	 * @see components.actions.interfaces.TranslatablesActions#translate()
+	 * @see components.commons.interfaces.Translatable#translate()
 	 */
+	@Override
 	public void translate() {
 		// Defensive code to avoid NullPointerException in WindowBuilder/Runtime when data are empty in bundle (Mnemonic and accelerator are not mandatory)
 		if (BundleManager.getUITexts(me, buttonsDisplayMode.getMnemonicKey()) != null && !BundleManager.getUITexts(me, buttonsDisplayMode.getMnemonicKey()).equals("")) // WindowBuilder
@@ -64,14 +73,28 @@ public class ButtonsDisplayModeAction extends AbstractAction implements IconAndT
 		putValue(SMALL_ICON, buttonsDisplayMode.getIcon());
 	}
 	
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getLabelKey()
+	 */
 	@Override
 	public String getLabelKey() {
 		return buttonsDisplayMode.getLabelKey();
 	}
 
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.IconAndTextAction#getIcon()
+	 */
 	@Override
 	public ImageIcon getIcon() {
 		return buttonsDisplayMode.getIcon();
+	}
+
+	/* (non-Javadoc)
+	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
+	 */
+	@Override
+	public ButtonsDisplayMode getCurrentItem() {
+		return buttonsDisplayMode;
 	}
 
 	/* (non-Javadoc)
@@ -79,14 +102,5 @@ public class ButtonsDisplayModeAction extends AbstractAction implements IconAndT
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {}
-
-	/*/
-	 * (non-Javadoc)
-	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
-	 */
-	@Override
-	public ButtonsDisplayMode getCurrentItem() {
-		return buttonsDisplayMode;
-	}
 
 }

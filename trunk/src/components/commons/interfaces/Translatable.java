@@ -13,30 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.textfields;
-
-import javax.swing.JTextField;
-
-import components.GamesLibrarian.WindowBuilderMask;
-import components.Librarian;
-import components.commons.adapters.LaunchButtonMouseAdapter;
-import components.containers.remotes.LaunchButton;
+package components.commons.interfaces;
 
 /**
  * @author Naeregwen
  *
  */
-public class GameArgumentsTextField extends JTextField {
-	
+public interface Translatable {
+
 	/**
-	 * serialVersionUID
+	 * Do I18n on underlying objects.
+	 * The operation will be mainly accomplished by using BundleManager with
+	 * <ul>
+	 * <li>setText() with labelKey for JComponents</li>
+	 * <li>putValue() with own properties for Actions</li>
+	 * <li>other necessary operations needed by objects</li> 
+	 * </ul>
 	 */
-	private static final long serialVersionUID = -6326520602558561598L;
-	
-	Librarian librarian;
-	
-	public GameArgumentsTextField(WindowBuilderMask me, LaunchButton launchButton) {
-		addMouseListener(new LaunchButtonMouseAdapter(me, launchButton));
-	}
-	
+	public void translate();
 }

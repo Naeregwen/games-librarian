@@ -13,42 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package components.actions.enums;
-
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
+package components.labels.titles;
 
 import commons.BundleManager;
-import commons.enums.DumpMode;
+import commons.GamesLibrary.LoadingSource;
+import commons.api.SteamProfile;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
-import components.actions.interfaces.EnumAction;
 import components.commons.interfaces.Translatable;
+import components.labels.TitleLabel;
 
 /**
  * @author Naeregwen
  *
  */
-public class DumpModeAction extends AbstractAction implements Translatable, EnumAction<DumpMode> {
+public class CurrentProfileTitleLabel extends TitleLabel implements Translatable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2269763346796610621L;
+	private static final long serialVersionUID = 4595421313648402277L;
 
 	WindowBuilderMask me;
 	Librarian librarian;
-	
-	DumpMode dumpMode;
 
+	String labelKey;
+	
 	/**
 	 * @param me the WindowBuilderMask to use for creating/managing this instance
-	 * @param dumpMode the binded DumpMode enumeration element
+	 * @param labelKey the labelKey for label translation
 	 */
-	public DumpModeAction(WindowBuilderMask me, DumpMode dumpMode) {
+	public CurrentProfileTitleLabel(WindowBuilderMask me, String labelKey) {
+		super();
 		this.me = me;
-		this.dumpMode = dumpMode;
+		this.labelKey = labelKey;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
 		if (librarian != null) // WindowBuilder
 			librarian.addTranslatable(this);
@@ -60,27 +58,22 @@ public class DumpModeAction extends AbstractAction implements Translatable, Enum
 	 */
 	@Override
 	public void translate() {
-		if (librarian == null) {
-			putValue(NAME, BundleManager.getUITexts(me, dumpMode.getLabelKey()));
-			putValue(SMALL_ICON, dumpMode.getIcon());
-		} else {
-			putValue(NAME, BundleManager.getUITexts(me, dumpMode.getLabelKey()));
-			putValue(SMALL_ICON, dumpMode.getIcon());
+		if (librarian == null)
+			setText(BundleManager.getUITexts(me, labelKey));
+		else {
+			SteamProfile currentSteamProfile = librarian.getCurrentSteamProfile();
+			if (currentSteamProfile != null && currentSteamProfile.getSteamID64() != null) {
+				// Update profile title label
+				String steamId = currentSteamProfile.getId();
+				if (currentSteamProfile.getLoadingSource().equals(LoadingSource.Preloading))
+					setText(String.format(BundleManager.getUITexts(me, "currentProfileTitleLabelPreloaded"), SteamProfile.htmlIdToText(steamId)));
+				else
+					setText(String.format(BundleManager.getUITexts(me, "currentProfileTitleLabel"), SteamProfile.htmlIdToText(steamId)));
+			} else
+				// Empty profile title label
+				setText(BundleManager.getUITexts(me, "currentProfileTitleLabelEmpty"));
 		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see components.actions.interfaces.EnumAction#getCurrentItem()
-	 */
-	@Override
-	public DumpMode getCurrentItem() {
-		return dumpMode;
-	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {}
+	}
 
 }

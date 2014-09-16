@@ -25,14 +25,16 @@ import javax.swing.ListCellRenderer;
 
 import commons.BundleManager;
 import commons.enums.LocaleChoice;
+import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.interfaces.Translatable;
 
 /**
  * @author Naeregwen
  *
  */
-public class LocaleChoiceComboBox extends JComboBox<LocaleChoice> implements ActionListener {
+public class LocaleChoiceComboBox extends JComboBox<LocaleChoice> implements Translatable, ActionListener {
 
 	/**
 	 * serialVersionUID
@@ -40,18 +42,33 @@ public class LocaleChoiceComboBox extends JComboBox<LocaleChoice> implements Act
 	private static final long serialVersionUID = -7505492166723454021L;
 
 	WindowBuilderMask me;
+	Librarian librarian;
 	
+	/**
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 */
 	@SuppressWarnings("unchecked")
 	public LocaleChoiceComboBox(WindowBuilderMask me) {
 		super(LocaleChoice.values());
 		this.me = me;
+		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<LocaleChoice>) this.getRenderer()));
 		setMaximumRowCount(3);
 		addActionListener(this);
+		translate();
 	}
 
-	/*/
-	 * (non-Javadoc)
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
+	 */
+	@Override
+	public void translate() {
+		setToolTipText(BundleManager.getUITexts(me, "languageComboBoxToolTip"));
+	}
+	
+	/* (non-Javadoc)
 	 * @see javax.swing.JComboBox#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent e) {
@@ -66,5 +83,5 @@ public class LocaleChoiceComboBox extends JComboBox<LocaleChoice> implements Act
 			me.getLibrarian().getTee().writelnError(String.format(BundleManager.getMessages(me, "errorLocaleChoiceUnableToDetermineLocale"), localeChoice.toString()));
 		}
 	}
-	
+
 }

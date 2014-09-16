@@ -23,35 +23,60 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
+import commons.BundleManager;
 import commons.enums.LibraryTabEnum;
 import commons.enums.SteamGamesDisplayMode;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.interfaces.Translatable;
+import components.labels.TranslatableLabel;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamGamesDisplayModeComboBox extends JComboBox<SteamGamesDisplayMode> implements ItemListener {
+public class SteamGamesDisplayModeComboBox extends JComboBox<SteamGamesDisplayMode> implements Translatable, ItemListener {
+	
 
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = 6603730575542461318L;
 	
+	WindowBuilderMask me;
 	Librarian librarian;
+	TranslatableLabel translatableLabel;
 	
+	/**
+	 * @param me the WindowBuilderMask to use for creating/managing this instance
+	 * @param translatableLabel the linked label for toolTip translation
+	 */
 	@SuppressWarnings("unchecked")
-	public SteamGamesDisplayModeComboBox(WindowBuilderMask me) {
+	public SteamGamesDisplayModeComboBox(WindowBuilderMask me, TranslatableLabel translatableLabel) {
 		super(SteamGamesDisplayMode.values());
+		this.me = me;
+		this.translatableLabel = translatableLabel;
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
+		if (librarian != null) // WindowBuilder
+			librarian.addTranslatable(this);
 		setRenderer(new GamesLibrarianActionEnumCellRenderer(me, (ListCellRenderer<SteamGamesDisplayMode>) this.getRenderer()));
 		addItemListener(this);
+		translate();
 	}
 	
-	/*/
-	 * (non-Javadoc)
+	/* (non-Javadoc)
+	 * @see components.commons.interfaces.Translatable#translate()
+	 */
+	@Override
+	public void translate() {
+		String tooltipText = String.format(BundleManager.getUITexts(me, "libraryDisplayModeTooltip"), 
+				BundleManager.getUITexts(me, ((SteamGamesDisplayMode) getSelectedItem()).getLabelKey()));
+		setToolTipText(tooltipText);
+		translatableLabel.setToolTipText(tooltipText);
+	}
+
+	/* (non-Javadoc)
 	 * @see java.awt.event.ItemListener#itemStateChanged(java.awt.event.ItemEvent)
 	 */
 	@Override
@@ -60,7 +85,7 @@ public class SteamGamesDisplayModeComboBox extends JComboBox<SteamGamesDisplayMo
 		JPanel cards = librarian.getLibraryPane();
         CardLayout cardLayout = (CardLayout)(cards.getLayout());
         cardLayout.show(cards, ((SteamGamesDisplayMode)e.getItem()).name());
-        librarian.updateLibraryDisplayModeTooltips();
+        translate();
 	}
 
 }
