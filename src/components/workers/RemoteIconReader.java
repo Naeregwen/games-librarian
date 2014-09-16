@@ -32,7 +32,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import commons.ColoredTee;
+import components.commons.ColoredTee;
 import components.containers.commons.RemoteIconButton;
 import components.workers.responsehandlers.ImageIconResponseHandler;
 

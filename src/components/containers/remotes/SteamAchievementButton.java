@@ -17,7 +17,7 @@ package components.containers.remotes;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.Parameters;
 import commons.api.Steam;
 import commons.api.SteamAchievement;
@@ -84,7 +84,7 @@ public class SteamAchievementButton extends BoundedButton implements RemoteIconB
 	 * Set icon to "invalidAchievement"
 	 */
 	private void setIconItemUnavailable() {
-		ImageIcon icon = GamesLibrary.invalidAchievementIcon;
+		ImageIcon icon = GamesLibrarianIcons.invalidAchievementIcon;
 		if (icon != null && icon.getImage() != null && icon.getIconWidth() > 0 && icon.getIconHeight() > 0)
 			super.setIcon(icon);
 	}
@@ -93,7 +93,7 @@ public class SteamAchievementButton extends BoundedButton implements RemoteIconB
 	 * Set icon to "achievementImageUnavailable"
 	 */
 	private void setIconImageItemUnavailable() {
-		ImageIcon icon = GamesLibrary.achievementImageUnavailableIcon;
+		ImageIcon icon = GamesLibrarianIcons.achievementImageUnavailableIcon;
 		if (icon != null && icon.getImage() != null && icon.getIconWidth() > 0 && icon.getIconHeight() > 0)
 			super.setIcon(icon);
 	}

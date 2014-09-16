@@ -21,14 +21,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolTip;
 
-import commons.BundleManager;
-import commons.ColoredTee;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.SteamProfile;
 import commons.enums.OnlineState;
 import components.GamesLibrarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
+import components.commons.BundleManager;
+import components.commons.ColoredTee;
 import components.commons.JScrollableToolTip;
 import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.commons.adapters.SteamProfileMouseAdapter;
@@ -59,7 +59,7 @@ public class SteamFriendButton extends JButton implements RemoteIconButton {
 	public SteamFriendButton(WindowBuilderMask me, String key) {
 		super(BundleManager.getUITexts(me, key));
 		this.librarian = me != null ? me.getLibrarian() : null; // WindowBuilder
-		setIcon(GamesLibrary.noAvatarIcon); // WindowBuilder
+		setIcon(GamesLibrarianIcons.noAvatarIcon); // WindowBuilder
 		addMouseListener(new SteamObjectsMouseAdapter());
 		addMouseListener(new SteamProfileMouseAdapter(me));
 	}
@@ -105,7 +105,7 @@ public class SteamFriendButton extends JButton implements RemoteIconButton {
 				"</div>" + stateMessage + (isInGame ? "" : "<div>&nbsp;</div>") +
 				"</html>");
 		// Set icon
-		setIcon(GamesLibrary.noAvatarIcon);
+		setIcon(GamesLibrarianIcons.noAvatarIcon);
 		if (steamProfile.getAvatarIcon() != null) 
 			(new RemoteIconReader(tee, this)).execute();
 		// Set tooltip

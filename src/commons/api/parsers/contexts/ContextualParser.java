@@ -21,9 +21,9 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import commons.ColoredTee;
 import commons.Strings;
 import commons.api.Parameters;
+import components.commons.ColoredTee;
 
 /**
  * @author Naeregwen

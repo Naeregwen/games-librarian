@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package commons.sortables;
+package commons.enums;
 
 /**
  * @author Naeregwen
  *
  */
-public interface SortableAchievementsList {
-	public void reverseSort();
+public enum ComparisonDirection {
+
+	Descendant,
+	Ascendant;
+	
 }

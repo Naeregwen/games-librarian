@@ -20,11 +20,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.comboboxes.interfaces.TextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -62,7 +62,7 @@ public class LookAndFeelAction extends AbstractAction implements Translatable, T
 	@Override
 	public void translate() {
 		putValue(NAME, lookAndFeelInfo.getName());
-		putValue(SMALL_ICON, GamesLibrary.lookAndFeelIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.lookAndFeelIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "lookAndFeelToolTip") + " = " + lookAndFeelInfo.getName());
 	}
 	

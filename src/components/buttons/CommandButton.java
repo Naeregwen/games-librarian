@@ -18,12 +18,12 @@ package components.buttons;
 import javax.swing.Action;
 import javax.swing.JButton;
 
-import commons.BundleManager;
 import commons.enums.ButtonsDisplayMode;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
 import components.comboboxes.observables.ButtonsDisplayModeObservable;
+import components.commons.BundleManager;
 
 /**
  * @author Naeregwen

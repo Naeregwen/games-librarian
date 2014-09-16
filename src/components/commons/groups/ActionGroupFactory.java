@@ -1,4 +1,4 @@
-package commons.groups;
+package components.commons.groups;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButton;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToggleButton;
+
 
 /**
  * http://bugs.java.com/bugdatabase/view_bug.do?bug_id=4133141

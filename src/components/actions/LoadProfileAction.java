@@ -22,13 +22,13 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.ButtonsDisplayMode;
 import commons.enums.ProfileTabEnum;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -67,7 +67,7 @@ public class LoadProfileAction extends AbstractAction implements Translatable, I
 		if (BundleManager.getUITexts(me, "loadProfileAccelerator") != null && !BundleManager.getUITexts(me, "loadProfileAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "loadProfileAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "loadProfileMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.steamIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.steamIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "loadProfileTooltip"));
 	}
 	
@@ -88,7 +88,7 @@ public class LoadProfileAction extends AbstractAction implements Translatable, I
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.steamIcon;
+		return GamesLibrarianIcons.steamIcon;
 	}
 
 	/* (non-Javadoc)

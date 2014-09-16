@@ -23,14 +23,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.SteamProfile;
 import commons.enums.ButtonsDisplayMode;
 import commons.enums.ProfileTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -71,7 +71,7 @@ public class AddProfileAction extends AbstractAction implements Translatable, Ic
 		if (BundleManager.getUITexts(me, "addProfileAccelerator") != null && !BundleManager.getUITexts(me, "addProfileAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "addProfileAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "addProfileMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.addProfile);
+		putValue(SMALL_ICON, GamesLibrarianIcons.addProfile);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "addProfileTooltip"));
 	}
 	
@@ -92,7 +92,7 @@ public class AddProfileAction extends AbstractAction implements Translatable, Ic
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.addProfile;
+		return GamesLibrarianIcons.addProfile;
 	}
 
 	/**

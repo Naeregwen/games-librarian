@@ -31,8 +31,8 @@ import javax.xml.bind.annotation.XmlType;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-import commons.GamesLibrary;
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons;
+import commons.GamesLibrarianIcons.LoadingSource;
 import commons.enums.OnlineState;
 import commons.enums.PrivacyState;
 import commons.Strings;
@@ -715,7 +715,7 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		if (getAvatarFull() != null)
 			tooltipText.append("<img width='" + Steam.avatarFullIconWidth + "' height='" + Steam.avatarFullIconHeight + "' src='"+getAvatarFull()+"'/>");
 		else
-			tooltipText.append("<img width='" + Steam.avatarFullIconWidth + "' height='" + Steam.avatarFullIconHeight + "' src='"+GamesLibrary.noAvatarFull+"'/>");
+			tooltipText.append("<img width='" + Steam.avatarFullIconWidth + "' height='" + Steam.avatarFullIconHeight + "' src='"+GamesLibrarianIcons.noAvatarFull+"'/>");
 		tooltipText.append("</td>");
 		
 		// status icons and (steam)Id

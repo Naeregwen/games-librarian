@@ -21,12 +21,12 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
 import commons.enums.LibraryTabEnum;
 import commons.enums.ProfileTabEnum;
 import commons.enums.TabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**

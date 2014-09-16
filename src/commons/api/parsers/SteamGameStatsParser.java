@@ -27,11 +27,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import commons.ColoredTee;
 import commons.api.Steam;
 import commons.api.SteamAchievement;
 import commons.api.SteamAchievementsList;
 import commons.api.SteamGameStats;
+import components.commons.ColoredTee;
 
 /**
  * @author Naeregwen

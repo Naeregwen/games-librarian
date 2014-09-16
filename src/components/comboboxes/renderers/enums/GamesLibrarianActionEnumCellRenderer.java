@@ -23,9 +23,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import commons.BundleManager;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.BundleManager;
 import components.labels.ErroneousLabel;
 
 /**

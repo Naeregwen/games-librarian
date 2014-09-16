@@ -31,8 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.JToolTip;
 import javax.swing.border.LineBorder;
 
-import commons.ColoredTee;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.OS;
 import commons.api.Parameters;
 import commons.api.Steam;
@@ -45,6 +44,7 @@ import commons.windows.WinProcesses;
 import components.GamesLibrarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
+import components.commons.ColoredTee;
 import components.commons.ImageToolTip;
 import components.commons.adapters.LaunchButtonMouseAdapter;
 import components.commons.adapters.SteamObjectsMouseAdapter;
@@ -139,7 +139,7 @@ public class LaunchButton extends BoundedButton implements Translatable, RemoteI
 	 * Set icon to "noGameSelected"
 	 */
 	public void setIconNoGameSelected() {
-		ImageIcon icon = GamesLibrary.noGameSelectedIcon;
+		ImageIcon icon = GamesLibrarianIcons.noGameSelectedIcon;
 		if (icon != null && icon.getImage() != null && icon.getIconWidth() > 0 && icon.getIconHeight() > 0)
 			super.setIcon(icon);
 	}
@@ -148,7 +148,7 @@ public class LaunchButton extends BoundedButton implements Translatable, RemoteI
 	 * Set icon to "gameImageUnavailable"
 	 */
 	private void setIconGameImageUnavailable() {
-		ImageIcon icon = GamesLibrary.gameImageUnavailableIcon;
+		ImageIcon icon = GamesLibrarianIcons.gameImageUnavailableIcon;
 		if (icon != null && icon.getImage() != null && icon.getIconWidth() > 0 && icon.getIconHeight() > 0)
 			super.setIcon(icon);
 	}

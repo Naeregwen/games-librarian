@@ -23,11 +23,11 @@ import java.util.regex.Matcher;
 import javax.swing.JComboBox;
 import javax.swing.ListCellRenderer;
 
-import commons.BundleManager;
 import commons.enums.LocaleChoice;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**

@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import components.GamesLibrarian;
 import components.containers.commons.RemoteIconComponent;
 
@@ -66,7 +66,7 @@ public class IconTableCellRenderer extends DefaultTableCellRenderer implements R
 				e.printStackTrace();
 			}
         else
-        	setIcon(GamesLibrary.noAvatarIcon);
+        	setIcon(GamesLibrarianIcons.noAvatarIcon);
         setHorizontalAlignment(CENTER);
         return this;
    }

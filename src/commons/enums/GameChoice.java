@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.Icon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 
 /**
  * @author Naeregwen
@@ -25,9 +25,9 @@ import commons.GamesLibrary;
  */
 public enum GameChoice {
 
-	One ("oneGameChoiceLabel", "oneGameChoiceToolTip", "oneGameChoiceMnemonic", "oneGameChoiceAccelerator", GamesLibrary.oneGameChoiceIcon),
-	Two ("twoGamesChoiceLabel", "twoGamesChoiceToolTip", "twoGamesChoiceMnemonic", "twoGamesChoiceAccelerator", GamesLibrary.twoGamesChoiceIcon),
-	Three ("threeGamesChoiceLabel", "threeGamesChoiceToolTip", "threeGamesChoiceMnemonic", "threeGamesChoiceAccelerator", GamesLibrary.threeGamesChoiceIcon);
+	One ("oneGameChoiceLabel", "oneGameChoiceToolTip", "oneGameChoiceMnemonic", "oneGameChoiceAccelerator", GamesLibrarianIcons.oneGameChoiceIcon),
+	Two ("twoGamesChoiceLabel", "twoGamesChoiceToolTip", "twoGamesChoiceMnemonic", "twoGamesChoiceAccelerator", GamesLibrarianIcons.twoGamesChoiceIcon),
+	Three ("threeGamesChoiceLabel", "threeGamesChoiceToolTip", "threeGamesChoiceMnemonic", "threeGamesChoiceAccelerator", GamesLibrarianIcons.threeGamesChoiceIcon);
 	
 	String labelKey;
 	String toolTipKey;

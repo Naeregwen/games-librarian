@@ -1,4 +1,4 @@
-package commons.groups;
+package components.commons.groups;
 
 
 /**

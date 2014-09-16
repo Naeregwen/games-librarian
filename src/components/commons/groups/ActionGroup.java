@@ -1,9 +1,10 @@
-package commons.groups;
+package components.commons.groups;
 
 import java.beans.*;
 import java.util.*;
  
 import javax.swing.Action;
+
  
 /**
  * http://bugs.java.com/bugdatabase/view_bug.do?bug_id=4133141

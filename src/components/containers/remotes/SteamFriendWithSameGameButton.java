@@ -21,7 +21,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.SteamProfile;
 import components.GamesLibrarian;
 import components.Librarian;
@@ -50,7 +50,7 @@ public class SteamFriendWithSameGameButton extends JToggleButton implements Remo
 	 */
 	public SteamFriendWithSameGameButton(String label) {
 		super(label);
-		setIcon(GamesLibrary.noAvatarIcon);
+		setIcon(GamesLibrarianIcons.noAvatarIcon);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class SteamFriendWithSameGameButton extends JToggleButton implements Remo
 		String onlineState = steamProfile.getOnlineState() != null && !steamProfile.getOnlineState().trim().equals("") ? steamProfile.getOnlineState() : "?";
 		setText("<html>" + steamId + "<br/>" + onlineState + "</html>");
 		// Set icon
-		setIcon(GamesLibrary.noAvatarIcon);
+		setIcon(GamesLibrarianIcons.noAvatarIcon);
 		if (steamProfile.getAvatarIcon() != null)
 			(new RemoteIconReader(librarian.getTee(), this)).execute();
 		// Set format

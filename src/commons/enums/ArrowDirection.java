@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 
 /**
  * @author Naeregwen
@@ -25,7 +25,7 @@ import commons.GamesLibrary;
  */
 public enum ArrowDirection {
 	
-	NEXT(GamesLibrary.nextIcon), PREVIOUS(GamesLibrary.previousIcon);
+	NEXT(GamesLibrarianIcons.nextIcon), PREVIOUS(GamesLibrarianIcons.previousIcon);
 	
 	ImageIcon imageIcon;
 	

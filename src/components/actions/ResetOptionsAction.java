@@ -24,9 +24,8 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons;
+import commons.GamesLibrarianIcons.LoadingSource;
 import commons.OS;
 import commons.Strings;
 import commons.api.Parameters;
@@ -37,6 +36,7 @@ import commons.windows.WinRegistry;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -75,7 +75,7 @@ public class ResetOptionsAction extends AbstractAction implements Translatable, 
 		if (BundleManager.getUITexts(me, "resetOptionsAccelerator") != null && !BundleManager.getUITexts(me, "resetOptionsAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "resetOptionsAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "resetOptionsMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.resetOptionsIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.resetOptionsIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "resetOptionsToolTip"));
 	}
 	
@@ -96,7 +96,7 @@ public class ResetOptionsAction extends AbstractAction implements Translatable, 
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.resetOptionsIcon;
+		return GamesLibrarianIcons.resetOptionsIcon;
 	}
 
 	/**

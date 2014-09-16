@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
@@ -26,17 +26,17 @@ import commons.enums.interfaces.GamesLibrarianActionEnum;
  */
 public enum SteamFriendsSortMethod implements GamesLibrarianActionEnum {
 
-	InitialAscendingOrder("initialOrder", GamesLibrary.steamFriendsInitialAscendingOrderIcon),
-	NameAscendingOrder("nameAscendingOrder", GamesLibrary.steamFriendsNameAscendingOrderIcon),
-	NameDescendingOrder("nameDescendingOrder", GamesLibrary.steamFriendsNameDescendingOrderIcon),
-	LogoAscendingOrder("logoAscendingOrder", GamesLibrary.steamFriendsLogoAscendingOrderIcon),
-	LogoDescendingOrder("logoDescendingOrder", GamesLibrary.steamFriendsLogoDescendingOrderIcon),
-	OnlineStateAscendingOrder("onlineStateAscendingOrder", GamesLibrary.steamFriendsOnlineStateAscendingOrderIcon),
-	OnlineStateDescendingOrder("onlineStateDescendingOrder", GamesLibrary.steamFriendsOnlineStateDescendingOrderIcon),
-	StateMessageAscendingOrder("stateMessageAscendingOrder", GamesLibrary.steamFriendsStateMessageAscendingOrderIcon),
-	StateMessageDescendingOrder("stateMessageDescendingOrder", GamesLibrary.steamFriendsStateMessageDescendingOrderIcon),
-	SteamId64AscendingOrder("steamId64AscendingOrder", GamesLibrary.steamFriendsSteamId64AscendingOrderIcon),
-	SteamId64DescendingOrder("steamId64DescendingOrder", GamesLibrary.steamFriendsSteamId64DescendingOrderIcon);
+	InitialAscendingOrder("initialOrder", GamesLibrarianIcons.steamFriendsInitialAscendingOrderIcon),
+	NameAscendingOrder("nameAscendingOrder", GamesLibrarianIcons.steamFriendsNameAscendingOrderIcon),
+	NameDescendingOrder("nameDescendingOrder", GamesLibrarianIcons.steamFriendsNameDescendingOrderIcon),
+	LogoAscendingOrder("logoAscendingOrder", GamesLibrarianIcons.steamFriendsLogoAscendingOrderIcon),
+	LogoDescendingOrder("logoDescendingOrder", GamesLibrarianIcons.steamFriendsLogoDescendingOrderIcon),
+	OnlineStateAscendingOrder("onlineStateAscendingOrder", GamesLibrarianIcons.steamFriendsOnlineStateAscendingOrderIcon),
+	OnlineStateDescendingOrder("onlineStateDescendingOrder", GamesLibrarianIcons.steamFriendsOnlineStateDescendingOrderIcon),
+	StateMessageAscendingOrder("stateMessageAscendingOrder", GamesLibrarianIcons.steamFriendsStateMessageAscendingOrderIcon),
+	StateMessageDescendingOrder("stateMessageDescendingOrder", GamesLibrarianIcons.steamFriendsStateMessageDescendingOrderIcon),
+	SteamId64AscendingOrder("steamId64AscendingOrder", GamesLibrarianIcons.steamFriendsSteamId64AscendingOrderIcon),
+	SteamId64DescendingOrder("steamId64DescendingOrder", GamesLibrarianIcons.steamFriendsSteamId64DescendingOrderIcon);
 
 	String labelKey;
 	ImageIcon icon;

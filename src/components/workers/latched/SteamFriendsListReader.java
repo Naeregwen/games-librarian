@@ -31,14 +31,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import commons.ColoredTee;
-import commons.ColoredTee.TeeColor;
 import commons.api.Parameters;
 import commons.api.Steam;
 import commons.api.SteamFriendsList;
 import commons.api.SteamProfile;
 import commons.api.parsers.SteamFriendsListParser;
 import components.Librarian;
+import components.commons.ColoredTee;
+import components.commons.ColoredTee.TeeColor;
 import components.workers.SteamFriendProfileReader;
 import components.workers.responsehandlers.XMLResponseHandler;
 

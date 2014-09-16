@@ -18,6 +18,7 @@ package commons.comparators;
 import java.util.Comparator;
 
 import commons.api.SteamGame;
+import commons.enums.ComparisonDirection;
 import commons.enums.SteamGamesSortMethod;
 
 /**

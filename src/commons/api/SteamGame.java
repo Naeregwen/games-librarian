@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons.LoadingSource;
 import components.commons.parsers.NumberParser;
 
 /**

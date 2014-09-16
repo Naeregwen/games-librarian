@@ -26,8 +26,7 @@ import javax.xml.bind.Marshaller;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-import commons.ColoredTee;
-import commons.GamesLibrary.LoadingSource;
+import commons.GamesLibrarianIcons.LoadingSource;
 import commons.api.Parameters;
 import commons.api.Steam;
 import commons.api.SteamGame;
@@ -36,6 +35,7 @@ import commons.api.SteamLaunchMethod;
 import commons.api.SteamProfile;
 import commons.api.parsers.contexts.ContextualParser;
 import commons.api.parsers.contexts.SteamProfileContexts;
+import components.commons.ColoredTee;
 
 /**
  * @author Naeregwen

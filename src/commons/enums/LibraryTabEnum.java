@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.Icon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 
 /**
  * @author Naeregwen
@@ -25,8 +25,8 @@ import commons.GamesLibrary;
  */
 public enum LibraryTabEnum implements TabEnum {
 
-	LibraryGamesList ("gotoLibraryGamesListMenuLabel", "gotoLibraryGamesListMnemonic", "gotoLibraryGamesListAccelerator", GamesLibrary.libraryMenuIcon),
-	LibraryStatistics ("gotoLibraryStatisticsMenuLabel", "gotoLibraryStatisticsMnemonic", "gotoLibraryStatisticsAccelerator", GamesLibrary.libraryStatisticsMenuIcon);
+	LibraryGamesList ("gotoLibraryGamesListMenuLabel", "gotoLibraryGamesListMnemonic", "gotoLibraryGamesListAccelerator", GamesLibrarianIcons.libraryMenuIcon),
+	LibraryStatistics ("gotoLibraryStatisticsMenuLabel", "gotoLibraryStatisticsMnemonic", "gotoLibraryStatisticsAccelerator", GamesLibrarianIcons.libraryStatisticsMenuIcon);
 	
 	String labelKey;
 	String mnemonicKey;

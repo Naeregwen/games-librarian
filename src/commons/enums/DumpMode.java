@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
@@ -26,9 +26,9 @@ import commons.enums.interfaces.GamesLibrarianActionEnum;
  */
 public enum DumpMode implements GamesLibrarianActionEnum {
 
-	Text ("dumpModeTextLabel", "dumpModeTextMnemonic", "dumpModeTextAccelerator", GamesLibrary.dumpModeTextIcon), 
-	XML ("dumpModeXMLLabel", "dumpModeXMLMnemonic", "dumpModeXMLAccelerator", GamesLibrary.dumpModeXMLIcon), 
-	Both ("dumpModeBothLabel", "dumpModeBothMnemonic", "dumpModeBothAccelerator", GamesLibrary.dumpModeBothIcon);
+	Text ("dumpModeTextLabel", "dumpModeTextMnemonic", "dumpModeTextAccelerator", GamesLibrarianIcons.dumpModeTextIcon), 
+	XML ("dumpModeXMLLabel", "dumpModeXMLMnemonic", "dumpModeXMLAccelerator", GamesLibrarianIcons.dumpModeXMLIcon), 
+	Both ("dumpModeBothLabel", "dumpModeBothMnemonic", "dumpModeBothAccelerator", GamesLibrarianIcons.dumpModeBothIcon);
 	
 	String labelKey;
 	String mnemonicKey;

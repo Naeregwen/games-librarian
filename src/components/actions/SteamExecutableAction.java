@@ -25,14 +25,14 @@ import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.OS;
 import commons.api.Parameters;
 import commons.enums.ButtonsDisplayMode;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 import components.dialogs.CenteredFileChooser;
 
@@ -72,7 +72,7 @@ public class SteamExecutableAction extends AbstractAction implements Translatabl
 		if (BundleManager.getUITexts(me, "steamExecutableAccelerator") != null && !BundleManager.getUITexts(me, "steamExecutableAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "steamExecutableAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "steamExecutableMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.steamExecutableIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.steamExecutableIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "steamExecutableToolTip"));
 	}
 	
@@ -93,7 +93,7 @@ public class SteamExecutableAction extends AbstractAction implements Translatabl
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.steamExecutableIcon;
+		return GamesLibrarianIcons.steamExecutableIcon;
 	}
 
 	/* (non-Javadoc)

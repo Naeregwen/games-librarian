@@ -26,7 +26,7 @@ import components.GamesLibrarian;
  * @author Naeregwen
  *
  */
-public class GamesLibrary {
+public class GamesLibrarianIcons {
 
 	/**
 	 * Application Menu Icons

@@ -17,9 +17,9 @@ package components.menus;
 
 import javax.swing.JMenu;
 
-import commons.BundleManager;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**

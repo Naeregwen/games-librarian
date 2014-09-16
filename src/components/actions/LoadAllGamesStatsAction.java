@@ -22,13 +22,13 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.ButtonsDisplayMode;
 import commons.enums.LibraryTabEnum;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.actions.interfaces.IconAndTextAction;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -67,7 +67,7 @@ public class LoadAllGamesStatsAction extends AbstractAction implements Translata
 		if (BundleManager.getUITexts(me, "loadAllGamesStatsAccelerator") != null && !BundleManager.getUITexts(me, "loadAllGamesStatsAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "loadAllGamesStatsAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "loadAllGamesStatsMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.steamIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.steamIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "loadAllGamesStatsTooltip"));
 	}
 	
@@ -88,7 +88,7 @@ public class LoadAllGamesStatsAction extends AbstractAction implements Translata
 	public ImageIcon getIcon() {
 		if (librarian.getParameters().getButtonsDisplayMode().equals(ButtonsDisplayMode.Text))
 			return null;
-		return GamesLibrary.steamIcon;
+		return GamesLibrarianIcons.steamIcon;
 	}
 
 	/* (non-Javadoc)

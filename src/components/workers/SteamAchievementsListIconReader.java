@@ -26,8 +26,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import commons.ColoredTee;
 import commons.api.SteamAchievementsList;
+import components.commons.ColoredTee;
 import components.workers.responsehandlers.ImageIconResponseHandler;
 
 /**

@@ -23,12 +23,12 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
-import commons.BundleManager;
 import commons.enums.LibraryTabEnum;
 import commons.enums.SteamGamesDisplayMode;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.comboboxes.renderers.enums.GamesLibrarianActionEnumCellRenderer;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 import components.labels.TranslatableLabel;
 

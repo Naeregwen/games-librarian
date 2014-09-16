@@ -23,9 +23,9 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
 
-import commons.ColoredTee;
 import commons.api.SteamGame;
 import components.Librarian;
+import components.commons.ColoredTee;
 import components.containers.remotes.SteamFriendWithSameGameButton;
 import components.workers.SteamFriendGameStatsReader;
 

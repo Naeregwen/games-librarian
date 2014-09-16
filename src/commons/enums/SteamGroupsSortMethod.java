@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
@@ -26,17 +26,17 @@ import commons.enums.interfaces.GamesLibrarianActionEnum;
  */
 public enum SteamGroupsSortMethod implements GamesLibrarianActionEnum {
 
-	InitialAscendingOrder("initialOrder", GamesLibrary.steamGroupsSortMethodInitialAscendingOrderIcon),
-	NameAscendingOrder("nameAscendingOrder", GamesLibrary.steamGroupsSortMethodNameAscendingOrderIcon),
-	NameDescendingOrder("nameDescendingOrder", GamesLibrary.steamGroupsSortMethodNameDescendingOrderIcon),
-	LogoAscendingOrder("logoAscendingOrder", GamesLibrary.steamGroupsSortMethodLogoAscendingOrderIcon),
-	LogoDescendingOrder("logoDescendingOrder", GamesLibrary.steamGroupsSortMethodLogoDescendingOrderIcon),
-	HeadlineAscendingOrder("headlineAscendingOrder", GamesLibrary.steamGroupsSortMethodHeadlineAscendingOrderIcon),
-	HeadlineDescendingOrder("headlineDescendingOrder", GamesLibrary.steamGroupsSortMethodHeadlineDescendingOrderIcon),
-	SummaryAscendingOrder("summaryAscendingOrder", GamesLibrary.steamGroupsSortMethodSummaryAscendingOrderIcon),
-	SummaryDescendingOrder("summaryDescendingOrder", GamesLibrary.steamGroupsSortMethodSummaryDescendingOrderIcon),
-	SteamId64AscendingOrder("steamId64AscendingOrder", GamesLibrary.steamGroupsSortMethodSteamId64AscendingOrderIcon),
-	SteamId64DescendingOrder("steamId64DescendingOrder", GamesLibrary.steamGroupsSortMethodSteamId64DescendingOrderIcon);
+	InitialAscendingOrder("initialOrder", GamesLibrarianIcons.steamGroupsSortMethodInitialAscendingOrderIcon),
+	NameAscendingOrder("nameAscendingOrder", GamesLibrarianIcons.steamGroupsSortMethodNameAscendingOrderIcon),
+	NameDescendingOrder("nameDescendingOrder", GamesLibrarianIcons.steamGroupsSortMethodNameDescendingOrderIcon),
+	LogoAscendingOrder("logoAscendingOrder", GamesLibrarianIcons.steamGroupsSortMethodLogoAscendingOrderIcon),
+	LogoDescendingOrder("logoDescendingOrder", GamesLibrarianIcons.steamGroupsSortMethodLogoDescendingOrderIcon),
+	HeadlineAscendingOrder("headlineAscendingOrder", GamesLibrarianIcons.steamGroupsSortMethodHeadlineAscendingOrderIcon),
+	HeadlineDescendingOrder("headlineDescendingOrder", GamesLibrarianIcons.steamGroupsSortMethodHeadlineDescendingOrderIcon),
+	SummaryAscendingOrder("summaryAscendingOrder", GamesLibrarianIcons.steamGroupsSortMethodSummaryAscendingOrderIcon),
+	SummaryDescendingOrder("summaryDescendingOrder", GamesLibrarianIcons.steamGroupsSortMethodSummaryDescendingOrderIcon),
+	SteamId64AscendingOrder("steamId64AscendingOrder", GamesLibrarianIcons.steamGroupsSortMethodSteamId64AscendingOrderIcon),
+	SteamId64DescendingOrder("steamId64DescendingOrder", GamesLibrarianIcons.steamGroupsSortMethodSteamId64DescendingOrderIcon);
 
 	String labelKey;
 	ImageIcon icon;

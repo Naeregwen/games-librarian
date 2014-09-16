@@ -31,7 +31,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.table.TableCellRenderer;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.api.SteamAchievementsList;
 import commons.enums.SteamAchievementsSortMethod;
 import components.tables.models.SteamAchievementsTableModel;
@@ -61,7 +61,7 @@ public class SteamAchievementsTableHeaderRenderer implements TableCellRenderer {
         SteamAchievementsList achievementsList = ((SteamAchievementsTableModel) table.getModel()).getAchievementListAt(table.convertColumnIndexToModel(column));
         Double achievementsRatio = achievementsList != null ? achievementsList.getAchievementsRatio() * 100 : 0;
         Icon playerAvatarIcon = achievementsList != null ? achievementsList.getPlayerAvatarIcon() : null;
-        avatarIcon.setIcon(playerAvatarIcon != null ? playerAvatarIcon : GamesLibrary.noAvatarIcon);
+        avatarIcon.setIcon(playerAvatarIcon != null ? playerAvatarIcon : GamesLibrarianIcons.noAvatarIcon);
         SteamAchievementsSortMethod achievementsSortMethod = ((SteamAchievementsTableModel) table.getModel()).getSteamAchievementsComparator().getSteamAchievementsSortMethod();
         BasicArrowButton sortDirectionIndicator = null;
         

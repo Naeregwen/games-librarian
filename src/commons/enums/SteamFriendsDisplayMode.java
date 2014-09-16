@@ -17,7 +17,7 @@ package commons.enums;
 
 import javax.swing.ImageIcon;
 
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import commons.enums.interfaces.GamesLibrarianActionEnum;
 
 /**
@@ -26,8 +26,8 @@ import commons.enums.interfaces.GamesLibrarianActionEnum;
  */
 public enum SteamFriendsDisplayMode implements GamesLibrarianActionEnum {
 
-	List ("steamFriendsDisplayModeList", "steamFriendsDisplayModeListMnemonic", "steamFriendsDisplayModeListAccelerator", GamesLibrary.steamFriendsDisplayModeListIcon),
-	Grid ("steamFriendsDisplayModeGrid", "steamFriendsDisplayModeGridMnemonic", "steamFriendsDisplayModeGridAccelerator", GamesLibrary.steamFriendsDisplayModeGridIcon);
+	List ("steamFriendsDisplayModeList", "steamFriendsDisplayModeListMnemonic", "steamFriendsDisplayModeListAccelerator", GamesLibrarianIcons.steamFriendsDisplayModeListIcon),
+	Grid ("steamFriendsDisplayModeGrid", "steamFriendsDisplayModeGridMnemonic", "steamFriendsDisplayModeGridAccelerator", GamesLibrarianIcons.steamFriendsDisplayModeGridIcon);
 	
 	String labelKey;
 	String mnemonicKey;

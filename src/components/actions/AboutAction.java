@@ -22,10 +22,10 @@ import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
-import commons.BundleManager;
-import commons.GamesLibrary;
+import commons.GamesLibrarianIcons;
 import components.Librarian;
 import components.GamesLibrarian.WindowBuilderMask;
+import components.commons.BundleManager;
 import components.commons.interfaces.Translatable;
 
 /**
@@ -64,7 +64,7 @@ public class AboutAction extends AbstractAction implements Translatable {
 		if (BundleManager.getUITexts(me, "aboutAccelerator") != null && !BundleManager.getUITexts(me, "aboutAccelerator").equals("")) // WindowBuilder
 			putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(BundleManager.getUITexts(me, "aboutAccelerator")));
 		putValue(NAME, BundleManager.getUITexts(me, "aboutMenuLabel"));
-		putValue(SMALL_ICON, GamesLibrary.aboutIcon);
+		putValue(SMALL_ICON, GamesLibrarianIcons.aboutIcon);
 		putValue(SHORT_DESCRIPTION, BundleManager.getUITexts(me, "aboutToolTip"));
 	}
 	
