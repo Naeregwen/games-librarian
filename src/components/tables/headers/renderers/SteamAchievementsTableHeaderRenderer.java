@@ -79,7 +79,8 @@ public class SteamAchievementsTableHeaderRenderer implements TableCellRenderer {
         	break;
         }
         sortDirectionIndicator.setBorder(new EmptyBorder(0, 0, 0, 0));
-        avatarIcon.setText("<html>" + ((String) value) + "<br/>" + String.format("%4.2f %%", achievementsRatio) + "</html>");
+        avatarIcon.setText("<html>" + ((String) value) + "<br/>" + achievementsList.getPrintableAchievementsRatio(achievementsRatio) + "</html>");
+//        avatarIcon.setText("<html>" + ((String) value) + "<br/>" + String.format("%4.2f %%", achievementsRatio) + "</html>");
         
         avatarPanel.add(avatarIcon);
         avatarPanel.add(sortDirectionIndicator);
@@ -87,7 +88,7 @@ public class SteamAchievementsTableHeaderRenderer implements TableCellRenderer {
         mainPanel.add(avatarPanel);
 
         JProgressBar progressBar = new JProgressBar(0, 100);
-        progressBar.setValue(Math.round(achievementsRatio.intValue()));
+        progressBar.setValue(achievementsList.getCeiledAchievementsRatio(achievementsRatio));
         progressBar.setStringPainted(true);
         progressBar.setBorder(new LineBorder(Color.BLACK));
         progressBar.setBorder(UIManager.getBorder("TableHeader.cellBorder"));

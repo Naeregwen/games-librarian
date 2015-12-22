@@ -74,6 +74,7 @@ import commons.api.SteamGroup;
 import commons.api.SteamProfile;
 import commons.api.parsers.SteamGameStatsParser;
 import commons.api.parsers.SteamProfileParser;
+import commons.comparators.DoubleNullLastComparator;
 import commons.comparators.LaunchButtonsComparator;
 import commons.comparators.SteamFriendButtonsComparator;
 import commons.comparators.SteamFriendsComparator;
@@ -840,6 +841,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		case StoreLinkAscendingOrder:
 		case GlobalStatsLinkAscendingOrder:
 		case StatsLinkAscendingOrder:
+		case AchievementsRatioAscendingOrder:
 			launchButtonsComparator = new LaunchButtonsComparator(ComparisonDirection.Ascendant, librarySortMethod);
 			steamGamesComparator = new SteamGamesComparator(ComparisonDirection.Ascendant, librarySortMethod);
 			break;
@@ -853,6 +855,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		case StoreLinkDescendingOrder:
 		case GlobalStatsLinkDescendingOrder:
 		case StatsLinkDescendingOrder:
+		case AchievementsRatioDescendingOrder:
 			launchButtonsComparator = new LaunchButtonsComparator(ComparisonDirection.Descendant, librarySortMethod);
 			steamGamesComparator = new SteamGamesComparator(ComparisonDirection.Descendant, librarySortMethod);
 			break;
@@ -927,14 +930,22 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		case StatsLinkDescendingOrder:
 			column = SteamGame.ColumnsOrder.statsLink.ordinal();
 			break;
+		case AchievementsRatioAscendingOrder:
+		case AchievementsRatioDescendingOrder:
+			column = SteamGame.ColumnsOrder.steamAchievementsRatio.ordinal();
+			break;
 		}
 		
-		if (steamGamesComparator != null) {
-			if (column == -1)
-				steamGamesTable.getRowSorter().setSortKeys(null);
-			else if (column != null)
-				steamGamesTable.getRowSorter().toggleSortOrder(column);
-		}
+//		if (librarySortMethod.equals(SteamGamesSortMethod.AchievementsRatioAscendingOrder) || librarySortMethod.equals(SteamGamesSortMethod.AchievementsRatioDescendingOrder)) {
+//			
+//		} else {
+			if (steamGamesComparator != null) {
+				if (column == -1)
+					steamGamesTable.getRowSorter().setSortKeys(null);
+				else if (column != null)
+					steamGamesTable.getRowSorter().toggleSortOrder(column);
+			}
+//		}
 	}
 	
 	/**
@@ -2345,7 +2356,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 	 * Add a FriendWithSameGameButton for each friend with same game
 	 */
 	public void updateFriendsWithSameGamePane() {
-		if (currentSteamGame == null || currentSteamProfile == null || currentSteamProfile.getSteamFriends() == null)
+		if (currentSteamGame == null || steamAchievementsTable == null || currentSteamProfile == null || currentSteamProfile.getSteamFriends() == null)
 			return;
 		
 		// Remove old friends and success

@@ -198,4 +198,12 @@ public class SteamAchievementsList {
 		}
 		
 	}
+	
+	public String getPrintableAchievementsRatio(Double achievementsRatio) {
+        return String.format("%4.2f %%", achievementsRatio != null ? achievementsRatio : getAchievementsRatio());
+	}
+	
+	public int getCeiledAchievementsRatio(Double achievementsRatio) {
+		return Math.round(new Double(Math.ceil(achievementsRatio)).intValue());	
+	}
 }

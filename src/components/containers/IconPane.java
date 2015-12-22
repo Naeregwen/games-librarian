@@ -25,8 +25,8 @@ import javax.swing.JToolTip;
 
 import commons.api.Steam;
 import components.GamesLibrarian.WindowBuilderMask;
-import components.commons.JScrollableToolTip;
 import components.commons.adapters.SteamObjectsMouseAdapter;
+import components.tooltips.JScrollableToolTip;
 import components.workers.IconPaneReader;
 
 /**

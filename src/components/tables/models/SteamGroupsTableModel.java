@@ -17,7 +17,7 @@ package components.tables.models;
 
 import java.util.List;
 
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 
 import commons.api.SteamGroup;
 import commons.api.SteamGroup.ColumnsOrder;
@@ -26,7 +26,7 @@ import commons.api.SteamGroup.ColumnsOrder;
  * @author Naeregwen
  *
  */
-public class SteamGroupsTableModel extends DefaultTableModel {
+public class SteamGroupsTableModel extends AbstractTableModel {
 
 	/**
 	 * serialVersionUID

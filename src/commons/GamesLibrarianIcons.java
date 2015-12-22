@@ -107,6 +107,9 @@ public class GamesLibrarianIcons {
 	public static final ImageIcon steamGamesSortMethodStatsLinkAscendingOrderIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/sort_ascending_chart_bar.png"));
 	public static final ImageIcon steamGamesSortMethodStatsLinkDescendingOrderIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/sort_descending_chart_bar.png"));
 	
+	public static final ImageIcon steamAchievementsListAchievementsRatioAscendingOrderIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/sort_ascending_achievements.png"));
+	public static final ImageIcon steamAchievementsListAchievementsRatioDescendingOrderIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/sort_descending_achievements.png"));
+	
 	public static final ImageIcon steamGroupsDisplayModeListIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/application_view_list.png"));
 	public static final ImageIcon steamGroupsDisplayModeGridIcon = new ImageIcon(GamesLibrarian.class.getResource("/images/icons/application_view_tile.png"));
 

@@ -44,6 +44,8 @@ import components.commons.parsers.NumberParser;
 	"statsLink",
 	"globalStatsLink",
 	
+	"achievementsRatio",
+	
 	"loadingSource",
 	"arguments",
 	"steamLaunchMethod",
@@ -67,7 +69,8 @@ public class SteamGame extends Game {
 		appID("gamesHeaderAppID"),
 		storeLink("gamesHeaderStoreLink"), 
 		statsLink("gamesHeaderStatsLink"), 
-		globalStatsLink("gamesHeaderGlobalStatsLink");
+		globalStatsLink("gamesHeaderGlobalStatsLink"),
+		steamAchievementsRatio("gamesHeaderAchievementsRatio");
 			
 		String headerName;
 		
@@ -96,6 +99,9 @@ public class SteamGame extends Game {
 	String hoursOnRecord;
 	String statsLink;
 	String globalStatsLink;
+	
+//	Double achievementsRatio = -1.0;
+	Double achievementsRatio = null;
 	
 	String arguments;
 	SteamLaunchMethod steamLaunchMethod;
@@ -367,6 +373,13 @@ public class SteamGame extends Game {
 	}
 
 	/**
+	 * @param achievementsRatio the achievementsRatio to set
+	 */
+	public void setAchievementsRatio(Double achievementsRatio) {
+		this.achievementsRatio = achievementsRatio;
+	}
+
+	/**
 	 * @param numberParser the numberParser to set
 	 */
 	@XmlTransient
@@ -384,7 +397,7 @@ public class SteamGame extends Game {
 	/**
 	 * @param steamGameStats the steamGameStats to set
 	 */
-	@XmlElement
+	@XmlElement(name = "steamGameStats", type = SteamGameStats.class)
 	public void setSteamGameStats(SteamGameStats steamGameStats) {
 		this.steamGameStats = steamGameStats;
 		setStatistics();
@@ -398,6 +411,7 @@ public class SteamGame extends Game {
 	 * Reset all game statistics counters to zero
 	 */
 	private void resetStatistics() {
+		achievementsRatio = null;
 		totalAchievements = 0;
 		totalUnlockedAchievements = 0;
 	}
@@ -529,4 +543,27 @@ public class SteamGame extends Game {
 
 		return result;
 	}
+	
+	public Double getAchievementsRatio() {
+		if (steamGameStats == null || totalUnlockedAchievements == null || totalAchievements == null || totalAchievements == 0.0)
+			return null;
+		return achievementsRatio = totalUnlockedAchievements / new Double(totalAchievements);
+	}
+	
+	public String getPrintableAchievementsRatio(Double achievementsRatio) {
+        return String.format("%4.2f %%", (achievementsRatio != null ? achievementsRatio : getAchievementsRatio()) * 100);
+	}
+	
+	private int getCeilAchievementsRatio(Double achievementsRatio) {
+		return Math.round(new Double(Math.ceil(achievementsRatio * 100)).intValue());	
+	}
+	
+	private int getFloorAchievementsRatio(Double achievementsRatio) {
+		return Math.round(new Double(Math.floor(achievementsRatio * 100)).intValue());	
+	}
+	
+	public int getAchievementsRatioProgressValue(Double achievementsRatio) {
+		return achievementsRatio * 100.0 < 1.0 ? getCeilAchievementsRatio(achievementsRatio) : getFloorAchievementsRatio(achievementsRatio);	
+	}
+	
 }

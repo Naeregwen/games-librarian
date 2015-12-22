@@ -23,8 +23,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import commons.api.SteamGame;
+import commons.comparators.DoubleNullLastComparator;
 import commons.enums.SteamGamesSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
@@ -32,6 +35,7 @@ import components.comboboxes.SteamLaunchMethodComboBox;
 import components.containers.remotes.LaunchButton;
 import components.tables.cells.editors.SteamLaunchMethodTableCellEditor;
 import components.tables.cells.renderers.IconTableCellRenderer;
+import components.tables.cells.renderers.SteamAchievementsRatioTableCellRenderer;
 import components.tables.cells.renderers.SteamLaunchMethodTableCellRenderer;
 import components.tables.headers.listeners.SteamGamesHeaderListener;
 import components.tables.headers.renderers.SteamGamesTableHeaderRenderer;
@@ -62,7 +66,10 @@ public class SteamGamesTable extends JTable {
 		setModel(new SteamGamesTableModel(games));
 		
         // Sorting
-		setAutoCreateRowSorter(true);
+//		setAutoCreateRowSorter(true);
+		TableRowSorter<TableModel> tableRowSorter = new TableRowSorter<TableModel>(getModel());
+		tableRowSorter.setComparator(SteamGame.ColumnsOrder.steamAchievementsRatio.ordinal(), new DoubleNullLastComparator());
+		setRowSorter(tableRowSorter);
 		
 		// Table header renderer
 		JTableHeader tableHeader = getTableHeader();
@@ -71,19 +78,23 @@ public class SteamGamesTable extends JTable {
         // Table header listener
 		tableHeader.addMouseListener(new SteamGamesHeaderListener(librarian, tableHeader));
 		
-		// Logo renderer
+		// LOGO renderer
 		TableColumn logoColumn = getColumnModel().getColumn(SteamGame.ColumnsOrder.logo.ordinal());
 		logoColumn.setCellRenderer(new IconTableCellRenderer());
 		
-		// Selection handlers
-		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        getSelectionModel().addListSelectionListener(new SteamGamesTableSelectionListener(librarian, this));
-        
+		// steamAchievementsRatio renderer
+//		TableColumn steamAchievementsRatioColumn = getColumnModel().getColumn(SteamGame.ColumnsOrder.steamAchievementsRatio.ordinal());
+//		steamAchievementsRatioColumn.setCellRenderer(new SteamAchievementsRatioTableCellRenderer(this));
+		
 		// SteamLaunchMethodComboBox handlers
 		TableColumn steamLaunchMethodColumn = getColumnModel().getColumn(SteamGame.ColumnsOrder.steamLaunchMethod.ordinal());
 		steamLaunchMethodColumn.setCellRenderer(new SteamLaunchMethodTableCellRenderer(me, this));
 		steamLaunchMethodColumn.setCellEditor(new SteamLaunchMethodTableCellEditor(me, launchButtons));
 		
+		// Selection handlers
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        getSelectionModel().addListSelectionListener(new SteamGamesTableSelectionListener(librarian, this));
+        
 		// Layout & display
 		setLayout(new GridLayout(1, 0, 0, 0));
 		setRowHeight(getPreferredRowHeight());
@@ -155,6 +166,10 @@ public class SteamGamesTable extends JTable {
 				case statsLink:
 					steamGamesSortMethodIndex = sortOrder.equals(SortOrder.ASCENDING) ? SteamGamesSortMethod.StatsLinkDescendingOrder.ordinal() : SteamGamesSortMethod.StatsLinkAscendingOrder.ordinal();
 					steamGamesSortMethod = sortOrder.equals(SortOrder.ASCENDING) ? SteamGamesSortMethod.StatsLinkDescendingOrder : SteamGamesSortMethod.StatsLinkAscendingOrder;
+					break;
+				case steamAchievementsRatio:
+					steamGamesSortMethodIndex = sortOrder.equals(SortOrder.ASCENDING) ? SteamGamesSortMethod.AchievementsRatioDescendingOrder.ordinal() : SteamGamesSortMethod.AchievementsRatioAscendingOrder.ordinal();
+					steamGamesSortMethod = sortOrder.equals(SortOrder.ASCENDING) ? SteamGamesSortMethod.AchievementsRatioDescendingOrder : SteamGamesSortMethod.AchievementsRatioAscendingOrder;
 					break;
 				}
 				

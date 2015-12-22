@@ -32,12 +32,12 @@ import commons.api.SteamProfile;
 import commons.enums.SteamFriendsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
-import components.commons.JScrollableToolTip;
 import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.tables.cells.renderers.IconTableCellRenderer;
 import components.tables.headers.listeners.SteamFriendsHeaderListener;
 import components.tables.headers.renderers.SteamFriendsTableHeaderRenderer;
 import components.tables.models.SteamFriendsTableModel;
+import components.tooltips.JScrollableToolTip;
 
 public class SteamFriendsTable extends JTable {
 

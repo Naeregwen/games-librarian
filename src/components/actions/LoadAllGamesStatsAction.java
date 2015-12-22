@@ -96,7 +96,7 @@ public class LoadAllGamesStatsAction extends AbstractAction implements Translata
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		librarian.displaySubTab(LibraryTabEnum.LibraryStatistics);
+		//librarian.displaySubTab(LibraryTabEnum.LibraryStatistics);
 		me.getLibrarian().readAllSteamGamesStats();
 	}
 

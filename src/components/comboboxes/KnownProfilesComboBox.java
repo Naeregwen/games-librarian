@@ -30,8 +30,8 @@ import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.comboboxes.commons.SortedComboBoxModel;
 import components.comboboxes.renderers.KnownProfilesComboBoxRenderer;
-import components.commons.JScrollableToolTip;
 import components.commons.adapters.SteamObjectsMouseAdapter;
+import components.tooltips.JScrollableToolTip;
 
 /**
  * @author Naeregwen

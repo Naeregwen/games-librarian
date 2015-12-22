@@ -17,17 +17,17 @@ package components.tables.models;
 
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 import commons.api.SteamGame;
-import commons.api.SteamLaunchMethod;
 import commons.api.SteamGame.ColumnsOrder;
+import commons.api.SteamLaunchMethod;
 
 /**
  * @author Naeregwen
  *
  */
-public class SteamGamesTableModel extends AbstractTableModel {
+public class SteamGamesTableModel extends DefaultTableModel {
 	
 	/**
 	 * serialVersionUID
@@ -40,7 +40,7 @@ public class SteamGamesTableModel extends AbstractTableModel {
 	public SteamGamesTableModel(List<SteamGame> games) {
 		this.games = games;
 		columnNames = new String[ColumnsOrder.values().length];
-		for (int i = 0; i < ColumnsOrder.values().length; i++) 
+		for (int i = 0; i < ColumnsOrder.values().length; i++)
 			columnNames[i] = ColumnsOrder.values()[i].name();
 	}
 	
@@ -83,6 +83,7 @@ public class SteamGamesTableModel extends AbstractTableModel {
 			return SteamLaunchMethod.class;
 		case hoursLast2Weeks:
 		case hoursOnRecord:
+		case steamAchievementsRatio:
 			return Double.class;
 		case appID:
 			return Integer.class;
@@ -111,6 +112,7 @@ public class SteamGamesTableModel extends AbstractTableModel {
 		case storeLink: return ColumnsOrder.storeLink.name();
 		case globalStatsLink: return ColumnsOrder.globalStatsLink.name();
 		case statsLink: return ColumnsOrder.statsLink.name();
+		case steamAchievementsRatio: return ColumnsOrder.steamAchievementsRatio.name();
 		}
 		return null;
 	}
@@ -163,6 +165,8 @@ public class SteamGamesTableModel extends AbstractTableModel {
 			return game.getGlobalStatsLink();
 		case statsLink:
 			return game.getStatsLink();
+		case steamAchievementsRatio:
+			return game.getAchievementsRatio();
 		}
 		return null;
 	}
@@ -228,6 +232,10 @@ public class SteamGamesTableModel extends AbstractTableModel {
 			break;
 		case statsLink:
 			game.setStatsLink((String) value);
+			hasNewValue = true;
+			break;
+		case steamAchievementsRatio:
+			game.setAchievementsRatio((Double) value);
 			hasNewValue = true;
 			break;
 		}

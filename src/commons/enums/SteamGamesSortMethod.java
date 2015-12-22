@@ -46,7 +46,9 @@ public enum SteamGamesSortMethod implements GamesLibrarianActionEnum {
 	GlobalStatsLinkAscendingOrder("globalStatsLinkAscendingOrder", GamesLibrarianIcons.steamGamesSortMethodGlobalStatsLinkAscendingOrderIcon),
 	GlobalStatsLinkDescendingOrder("globalStatsLinkDescendingOrder", GamesLibrarianIcons.steamGamesSortMethodGlobalStatsLinkDescendingOrderIcon),
 	StatsLinkAscendingOrder("statsLinkAscendingOrder", GamesLibrarianIcons.steamGamesSortMethodStatsLinkAscendingOrderIcon),
-	StatsLinkDescendingOrder("statsLinkDescendingOrder", GamesLibrarianIcons.steamGamesSortMethodStatsLinkDescendingOrderIcon);
+	StatsLinkDescendingOrder("statsLinkDescendingOrder", GamesLibrarianIcons.steamGamesSortMethodStatsLinkDescendingOrderIcon),
+	AchievementsRatioAscendingOrder("achievementsRatioAscendingOrder", GamesLibrarianIcons.steamAchievementsListAchievementsRatioAscendingOrderIcon),
+	AchievementsRatioDescendingOrder("achievementsRatioDescendingOrder", GamesLibrarianIcons.steamAchievementsListAchievementsRatioDescendingOrderIcon);
 	
 	String labelKey;
 	ImageIcon icon;

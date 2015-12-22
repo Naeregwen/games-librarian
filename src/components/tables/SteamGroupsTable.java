@@ -31,12 +31,12 @@ import commons.api.SteamGroup;
 import commons.enums.SteamGroupsSortMethod;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
-import components.commons.JScrollableToolTip;
 import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.tables.cells.renderers.IconTableCellRenderer;
 import components.tables.headers.listeners.SteamGroupsHeaderListener;
 import components.tables.headers.renderers.SteamGroupsTableHeaderRenderer;
 import components.tables.models.SteamGroupsTableModel;
+import components.tooltips.JScrollableToolTip;
 
 /**
  * @author Naeregwen

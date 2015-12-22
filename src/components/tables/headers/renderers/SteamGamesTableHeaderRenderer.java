@@ -43,7 +43,7 @@ public class SteamGamesTableHeaderRenderer extends DefaultTableHeaderCellRendere
 		Component header = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		
 		if (header instanceof JLabel) {
-			ColumnsOrder columnsOrder = ColumnsOrder.valueOf((String) value); 
+			ColumnsOrder columnsOrder = ColumnsOrder.valueOf((String) value);
 			ResourceBundle UITexts = ResourceBundle.getBundle("i18n/UITexts");
 			((JLabel) header).setText(UITexts.getString(columnsOrder.getHeaderName()));
 		}

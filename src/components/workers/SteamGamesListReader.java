@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
@@ -100,8 +101,6 @@ public class SteamGamesListReader extends SwingWorker<SteamGamesList, String> {
 	/*/
 	 * (non-Javadoc)(
 	 * @see javax.swing.SwingWorker#done()
-	 * 
-	 * TODO: CancellationException
 	 */
 	@Override
 	protected void done() {
@@ -126,7 +125,7 @@ public class SteamGamesListReader extends SwingWorker<SteamGamesList, String> {
 					librarian.updateAllLibraryTabs();
 				}
 			}
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (InterruptedException | ExecutionException | CancellationException e) {
 			librarian.getTee().printStackTrace(e);
 		}
 		librarian.updateLibraryMainTabTitle();

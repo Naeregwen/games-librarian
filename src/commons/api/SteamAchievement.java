@@ -15,24 +15,30 @@
  */
 package commons.api;
 
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import commons.api.adapters.BooleanAdapter;
 
 /**
  * @author Naeregwen
  *
  */
 @XmlRootElement (name = "steamAchievement")
-//@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType (propOrder = { 
+@XmlType (propOrder = {
+		
 	"name",
 	"description",
 	"unlockTimestamp",
 	"iconClosed",
 	"iconOpen",
 	"apiname",
+	
 	"initialPosition"
 })
 public class SteamAchievement {
@@ -108,7 +114,9 @@ public class SteamAchievement {
 	/**
 	 * @param closed the closed to set
 	 */
+//	@XmlAccessType(name= "closed")
 	@XmlAttribute
+	@XmlJavaTypeAdapter(BooleanAdapter.class)
 	public void setClosed(Boolean closed) {
 		this.closed = closed;
 	}

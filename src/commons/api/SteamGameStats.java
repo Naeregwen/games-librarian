@@ -280,7 +280,7 @@ public class SteamGameStats {
 	/**
 	 * @param steamAchievementsList the steamAchievementsList to set
 	 */
-	@XmlElement(type = SteamAchievementsList.class)
+	@XmlElement(name = "steamAchievementsList", type = SteamAchievementsList.class)
 	public void setSteamAchievementsList(SteamAchievementsList steamAchievementsList) {
 		this.steamAchievementsList = steamAchievementsList;
 	}

@@ -24,7 +24,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -45,20 +44,19 @@ import components.GamesLibrarian;
 import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.commons.ColoredTee;
-import components.commons.ImageToolTip;
 import components.commons.adapters.LaunchButtonMouseAdapter;
 import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.commons.interfaces.Translatable;
-import components.commons.ui.ImageToolTipUIHelper;
 import components.containers.BoundedButton;
 import components.containers.commons.RemoteIconButton;
+import components.tooltips.ImageToolTip;
 import components.workers.RemoteIconReader;
 
 /**
  * @author Naeregwen
  *
  */
-public class LaunchButton extends BoundedButton implements Translatable, RemoteIconButton, ImageToolTipUIHelper, ActionListener {
+public class LaunchButton extends BoundedButton implements Translatable, RemoteIconButton, ActionListener {
 
 	/**
 	 * serialVersionUID
@@ -103,11 +101,14 @@ public class LaunchButton extends BoundedButton implements Translatable, RemoteI
 	/*/
 	 * (non-Javadoc)
 	 * @see javax.swing.JComponent#createToolTip()
+	 * TODO: Remove delayed HTML display (updateTooltip())
 	 */
 	@Override
 	public JToolTip createToolTip() {
-		JToolTip tooltip = new ImageToolTip((ImageIcon) getIcon(), this);
+		Double achievementsRatio = game != null ? game.getAchievementsRatio() : null;
+		JToolTip tooltip = new ImageToolTip((ImageIcon) getIcon(), (achievementsRatio != null && achievementsRatio != -1.0) ? game.getAchievementsRatioProgressValue(achievementsRatio) : null);
 		tooltip.setBorder(new LineBorder(Color.BLACK));
+		updateTooltip();
 		return tooltip;
     }
 
@@ -206,6 +207,14 @@ public class LaunchButton extends BoundedButton implements Translatable, RemoteI
 	private String getHoursLast2WeeksToolTipText() {
 		Parameters parameters = librarian.getParameters();
 		return String.format(parameters.getUITexts().getString("launchButtonHoursLast2WeeksToolTip"), (game.getHoursLast2Weeks() != null ? game.getHoursLast2Weeks() : "0"));
+	} 
+	
+	/**
+	 * @return the AchievementsRatio ToolTipText
+	 */
+	private String getAchievementsRatioToolTipText() {
+		Parameters parameters = librarian.getParameters();
+		return String.format(parameters.getUITexts().getString("launchButtonAchievementsRatioToolTip"), game.getPrintableAchievementsRatio(null));
 	} 
 	
 	/**
@@ -315,25 +324,33 @@ public class LaunchButton extends BoundedButton implements Translatable, RemoteI
 			setToolTipText(htmlStart + parameters.getUITexts().getString("launchButtonErrorToolTip") + htmlStop);
 		} else {
 			if (game.getName() != null) {
+				URL url = GamesLibrarian.class.getResource(game.getSteamLaunchMethod().getIconPath());
 				String gameTitle = String.format(parameters.getUITexts().getString("launchButtonGameTitleToolTip"), game.getName());
 				String steamLaunchMethod = parameters.getUITexts().getString(SteamLaunchMethod.values()[game.getSteamLaunchMethod().ordinal()].getLabelKey());
-				URL url = GamesLibrarian.class.getResource(game.getSteamLaunchMethod().getIconPath());
+				Double achievementsRatio = game.getAchievementsRatio();
+				Boolean hasAchievements = achievementsRatio != null && achievementsRatio != -1.0;
+				
 				setToolTipText(
-						htmlStart +
-						// Do it old school (HTML 3.2 with Swing HTMLEditorKit)
-						// Table style seems to be the only way to vertically align an image and a text with swing HTMLEditorKit
-						// 3px is the padding from javax.swing.plaf.basic.BasicToolTipUI.paint(Graphics g, JComponent c)
-						"<table style='padding: 0px; margin: 3px 0px 0px 0px; border: 1px solid black'>" +
-						"<tr style='margin: 0px; padding: 0px'>" + 
-						"<td style='margin: 0px; padding: 0px'><img width='16px' height='16px' src='" + url + "'></td>" +
-						"<td style='margin: 0px; padding: 0px'><div style='font-weight: bold'>" + steamLaunchMethod + "</div></td>" +
-						"</tr>" +
-						"</table>" +
-						"<h1 style='text-align:center; vertical-align: super'>" + gameTitle + "</h1>" +
-						getHoursOnRecordToolTipText() + 
-						"<br/>" + 
-						getHoursLast2WeeksToolTipText() + 
-						htmlStop);
+					htmlStart +
+					// Do it old school (HTML 3.2 with Swing HTMLEditorKit)
+					// Table style seems to be the only way to vertically align an image and a text with swing HTMLEditorKit
+					// 3px is the padding from javax.swing.plaf.basic.BasicToolTipUI.paint(Graphics g, JComponent c)
+					"<table style='padding: 0px; margin: 3px 0px 0px 0px; border: 1px solid black'>" +
+					"<tr style='margin: 0px; padding: 0px'>" + 
+					"<td style='margin: 0px; padding: 0px'><img width='16px' height='16px' src='" + url + "'></td>" +
+					"<td style='margin: 0px; padding: 0px'><div style='font-weight: bold'>" + steamLaunchMethod + "</div></td>" +
+					"</tr>" +
+					"</table>" +
+					"<h1 style='text-align:center; vertical-align: super'>" + gameTitle + "</h1>" +
+					getHoursOnRecordToolTipText() +
+					"<br/>" +
+					getHoursLast2WeeksToolTipText() +
+					(hasAchievements ?
+					"<br/>" +
+					getAchievementsRatioToolTipText() +
+					"<br/>" 
+					: "") +
+					htmlStop);
 			} else
 				setToolTipText(htmlStart + tooltipTitle + htmlStop);
 		}
@@ -446,30 +463,12 @@ public class LaunchButton extends BoundedButton implements Translatable, RemoteI
 
 	/*/
 	 * (non-Javadoc)
-	 * @see components.commons.ui.ImageToolTipUIHelper#getImageIcon()
-	 */
-	@Override
-	public Icon getImageIcon() {
-		return super.getIcon();
-	}
-
-	/*/
-	 * (non-Javadoc)
-	 * @see components.commons.ui.ImageToolTipUIHelper#setImageIcon(javax.swing.ImageIcon)
-	 */
-	@Override
-	public void setImageIcon(ImageIcon icon) {
-		resizeAndSetIcon(icon);
-		if (game != null) updateIconAndTooltip(); // WindowBuilder
-	}
-
-	/*/
-	 * (non-Javadoc)
 	 * @see components.containers.commons.RemoteIconButton#setIcon(javax.swing.ImageIcon)
 	 */
 	@Override
 	public void setIcon(ImageIcon icon) {
-		setImageIcon(icon);
+		resizeAndSetIcon(icon);
+		if (game != null) updateIconAndTooltip(); // WindowBuilder
 	}
 
 	/*/

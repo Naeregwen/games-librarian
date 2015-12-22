@@ -29,10 +29,10 @@ import components.GamesLibrarian.WindowBuilderMask;
 import components.Librarian;
 import components.commons.BundleManager;
 import components.commons.ColoredTee;
-import components.commons.JScrollableToolTip;
 import components.commons.adapters.SteamObjectsMouseAdapter;
 import components.commons.adapters.SteamProfileMouseAdapter;
 import components.containers.commons.RemoteIconButton;
+import components.tooltips.JScrollableToolTip;
 import components.workers.RemoteIconReader;
 
 /**

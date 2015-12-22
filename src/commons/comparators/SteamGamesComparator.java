@@ -46,33 +46,56 @@ public class SteamGamesComparator implements Comparator<SteamGame> {
 			return 0;
 	}
 	
-	private int compareGamesHours(SteamGame steamGame1, SteamGame steamGame2, SteamGamesSortMethod steamGamesSortMethod) {
+	private int compareNumbers(SteamGame steamGame1, SteamGame steamGame2, SteamGamesSortMethod steamGamesSortMethod) {
 		
 		int comparisonResult = 0;
 		
 		boolean isGameTime1Valid = false;
 		boolean isGameTime2Valid = false;
-		Float gameTime1 = null;
-		Float gameTime2 = null;
+		
+		Double gameTime1 = null;
+		Double gameTime2 = null;
+		
 		String gameName1 = null;
 		String gameName2 = null;
+		
+		Double steamAchievementsRatio1 = steamGame1.getAchievementsRatio();
+		Double steamAchievementsRatio2 = steamGame2.getAchievementsRatio();
+		
 		boolean steamGamesSortMethodIsHoursOnRecord = steamGamesSortMethod.equals(SteamGamesSortMethod.HoursOnRecordAscendingOrder) || steamGamesSortMethod.equals(SteamGamesSortMethod.HoursOnRecordDescendingOrder) ? true : false;
 		boolean steamGamesSortMethodIsHoursLast2Weeks = steamGamesSortMethod.equals(SteamGamesSortMethod.HoursLast2WeeksAscendingOrder) || steamGamesSortMethod.equals(SteamGamesSortMethod.HoursLast2WeeksDescendingOrder) ? true : false;
+		boolean steamGamesSortMethodIsAppId = steamGamesSortMethod.equals(SteamGamesSortMethod.AppIdAscendingOrder) || steamGamesSortMethod.equals(SteamGamesSortMethod.AppIdDescendingOrder) ? true : false;
+		boolean steamGamesSortMethodIsAchievementsRatio = steamGamesSortMethod.equals(SteamGamesSortMethod.AchievementsRatioAscendingOrder) || steamGamesSortMethod.equals(SteamGamesSortMethod.AchievementsRatioDescendingOrder) ? true : false;
+		
+		Boolean ascending = (steamGamesSortMethod.equals(SteamGamesSortMethod.HoursOnRecordAscendingOrder) 
+				|| steamGamesSortMethod.equals(SteamGamesSortMethod.HoursLast2WeeksAscendingOrder)
+				|| steamGamesSortMethod.equals(SteamGamesSortMethod.AppIdAscendingOrder)
+				|| steamGamesSortMethod.equals(SteamGamesSortMethod.AchievementsRatioAscendingOrder));
 		
 		if (steamGame1 != null && (
-				(steamGamesSortMethodIsHoursOnRecord && (steamGame1.getHoursOnRecord()) != null)) 
-				|| (steamGamesSortMethodIsHoursLast2Weeks && (steamGame1.getHoursLast2Weeks()) != null)) {
+				(steamGamesSortMethodIsHoursOnRecord && steamGame1.getHoursOnRecord() != null)
+				|| (steamGamesSortMethodIsHoursLast2Weeks && steamGame1.getHoursLast2Weeks() != null)
+				|| (steamGamesSortMethodIsAppId && steamGame1.getAppID() != null)
+				|| (steamGamesSortMethodIsAchievementsRatio && steamAchievementsRatio1 != null))) {
 			try {
-				gameTime1 = Float.parseFloat(steamGame1.getHoursOnRecord());
-				if (gameTime1 != null)
+				gameTime1 = steamGamesSortMethodIsAchievementsRatio ? steamAchievementsRatio1 : Double.parseDouble(
+						steamGamesSortMethodIsHoursOnRecord ? steamGame1.getHoursOnRecord() : 
+							(steamGamesSortMethodIsHoursLast2Weeks ? steamGame1.getHoursLast2Weeks() : steamGame1.getAppID()));
+				if (gameTime1 != null && (!steamGamesSortMethodIsAchievementsRatio || steamAchievementsRatio1 != -1.0))
 					isGameTime1Valid = true;
 			} catch (NumberFormatException e) {}
 		}
 		
-		if (steamGame2 != null && steamGame2.getHoursOnRecord() != null) {
+		if (steamGame2 != null && (
+				(steamGamesSortMethodIsHoursOnRecord && steamGame2.getHoursOnRecord() != null)
+				|| (steamGamesSortMethodIsHoursLast2Weeks && steamGame2.getHoursLast2Weeks() != null)
+				|| (steamGamesSortMethodIsAppId && steamGame2.getAppID() != null)
+				|| (steamGamesSortMethodIsAchievementsRatio && steamAchievementsRatio2 != null))) {
 			try {
-				gameTime2 = Float.parseFloat(steamGame2.getHoursOnRecord());
-				if (gameTime2 != null)
+				gameTime2 = steamGamesSortMethodIsAchievementsRatio ? steamAchievementsRatio2 : Double.parseDouble(
+						steamGamesSortMethodIsHoursOnRecord ? steamGame2.getHoursOnRecord() : 
+							(steamGamesSortMethodIsHoursLast2Weeks ? steamGame2.getHoursLast2Weeks() : steamGame2.getAppID()));
+				if (gameTime2 != null && (!steamGamesSortMethodIsAchievementsRatio || steamAchievementsRatio2 != -1.0))
 					isGameTime2Valid = true;
 			} catch (NumberFormatException e) {}
 		}
@@ -95,6 +118,19 @@ public class SteamGamesComparator implements Comparator<SteamGame> {
 		else
 			comparisonResult = 0;
 		
+		if (!isGameTime1Valid)
+			if (!isGameTime2Valid)
+				// Restore initial position when time stamps are empty
+				// Ensure initial position stability (does not respect asked order)
+				comparisonResult = compareString(gameName1, gameName2);
+			else
+				comparisonResult = ascending ? 1 : -1; // Null values are always positioned on last results
+		else
+			if (!isGameTime2Valid)
+				comparisonResult = ascending ? -1 : 1;
+			else
+				comparisonResult = gameTime1.compareTo(gameTime2);				
+				
 		return comparisonResult;
 	}
 	
@@ -102,7 +138,7 @@ public class SteamGamesComparator implements Comparator<SteamGame> {
 	public int compare(SteamGame steamGame1, SteamGame steamGame2) {
 		
 		int comparisonResult = 0;
-		
+		System.out.println("librarySortMethod = " + librarySortMethod);
 		switch (librarySortMethod) {
 		
 		case InitialAscendingOrder:
@@ -126,15 +162,15 @@ public class SteamGamesComparator implements Comparator<SteamGame> {
 			break;
 		case HoursLast2WeeksAscendingOrder:
 		case HoursLast2WeeksDescendingOrder:
-			comparisonResult = compareGamesHours(steamGame1, steamGame2, librarySortMethod);
+			comparisonResult = compareNumbers(steamGame1, steamGame2, librarySortMethod);
 			break;
 		case HoursOnRecordAscendingOrder:
 		case HoursOnRecordDescendingOrder:
-			comparisonResult = compareGamesHours(steamGame1, steamGame2, librarySortMethod);
+			comparisonResult = compareNumbers(steamGame1, steamGame2, librarySortMethod);
 			break;
 		case AppIdAscendingOrder:
 		case AppIdDescendingOrder:
-			comparisonResult =  compareString(steamGame1.getAppID(), steamGame2.getAppID());
+			comparisonResult = compareNumbers(steamGame1, steamGame2, librarySortMethod);
 			break;
 		case StoreLinkAscendingOrder:
 		case StoreLinkDescendingOrder:
@@ -148,8 +184,12 @@ public class SteamGamesComparator implements Comparator<SteamGame> {
 		case StatsLinkDescendingOrder:
 			comparisonResult =  compareString(steamGame1.getStatsLink(), steamGame2.getStatsLink());
 			break;
+		case AchievementsRatioAscendingOrder:
+		case AchievementsRatioDescendingOrder:
+			comparisonResult = compareNumbers(steamGame1, steamGame2, librarySortMethod);
+			System.out.println("librarySortMethod = " + librarySortMethod + ", steamGame1 = " + (steamGame1.getAchievementsRatio() == null ? "null" : steamGame1.getAchievementsRatio()) + ", steamGame2 = " + (steamGame2.getAchievementsRatio() == null ? "null" : steamGame2.getAchievementsRatio()) + ", comparisonResult = " + comparisonResult);
+			break;
 		}
-		
-		return comparisonDirection == ComparisonDirection.Ascendant ? comparisonResult : -comparisonResult;
+		return comparisonResult;
 	}
 }

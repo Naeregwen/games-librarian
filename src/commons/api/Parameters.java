@@ -496,7 +496,7 @@ public class Parameters implements GameLeftClickActionObservables {
 	/**
 	 * @param steamGamesList the steamGamesList to set
 	 */
-	@XmlElement
+	@XmlElement(name = "steamGamesList", type = SteamGamesList.class)
 	public void setSteamGamesList(SteamGamesList steamGamesList) {
 		this.steamGamesList = steamGamesList;
 	}
