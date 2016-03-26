@@ -74,7 +74,6 @@ import commons.api.SteamGroup;
 import commons.api.SteamProfile;
 import commons.api.parsers.SteamGameStatsParser;
 import commons.api.parsers.SteamProfileParser;
-import commons.comparators.DoubleNullLastComparator;
 import commons.comparators.LaunchButtonsComparator;
 import commons.comparators.SteamFriendButtonsComparator;
 import commons.comparators.SteamFriendsComparator;
@@ -1529,20 +1528,36 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 
 			steamGamesList.setAchievementsStatistics();
 			
-    		view.libraryTotalFinishedGamesTextField.setText(steamGamesList.getTotalFinishedGames().toString());
-    		view.libraryTotalGamesWithInvalidStatsTextField.setText(steamGamesList.getTotalGamesWithInvalidStats().toString());
-    		view.libraryTotalAchievementsTextField.setText(steamGamesList.getTotalAchievements().toString());
-    		view.libraryTotalUnlockedAchievementsTextField.setText(steamGamesList.getTotalUnlockedAchievements().toString());
+    		view.libraryTotalFinishedGamesTextField.setText(steamGamesList.getFinishedGamesCount().toString());
+    		view.libraryTotalGamesWithInvalidStatsTextField.setText(steamGamesList.getGamesWithInvalidStatsCount().toString());
+    		view.libraryTotalAchievementsTextField.setText(steamGamesList.getAchievementsCount().toString());
+    		view.libraryTotalUnlockedAchievementsTextField.setText(steamGamesList.getUnlockedAchievementsCount().toString());
     		
 			// Percentage output formatter
 			NumberFormat percentFormat = NumberFormat.getPercentInstance();
 			percentFormat.setMaximumFractionDigits(2);
 			
-			Double totalUnlockedAchievements = new Double(steamGamesList.getTotalUnlockedAchievements());
-			Double totalAchievements = new Double(steamGamesList.getTotalAchievements());
-    		view.libraryPercentageAchievedTextField.setText(percentFormat.format(totalAchievements == 0 ? 0 : totalUnlockedAchievements / totalAchievements));
+			// Display percentage achieved
+			Double unlockedAchievementsCount = new Double(steamGamesList.getUnlockedAchievementsCount());
+			Double achievementsCount = new Double(steamGamesList.getAchievementsCount());
+    		view.libraryPercentageAchievedTextField.setText(percentFormat.format(achievementsCount == 0 ? 0 : unlockedAchievementsCount / achievementsCount));
 
-    		// Do not signal games invalid statistics when translating the GUI
+			// Display average percentage achieved
+			Double achievementsForAveragePercentageCount = new Double(steamGamesList.getAchievementsForAveragePercentageCount());
+    		view.libraryAveragePercentageAchievedTextField.setText(percentFormat.format(achievementsForAveragePercentageCount == 0 ? 0 : unlockedAchievementsCount / achievementsForAveragePercentageCount));
+    		
+			// Display average percentage achieved formatted label
+    		String labelName = "libraryAveragePercentageAchievedTooltip0";
+    		if (unlockedAchievementsCount <= 1)
+    			labelName = "libraryAveragePercentageAchievedTooltip0";
+    		else
+    			if (steamGamesList.getGamesWithUnlockedAchievementsCount() <= 1)
+    				labelName = "libraryAveragePercentageAchievedTooltip1";
+    			else
+    				labelName = "libraryAveragePercentageAchievedTooltip2";
+    		view.libraryAveragePercentageAchievedFormattedLabel.setText(String.format(BundleManager.getUITexts(me, labelName), unlockedAchievementsCount.intValue(), steamGamesList.getGamesWithUnlockedAchievementsCount()));
+    		
+			// Do not signal games invalid statistics when translating the GUI
     		if (!translating) {
 	    		for (SteamGame game : currentSteamProfile.getSteamGames()) {
 					if ((game.getStatsLink() != null && !game.getStatsLink().trim().equals(""))

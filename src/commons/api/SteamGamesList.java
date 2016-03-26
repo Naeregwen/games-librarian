@@ -46,10 +46,12 @@ import components.commons.parsers.UnacceptableValueTypeException;
 	"totalWastedHours",
 	"totalHoursLast2Weeks",
 
-	"totalAchievements",
-	"totalUnlockedAchievements",
-	"totalGamesWithInvalidStats",
-	"totalFinishedGames",
+	"achievementsCount",
+	"unlockedAchievementsCount",
+	"gamesWithInvalidStatsCount",
+	"finishedGamesCount",
+	"achievementsForAveragePercentageCount",
+	"gamesWithUnlockedAchievementsCount",
 	
 	"steamGames"
 })
@@ -68,10 +70,13 @@ public class SteamGamesList {
 	Double totalWastedHours = 0d;
 	Double totalHoursLast2Weeks = 0d;
 	
-	Integer totalAchievements = 0;
-	Integer totalUnlockedAchievements = 0;
-	Integer totalGamesWithInvalidStats = 0;
-	Integer totalFinishedGames = 0;
+	Integer achievementsCount = 0;
+	Integer unlockedAchievementsCount = 0;
+	Integer gamesWithInvalidStatsCount = 0;
+	Integer finishedGamesCount = 0;
+	// Achievements from games with unlocked achievements count
+	Integer achievementsForAveragePercentageCount = 0;
+	Integer gamesWithUnlockedAchievementsCount = 0;
 	
 	// Tools
 	private NumberParser numberParser;
@@ -236,63 +241,85 @@ public class SteamGamesList {
 	}
 
 	/**
-	 * @return the totalAchievements
+	 * @return the achievementsCount
 	 */
-	public Integer getTotalAchievements() {
-		return totalAchievements;
+	public Integer getAchievementsCount() {
+		return achievementsCount;
 	}
 
 	/**
-	 * @param totalAchievements the totalAchievements to set
+	 * @param achievementsCount the achievementsCount to set
 	 */
 	@XmlElement
-	protected void setTotalAchievements(Integer totalAchievements) {
-		this.totalAchievements = totalAchievements;
+	protected void setTotalAchievements(Integer achievementsCount) {
+		this.achievementsCount = achievementsCount;
 	}
 
 	/**
-	 * @return the totalUnlockedAchievements
+	 * @return the unlockedAchievementsCount
 	 */
-	public Integer getTotalUnlockedAchievements() {
-		return totalUnlockedAchievements;
+	public Integer getUnlockedAchievementsCount() {
+		return unlockedAchievementsCount;
 	}
 
 	/**
-	 * @param totalUnlockedAchievements the totalUnlockedAchievements to set
-	 */
-	@XmlElement
-	protected void setTotalUnlockedAchievements(Integer totalUnlockedAchievements) {
-		this.totalUnlockedAchievements = totalUnlockedAchievements;
-	}
-
-	/**
-	 * @return the totalGamesWithInvalidStats
-	 */
-	public Integer getTotalGamesWithInvalidStats() {
-		return totalGamesWithInvalidStats;
-	}
-
-	/**
-	 * @param totalGamesWithInvalidStats the totalGamesWithInvalidStats to set
+	 * @param unlockedAchievementsCount the unlockedAchievementsCount to set
 	 */
 	@XmlElement
-	protected void setTotalGamesWithInvalidStats(Integer totalGamesWithErroredStats) {
-		this.totalGamesWithInvalidStats = totalGamesWithErroredStats;
+	protected void setUnlockedAchievementsCount(Integer unlockedAchievementsCount) {
+		this.unlockedAchievementsCount = unlockedAchievementsCount;
 	}
 
 	/**
-	 * @return the totalFinishedGames
+	 * @return the achievementsForAveragePercentageCount
 	 */
-	public Integer getTotalFinishedGames() {
-		return totalFinishedGames;
+	public Integer getAchievementsForAveragePercentageCount() {
+		return achievementsForAveragePercentageCount;
 	}
 
 	/**
-	 * @param totalFinishedGames the totalFinishedGames to set
+	 * @param achievementsForAveragePercentageCount the achievementsForAveragePercentageCount to set
 	 */
 	@XmlElement
-	protected void setTotalFinishedGames(Integer totalFinishedGames) {
-		this.totalFinishedGames = totalFinishedGames;
+	protected void setAchievementsForAveragePercentageCount(Integer achievementsForAveragePercentageCount) {
+		this.achievementsForAveragePercentageCount = achievementsForAveragePercentageCount;
+	}
+
+	/**
+	 * @return the finishedGamesCount
+	 */
+	public Integer getFinishedGamesCount() {
+		return finishedGamesCount;
+	}
+
+	/**
+	 * @param finishedGamesCount the finishedGamesCount to set
+	 */
+	@XmlElement
+	protected void setFinishedGamesCount(Integer finishedGamesCount) {
+		this.finishedGamesCount = finishedGamesCount;
+	}
+
+	/**
+	 * @return the gamesWithInvalidStatsCount
+	 */
+	public Integer getGamesWithInvalidStatsCount() {
+		return gamesWithInvalidStatsCount;
+	}
+
+	/**
+	 * @param gamesWithInvalidStatsCount the gamesWithInvalidStatsCount to set
+	 */
+	@XmlElement
+	protected void setGamesWithInvalidStatsCount(Integer gamesWithErroredStatsCount) {
+		this.gamesWithInvalidStatsCount = gamesWithErroredStatsCount;
+	}
+
+	/**
+	 * @return the gamesWithUnlockedAchievementsCount
+	 */
+	public Integer getGamesWithUnlockedAchievementsCount() {
+		return gamesWithUnlockedAchievementsCount;
 	}
 
 	/**
@@ -329,16 +356,20 @@ public class SteamGamesList {
 				&& steamGame.getSteamGameStats().getSteamAchievementsList() != null 
 				&& steamGame.getSteamGameStats().getSteamAchievementsList().getSteamAchievements() != null
 				&& steamGame.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() > 0) {
-			totalAchievements += steamGame.getTotalAchievements();
-			totalUnlockedAchievements += steamGame.getTotalUnlockedAchievements();
+			achievementsCount += steamGame.getTotalAchievements();
+			unlockedAchievementsCount += steamGame.getTotalUnlockedAchievements();
+			if (steamGame.getTotalUnlockedAchievements() > 0) {
+				gamesWithUnlockedAchievementsCount++;
+				achievementsForAveragePercentageCount += steamGame.getTotalAchievements();
+			}
 			if (steamGame.getTotalAchievements().equals(steamGame.getTotalUnlockedAchievements()))
-				totalFinishedGames++;
+				finishedGamesCount++;
 		} else if ((steamGame.getStatsLink() != null && !steamGame.getStatsLink().trim().equals(""))
 				&& (steamGame.getSteamGameStats() == null
 					|| steamGame.getSteamGameStats().getSteamAchievementsList() == null
 					|| steamGame.getSteamGameStats().getSteamAchievementsList().getSteamAchievements() == null
 					|| steamGame.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() <= 0)) {
-			totalGamesWithInvalidStats++;
+			gamesWithInvalidStatsCount++;
 		}
 	}
 		
@@ -375,10 +406,12 @@ public class SteamGamesList {
 	 * Reset to zero only statistics counters relatives to achievements
 	 */
 	private void resetAchievementsStatistics() {
-		totalFinishedGames = 0;
-		totalAchievements = 0;
-		totalUnlockedAchievements = 0;
-		totalGamesWithInvalidStats = 0;
+		finishedGamesCount = 0;
+		achievementsCount = 0;
+		unlockedAchievementsCount = 0;
+		gamesWithInvalidStatsCount = 0;
+		achievementsForAveragePercentageCount = 0;
+		gamesWithUnlockedAchievementsCount = 0;
 	}
 	
 	/**

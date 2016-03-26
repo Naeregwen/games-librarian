@@ -358,6 +358,10 @@ public class GamesLibrarian extends JFrame {
 	TranslatableLabel libraryPercentageAchievedLabel;
 	JTextField libraryPercentageAchievedTextField;
 	
+	TranslatableLabel libraryAveragePercentageAchievedLabel;
+	JTextField libraryAveragePercentageAchievedTextField;
+	JLabel libraryAveragePercentageAchievedFormattedLabel;
+	
 	// Game Tab
 	
 	JPanel gameCommandsPane;
@@ -1449,7 +1453,7 @@ public class GamesLibrarian extends JFrame {
 		// Main pane
 		libraryStatisticsMainPane = new JPanel();
 		libraryStatisticsMainPane.setName("libraryStatisticsTab");
-		libraryStatisticsMainPane.setLayout(new MigLayout("", "[][][]", "[][][][][][][][][][][]"));
+		libraryStatisticsMainPane.setLayout(new MigLayout("", "[][][grow][][][grow]", "[][][][][][]"));
 		
 		libraryMainPane.addTab(getTabTitle(BundleManager.getUITexts(me, "libraryStatisticsTabTitle")), GamesLibrarianIcons.libraryStatisticsMenuIcon, libraryStatisticsMainPane, null);
 		
@@ -1463,6 +1467,15 @@ public class GamesLibrarian extends JFrame {
 		
 		libraryStatisticsMainPane.add(libraryTotalGamesTextField, "flowx,cell 1 0,growx");
 		
+		// libraryTotalFinishedGames
+		libraryTotalFinishedGamesLabel = new TranslatableLabel(me, "libraryTotalFinishedGamesLabel");
+		libraryStatisticsMainPane.add(libraryTotalFinishedGamesLabel, "cell 3 0,alignx trailing");
+		
+		libraryTotalFinishedGamesTextField = new JTextField();
+		libraryTotalFinishedGamesTextField.setEditable(false);
+		libraryTotalFinishedGamesTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryTotalFinishedGamesTextField, "cell 4 0,growx");
+		
 		// libraryTotalGamesWithStats
 		libraryTotalGamesWithStatsLabel = new TranslatableLabel(me, "libraryTotalGamesWithStatsLabel");
 		libraryStatisticsMainPane.add(libraryTotalGamesWithStatsLabel, "cell 0 1,alignx trailing");
@@ -1472,6 +1485,15 @@ public class GamesLibrarian extends JFrame {
 		libraryTotalGamesWithStatsTextField.setColumns(10);
 		
 		libraryStatisticsMainPane.add(libraryTotalGamesWithStatsTextField, "cell 1 1");
+		
+		// libraryTotalGamesWithInvalidStats
+		libraryTotalGamesWithInvalidStatsLabel = new TranslatableLabel(me, "libraryTotalGamesWithInvalidStatsLabel");
+		libraryStatisticsMainPane.add(libraryTotalGamesWithInvalidStatsLabel, "cell 3 1,alignx trailing");
+		
+		libraryTotalGamesWithInvalidStatsTextField = new JTextField();
+		libraryTotalGamesWithInvalidStatsTextField.setEditable(false);
+		libraryTotalGamesWithInvalidStatsTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryTotalGamesWithInvalidStatsTextField, "cell 4 1,growx");
 		
 		// libraryTotalGamesWithGlobalStats
 		libraryTotalGamesWithGlobalStatsLabel = new TranslatableLabel(me, "libraryTotalGamesWithGlobalStatsLabel");
@@ -1483,6 +1505,15 @@ public class GamesLibrarian extends JFrame {
 		
 		libraryStatisticsMainPane.add(libraryTotalGamesWithGlobalStatsTextField, "cell 1 2,growx");
 		
+		// libraryTotalAchievements
+		libraryTotalAchievementsLabel = new TranslatableLabel(me, "libraryTotalAchievementsLabel");
+		libraryStatisticsMainPane.add(libraryTotalAchievementsLabel, "cell 3 2,alignx trailing");
+		
+		libraryTotalAchievementsTextField = new JTextField();
+		libraryTotalAchievementsTextField.setEditable(false);
+		libraryTotalAchievementsTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryTotalAchievementsTextField, "cell 4 2,growx");
+		
 		// libraryTotalGamesWithStoreLink
 		libraryTotalGamesWithStoreLinkLabel = new TranslatableLabel(me, "libraryTotalGamesWithStoreLinkLabel");
 		libraryStatisticsMainPane.add(libraryTotalGamesWithStoreLinkLabel, "cell 0 3,alignx trailing");
@@ -1492,6 +1523,15 @@ public class GamesLibrarian extends JFrame {
 		libraryTotalGamesWithStoreLinkTextField.setColumns(10);
 		
 		libraryStatisticsMainPane.add(libraryTotalGamesWithStoreLinkTextField, "cell 1 3,growx");
+		
+		// libraryTotalUnlockedAchievements
+		libraryTotalUnlockedAchievementsLabel = new TranslatableLabel(me, "libraryTotalUnlockedAchievementsLabel");
+		libraryStatisticsMainPane.add(libraryTotalUnlockedAchievementsLabel, "cell 3 3,alignx trailing");
+		
+		libraryTotalUnlockedAchievementsTextField = new JTextField();
+		libraryTotalUnlockedAchievementsTextField.setEditable(false);
+		libraryTotalUnlockedAchievementsTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryTotalUnlockedAchievementsTextField, "cell 4 3,growx");
 		
 		// libraryTotalWastedHours
 		libraryTotalWastedHoursLabel = new TranslatableLabel(me, "libraryTotalWastedHoursLabel");
@@ -1506,6 +1546,15 @@ public class GamesLibrarian extends JFrame {
 		libraryTotalWastedHoursFormattedLabel = new JLabel("");
 		libraryStatisticsMainPane.add(libraryTotalWastedHoursFormattedLabel, "cell 2 4");
 		
+		// libraryPercentageAchieved
+		libraryPercentageAchievedLabel = new TranslatableLabel(me, "libraryPercentageAchievedLabel");
+		libraryStatisticsMainPane.add(libraryPercentageAchievedLabel, "cell 3 4,alignx trailing");
+		
+		libraryPercentageAchievedTextField = new JTextField();
+		libraryPercentageAchievedTextField.setEditable(false);
+		libraryPercentageAchievedTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryPercentageAchievedTextField, "cell 4 4,growx");
+		
 		// libraryTotalHoursLast2Week
 		libraryTotalHoursLast2WeeksLabel = new TranslatableLabel(me, "libraryTotalHoursLast2WeeksLabel");
 		libraryStatisticsMainPane.add(libraryTotalHoursLast2WeeksLabel, "cell 0 5,alignx trailing");
@@ -1519,50 +1568,17 @@ public class GamesLibrarian extends JFrame {
 		libraryTotalHoursLast2WeeksFormattedLabel = new JLabel("");
 		libraryStatisticsMainPane.add(libraryTotalHoursLast2WeeksFormattedLabel, "cell 2 5");
 		
-		// libraryTotalFinishedGames
-		libraryTotalFinishedGamesLabel = new TranslatableLabel(me, "libraryTotalFinishedGamesLabel");
-		libraryStatisticsMainPane.add(libraryTotalFinishedGamesLabel, "cell 0 6,alignx trailing");
+		// libraryAveragePercentageAchieved
+		libraryAveragePercentageAchievedLabel = new TranslatableLabel(me, "libraryAveragePercentageAchievedLabel");
+		libraryStatisticsMainPane.add(libraryAveragePercentageAchievedLabel, "cell 3 5,alignx trailing");
 		
-		libraryTotalFinishedGamesTextField = new JTextField();
-		libraryTotalFinishedGamesTextField.setEditable(false);
-		libraryTotalFinishedGamesTextField.setColumns(10);
-		libraryStatisticsMainPane.add(libraryTotalFinishedGamesTextField, "cell 1 6,growx");
+		libraryAveragePercentageAchievedTextField = new JTextField();
+		libraryAveragePercentageAchievedTextField.setEditable(false);
+		libraryAveragePercentageAchievedTextField.setColumns(10);
+		libraryStatisticsMainPane.add(libraryAveragePercentageAchievedTextField, "cell 4 5,growx");
 		
-		// libraryTotalGamesWithInvalidStats
-		libraryTotalGamesWithInvalidStatsLabel = new TranslatableLabel(me, "libraryTotalGamesWithInvalidStatsLabel");
-		libraryStatisticsMainPane.add(libraryTotalGamesWithInvalidStatsLabel, "cell 0 7,alignx trailing");
-		
-		libraryTotalGamesWithInvalidStatsTextField = new JTextField();
-		libraryTotalGamesWithInvalidStatsTextField.setEditable(false);
-		libraryTotalGamesWithInvalidStatsTextField.setColumns(10);
-		libraryStatisticsMainPane.add(libraryTotalGamesWithInvalidStatsTextField, "cell 1 7,growx");
-		
-		// libraryTotalAchievements
-		libraryTotalAchievementsLabel = new TranslatableLabel(me, "libraryTotalAchievementsLabel");
-		libraryStatisticsMainPane.add(libraryTotalAchievementsLabel, "cell 0 8,alignx trailing");
-		
-		libraryTotalAchievementsTextField = new JTextField();
-		libraryTotalAchievementsTextField.setEditable(false);
-		libraryTotalAchievementsTextField.setColumns(10);
-		libraryStatisticsMainPane.add(libraryTotalAchievementsTextField, "cell 1 8,growx");
-		
-		// libraryTotalUnlockedAchievements
-		libraryTotalUnlockedAchievementsLabel = new TranslatableLabel(me, "libraryTotalUnlockedAchievementsLabel");
-		libraryStatisticsMainPane.add(libraryTotalUnlockedAchievementsLabel, "cell 0 9,alignx trailing");
-		
-		libraryTotalUnlockedAchievementsTextField = new JTextField();
-		libraryTotalUnlockedAchievementsTextField.setEditable(false);
-		libraryTotalUnlockedAchievementsTextField.setColumns(10);
-		libraryStatisticsMainPane.add(libraryTotalUnlockedAchievementsTextField, "cell 1 9,growx");
-		
-		// libraryPercentageAchieved
-		libraryPercentageAchievedLabel = new TranslatableLabel(me, "libraryPercentageAchievedLabel");
-		libraryStatisticsMainPane.add(libraryPercentageAchievedLabel, "cell 0 10,alignx trailing");
-		
-		libraryPercentageAchievedTextField = new JTextField();
-		libraryPercentageAchievedTextField.setEditable(false);
-		libraryPercentageAchievedTextField.setColumns(10);
-		libraryStatisticsMainPane.add(libraryPercentageAchievedTextField, "cell 1 10,growx");
+		libraryAveragePercentageAchievedFormattedLabel = new JLabel("");
+		libraryStatisticsMainPane.add(libraryAveragePercentageAchievedFormattedLabel, "cell 5 5");
 	}
 	
 	/**
