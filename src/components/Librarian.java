@@ -799,6 +799,18 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		} 
 	}
 	
+	/**
+	 * Mark games statistics as fetched
+	 */
+	public void setStatisticsFetched(SteamGamesList steamGamesList) {
+		if (parameters.getSteamGamesList() != null && parameters.getSteamGamesList().getSteamGames() != null) {
+			parameters.getSteamGamesList().setStatisticsFetched();
+			currentSteamProfile.setStatisticsFetched(true);
+			if (currentSteamProfile.getId64().equals(steamGamesList.getSteamID64()))
+				currentSteamProfile.setSteamGames(steamGamesList.getSteamGames());
+		}
+	}
+	
 	//
 	// Query runtime variables
 	//
@@ -1285,16 +1297,13 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		view.libraryTotalWastedHoursTextField.setText("");
 		view.libraryTotalHoursLast2WeeksTextField.setText("");
 		
-		// Percentage output formatter
-		NumberFormat percentFormat = NumberFormat.getPercentInstance();
-		percentFormat.setMaximumFractionDigits(2);
-		
-		// Clear all games statistics
-		view.libraryTotalFinishedGamesTextField.setText("0");
-		view.libraryTotalGamesWithInvalidStatsTextField.setText("0");
-		view.libraryTotalAchievementsTextField.setText("0");
-		view.libraryTotalUnlockedAchievementsTextField.setText("0");
-		view.libraryPercentageAchievedTextField.setText(percentFormat.format(0));
+		// Clear all games statistics count
+		view.libraryTotalFinishedGamesTextField.setText(BundleManager.getUITexts(me, "unavailable"));
+		view.libraryTotalGamesWithInvalidStatsTextField.setText(BundleManager.getUITexts(me, "unavailable"));
+		view.libraryTotalAchievementsTextField.setText(BundleManager.getUITexts(me, "unavailable"));
+		view.libraryTotalUnlockedAchievementsTextField.setText(BundleManager.getUITexts(me, "unavailable"));
+		view.libraryPercentageAchievedTextField.setText(BundleManager.getUITexts(me, "unavailable"));
+		view.libraryAveragePercentageAchievedTextField.setText(BundleManager.getUITexts(me, "unavailable"));
 	}
 
 	/**
@@ -1502,7 +1511,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 	/**
 	 * Update display of libraryStatistics Main Tab and SubTabs
 	 */
-	public void updateLibraryStatisticsMainTab(Boolean translating) {
+	public void updateLibraryStatisticsMainTab() {
 		
 		// Clear first
 		clearLibraryStatisticsPane();
@@ -1528,46 +1537,38 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 
 			steamGamesList.setAchievementsStatistics();
 			
-    		view.libraryTotalFinishedGamesTextField.setText(steamGamesList.getFinishedGamesCount().toString());
-    		view.libraryTotalGamesWithInvalidStatsTextField.setText(steamGamesList.getGamesWithInvalidStatsCount().toString());
-    		view.libraryTotalAchievementsTextField.setText(steamGamesList.getAchievementsCount().toString());
-    		view.libraryTotalUnlockedAchievementsTextField.setText(steamGamesList.getUnlockedAchievementsCount().toString());
+    		view.libraryTotalFinishedGamesTextField.setText(steamGamesList.getStatisticsFetched() ? steamGamesList.getFinishedGamesCount().toString() : BundleManager.getUITexts(me, "unavailable"));
+    		view.libraryTotalGamesWithInvalidStatsTextField.setText(steamGamesList.getStatisticsFetched() ? steamGamesList.getGamesWithInvalidStatsCount().toString() : BundleManager.getUITexts(me, "unavailable"));
+    		view.libraryTotalAchievementsTextField.setText(steamGamesList.getStatisticsFetched() ? steamGamesList.getAchievementsCount().toString() : BundleManager.getUITexts(me, "unavailable"));
+    		view.libraryTotalUnlockedAchievementsTextField.setText(steamGamesList.getStatisticsFetched() ? steamGamesList.getUnlockedAchievementsCount().toString() : BundleManager.getUITexts(me, "unavailable"));
     		
-			// Percentage output formatter
-			NumberFormat percentFormat = NumberFormat.getPercentInstance();
-			percentFormat.setMaximumFractionDigits(2);
-			
-			// Display percentage achieved
-			Double unlockedAchievementsCount = new Double(steamGamesList.getUnlockedAchievementsCount());
-			Double achievementsCount = new Double(steamGamesList.getAchievementsCount());
-    		view.libraryPercentageAchievedTextField.setText(percentFormat.format(achievementsCount == 0 ? 0 : unlockedAchievementsCount / achievementsCount));
-
-			// Display average percentage achieved
-			Double achievementsForAveragePercentageCount = new Double(steamGamesList.getAchievementsForAveragePercentageCount());
-    		view.libraryAveragePercentageAchievedTextField.setText(percentFormat.format(achievementsForAveragePercentageCount == 0 ? 0 : unlockedAchievementsCount / achievementsForAveragePercentageCount));
-    		
-			// Display average percentage achieved formatted label
-    		String labelName = "libraryAveragePercentageAchievedTooltip0";
-    		if (unlockedAchievementsCount <= 1)
-    			labelName = "libraryAveragePercentageAchievedTooltip0";
-    		else
-    			if (steamGamesList.getGamesWithUnlockedAchievementsCount() <= 1)
-    				labelName = "libraryAveragePercentageAchievedTooltip1";
+    		if (steamGamesList.getStatisticsFetched()) {
+    			// Percentage output formatter
+    			NumberFormat percentFormat = NumberFormat.getPercentInstance();
+    			percentFormat.setMaximumFractionDigits(2);
+    			
+    			// Display percentage achieved
+    			Double unlockedAchievementsCount = new Double(steamGamesList.getUnlockedAchievementsCount());
+    			Double achievementsCount = new Double(steamGamesList.getAchievementsCount());
+    			view.libraryPercentageAchievedTextField.setText(percentFormat.format(achievementsCount == 0 ? 0 : unlockedAchievementsCount / achievementsCount));
+    			
+    			// Display average percentage achieved
+    			Double achievementsForAveragePercentageCount = new Double(steamGamesList.getAchievementsForAveragePercentageCount());
+    			view.libraryAveragePercentageAchievedTextField.setText(percentFormat.format(achievementsForAveragePercentageCount == 0 ? 0 : unlockedAchievementsCount / achievementsForAveragePercentageCount));
+    			
+    			// Display average percentage achieved formatted label
+    			String labelName = "libraryAveragePercentageAchievedTooltip0";
+    			if (unlockedAchievementsCount <= 1)
+    				labelName = "libraryAveragePercentageAchievedTooltip0";
     			else
-    				labelName = "libraryAveragePercentageAchievedTooltip2";
-    		view.libraryAveragePercentageAchievedFormattedLabel.setText(String.format(BundleManager.getUITexts(me, labelName), unlockedAchievementsCount.intValue(), steamGamesList.getGamesWithUnlockedAchievementsCount()));
-    		
-			// Do not signal games invalid statistics when translating the GUI
-    		if (!translating) {
-	    		for (SteamGame game : currentSteamProfile.getSteamGames()) {
-					if ((game.getStatsLink() != null && !game.getStatsLink().trim().equals(""))
-						&& (game.getSteamGameStats() == null
-							|| game.getSteamGameStats().getSteamAchievementsList() == null
-							|| game.getSteamGameStats().getSteamAchievementsList().getSteamAchievements() == null
-							|| game.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() <= 0)) {
-						tee.writelnInfos("Game with invalid statistics = " + game.getName() + ", " + game.getStatsLink());
-					}
-				}
+    				if (steamGamesList.getGamesWithUnlockedAchievementsCount() <= 1)
+    					labelName = "libraryAveragePercentageAchievedTooltip1";
+    				else
+    					labelName = "libraryAveragePercentageAchievedTooltip2";
+    			view.libraryAveragePercentageAchievedFormattedLabel.setText(String.format(BundleManager.getUITexts(me, labelName), unlockedAchievementsCount.intValue(), steamGamesList.getGamesWithUnlockedAchievementsCount()));
+    		} else {
+    			view.libraryAveragePercentageAchievedTextField.setText(BundleManager.getUITexts(me, "unavailable"));
+    			view.libraryAveragePercentageAchievedFormattedLabel.setText("");
     		}
 		}
 	}
@@ -1577,7 +1578,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 	 */
 	public void updateAllLibraryTabs() {
 		updateGamesLibraryTab();
-		updateLibraryStatisticsMainTab(false);
+		updateLibraryStatisticsMainTab();
 	}
 	
 	/**
@@ -2983,6 +2984,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		
 		// Clear gameList
 		parameters.setSteamGamesList(null);
+		currentSteamProfile.setStatisticsFetched(false);
 		updateAllLibraryTabs();
 		
 		// Read gameList
@@ -3459,6 +3461,22 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		}
 	}
 	
+	/**
+	 * When finishing AllSteamGamesStatsReader work
+	 * We can do this
+	 */
+	public void displayGamesWithInvalidStatistics() {
+		for (SteamGame game : currentSteamProfile.getSteamGames()) {
+			if ((game.getStatsLink() != null && !game.getStatsLink().trim().equals(""))
+				&& (game.getSteamGameStats() == null
+					|| game.getSteamGameStats().getSteamAchievementsList() == null
+					|| game.getSteamGameStats().getSteamAchievementsList().getSteamAchievements() == null
+					|| game.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() <= 0)) {
+				tee.writelnInfos("Game with invalid statistics = " + game.getName() + ", " + game.getStatsLink());
+			}
+		}
+	}
+	
 	//
 	// Localization
 	//
@@ -3544,7 +3562,7 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		// Library Statistics Tab
 		//
 		
-		updateLibraryStatisticsMainTab(true);
+		updateLibraryStatisticsMainTab();
 		
 		//
 		// Profile Tab
@@ -3714,7 +3732,6 @@ public class Librarian implements SteamAchievementsSortMethodObserver, ButtonsDi
 		if (currentSteamProfile.getId() != null) {
 			view.knownProfilesComboBox.addProfile(currentSteamProfile);
 		}	
-			
 		
 		// Check if Steam Community is online
 		if (parameters.isCheckCommunityOnStartup() && !checkSteamCommunity(DisplayMode.verbose))

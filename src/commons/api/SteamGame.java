@@ -51,8 +51,8 @@ import components.commons.parsers.NumberParser;
 	"steamLaunchMethod",
 	"initialPosition",
 	
-	"totalAchievements",
-	"totalUnlockedAchievements",
+	"achievementsCount",
+	"unlockedAchievementsCount",
 	
 	"steamGameStats"
 })
@@ -107,8 +107,8 @@ public class SteamGame extends Game {
 	SteamLaunchMethod steamLaunchMethod;
 	Integer initialPosition;
 	
-	Integer totalAchievements = 0;
-	Integer totalUnlockedAchievements = 0;
+	Integer achievementsCount = 0;
+	Integer unlockedAchievementsCount = 0;
 	
 	// Tools
 	private NumberParser numberParser;
@@ -336,33 +336,33 @@ public class SteamGame extends Game {
 	}
 
 	/**
-	 * @return the totalAchievements
+	 * @return the achievementsCount
 	 */
-	public Integer getTotalAchievements() {
-		return totalAchievements;
+	public Integer getAchievementsCount() {
+		return achievementsCount;
 	}
 
 	/**
-	 * @param totalAchievements the totalAchievements to set
+	 * @param achievementsCount the achievementsCount to set
 	 */
 	@XmlElement
-	public void setTotalAchievements(Integer totalAchievements) {
-		this.totalAchievements = totalAchievements;
+	public void setAchievementsCount(Integer achievementsCount) {
+		this.achievementsCount = achievementsCount;
 	}
 
 	/**
-	 * @return the totalUnlockedAchievements
+	 * @return the unlockedAchievementsCount
 	 */
-	public Integer getTotalUnlockedAchievements() {
-		return totalUnlockedAchievements;
+	public Integer getUnlockedAchievementsCount() {
+		return unlockedAchievementsCount;
 	}
 
 	/**
-	 * @param totalUnlockedAchievements the totalUnlockedAchievements to set
+	 * @param unlockedAchievementsCount the unlockedAchievementsCount to set
 	 */
 	@XmlElement
-	public void setTotalUnlockedAchievements(Integer totalUnlockedAchievements) {
-		this.totalUnlockedAchievements = totalUnlockedAchievements;
+	public void setUnlockedAchievementsCount(Integer unlockedAchievementsCount) {
+		this.unlockedAchievementsCount = unlockedAchievementsCount;
 	}
 
 	/**
@@ -412,8 +412,8 @@ public class SteamGame extends Game {
 	 */
 	private void resetStatistics() {
 		achievementsRatio = null;
-		totalAchievements = 0;
-		totalUnlockedAchievements = 0;
+		achievementsCount = 0;
+		unlockedAchievementsCount = 0;
 	}
 	
 	/**
@@ -426,9 +426,9 @@ public class SteamGame extends Game {
 				&& steamGameStats.getSteamAchievementsList().getSteamAchievements() != null
 				&& steamGameStats.getSteamAchievementsList().getSteamAchievements().size() > 0) {
 			for (SteamAchievement steamAchievement : steamGameStats.getSteamAchievementsList().getSteamAchievements()) {
-				totalAchievements++;
+				achievementsCount++;
 				if (steamAchievement.isClosed())
-					totalUnlockedAchievements++;
+					unlockedAchievementsCount++;
 			}
 		}
 	}
@@ -528,8 +528,8 @@ public class SteamGame extends Game {
 		result.add(prefix + " - hoursOnRecord : " + (hoursOnRecord != null ? hoursOnRecord : "null"));
 		result.add(prefix + " - statsLink : " + (statsLink != null ? statsLink : "null"));
 		result.add(prefix + " - globalStatsLink : " + (globalStatsLink != null ? globalStatsLink : "null"));
-		result.add(prefix + " - totalAchievements : " + (totalAchievements != null ? totalAchievements : "null"));
-		result.add(prefix + " - totalUnlockedAchievements : " + (totalUnlockedAchievements != null ? totalUnlockedAchievements : "null"));
+		result.add(prefix + " - totalAchievements : " + (achievementsCount != null ? achievementsCount : "null"));
+		result.add(prefix + " - totalUnlockedAchievements : " + (unlockedAchievementsCount != null ? unlockedAchievementsCount : "null"));
 		result.add(prefix + " - loadingSource : " + (loadingSource != null ? loadingSource : "null"));
 		result.add(prefix + " - arguments : " + (arguments != null ? arguments : "null"));
 		result.add(prefix + " - steamLaunchMethod : " + (steamLaunchMethod != null ? steamLaunchMethod : "null"));
@@ -545,9 +545,9 @@ public class SteamGame extends Game {
 	}
 	
 	public Double getAchievementsRatio() {
-		if (steamGameStats == null || totalUnlockedAchievements == null || totalAchievements == null || totalAchievements == 0.0)
+		if (steamGameStats == null || unlockedAchievementsCount == null || achievementsCount == null || achievementsCount == 0.0)
 			return null;
-		return achievementsRatio = totalUnlockedAchievements / new Double(totalAchievements);
+		return achievementsRatio = unlockedAchievementsCount / new Double(achievementsCount);
 	}
 	
 	public String getPrintableAchievementsRatio(Double achievementsRatio) {

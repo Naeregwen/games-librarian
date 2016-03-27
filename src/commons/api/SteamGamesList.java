@@ -46,6 +46,7 @@ import components.commons.parsers.UnacceptableValueTypeException;
 	"totalWastedHours",
 	"totalHoursLast2Weeks",
 
+	"statisticsFetched",
 	"achievementsCount",
 	"unlockedAchievementsCount",
 	"gamesWithInvalidStatsCount",
@@ -70,13 +71,14 @@ public class SteamGamesList {
 	Double totalWastedHours = 0d;
 	Double totalHoursLast2Weeks = 0d;
 	
+	Boolean statisticsFetched = false;
+	
 	Integer achievementsCount = 0;
 	Integer unlockedAchievementsCount = 0;
 	Integer gamesWithInvalidStatsCount = 0;
 	Integer finishedGamesCount = 0;
-	// Achievements from games with unlocked achievements count
-	Integer achievementsForAveragePercentageCount = 0;
-	Integer gamesWithUnlockedAchievementsCount = 0;
+	Integer achievementsForAveragePercentageCount = 0; // Achievements count from games with unlocked achievements
+	Integer gamesWithUnlockedAchievementsCount = 0; // Games count from games with unlocked achievements
 	
 	// Tools
 	private NumberParser numberParser;
@@ -98,6 +100,7 @@ public class SteamGamesList {
 		steamID = steamProfile.getSteamID();
 		loadingSource = steamProfile.getLoadingSource();
 		steamGames = steamProfile.getSteamGames();
+		statisticsFetched = steamProfile.getStatisticsFetched();
 		numberParser = new NumberParser();
 		resetStatistics();
 		setStatistics();
@@ -241,6 +244,21 @@ public class SteamGamesList {
 	}
 
 	/**
+	 * @return the statisticsFetched
+	 */
+	public Boolean getStatisticsFetched() {
+		return statisticsFetched;
+	}
+
+	/**
+	 * Set statisticsFetched to true
+	 */
+	@XmlElement
+	public void setStatisticsFetched() {
+		this.statisticsFetched = true;
+	}
+
+	/**
 	 * @return the achievementsCount
 	 */
 	public Integer getAchievementsCount() {
@@ -356,13 +374,13 @@ public class SteamGamesList {
 				&& steamGame.getSteamGameStats().getSteamAchievementsList() != null 
 				&& steamGame.getSteamGameStats().getSteamAchievementsList().getSteamAchievements() != null
 				&& steamGame.getSteamGameStats().getSteamAchievementsList().getSteamAchievements().size() > 0) {
-			achievementsCount += steamGame.getTotalAchievements();
-			unlockedAchievementsCount += steamGame.getTotalUnlockedAchievements();
-			if (steamGame.getTotalUnlockedAchievements() > 0) {
+			achievementsCount += steamGame.getAchievementsCount();
+			unlockedAchievementsCount += steamGame.getUnlockedAchievementsCount();
+			if (steamGame.getUnlockedAchievementsCount() > 0) {
 				gamesWithUnlockedAchievementsCount++;
-				achievementsForAveragePercentageCount += steamGame.getTotalAchievements();
+				achievementsForAveragePercentageCount += steamGame.getAchievementsCount();
 			}
-			if (steamGame.getTotalAchievements().equals(steamGame.getTotalUnlockedAchievements()))
+			if (steamGame.getAchievementsCount().equals(steamGame.getUnlockedAchievementsCount()))
 				finishedGamesCount++;
 		} else if ((steamGame.getStatsLink() != null && !steamGame.getStatsLink().trim().equals(""))
 				&& (steamGame.getSteamGameStats() == null
@@ -378,7 +396,6 @@ public class SteamGamesList {
 	 * @param steamGame
 	 */
 	private void addGameStats(SteamGame steamGame) {
-		
 		if (steamGame.getStatsLink() != null && !steamGame.getStatsLink().trim().equals(""))
 			totalGamesWithStats++;
 		if (steamGame.getGlobalStatsLink() != null && steamGame.getGlobalStatsLink().startsWith(Steam.steamCommunityShortURL))
@@ -403,9 +420,9 @@ public class SteamGamesList {
 	}
 	
 	/**
-	 * Reset to zero only statistics counters relatives to achievements
+	 * Reset to zero all statistics counters
 	 */
-	private void resetAchievementsStatistics() {
+	private void resetStatisticsCounters() {
 		finishedGamesCount = 0;
 		achievementsCount = 0;
 		unlockedAchievementsCount = 0;
@@ -415,10 +432,9 @@ public class SteamGamesList {
 	}
 	
 	/**
-	 * Reset to zero all statistics counters
+	 * Reset to zero all statistics
 	 */
 	private void resetStatistics() {
-		
 		totalGamesWithStats = 0;
 		totalGamesWithGlobalStats = 0;
 		totalGamesWithStoreLink = 0;
@@ -426,14 +442,14 @@ public class SteamGamesList {
 		totalWastedHours = 0d;
 		totalHoursLast2Weeks = 0d;
 		
-		resetAchievementsStatistics();
+		resetStatisticsCounters();
 	}
 	
 	/**
 	 * Set the statistics counters relatives to achievements
 	 */
 	public void setAchievementsStatistics() {
-		resetAchievementsStatistics();
+		resetStatisticsCounters();
 		for (SteamGame steamGame : steamGames) 
 			addGameAchievementsStats(steamGame);
 	}

@@ -124,8 +124,12 @@ public class AllSteamGamesStatsReader extends SwingWorker<SteamGamesList, String
 			try {
 				SteamGamesList steamGamesList = get();
 				if (steamGamesList != null) {
+					// Update steamGamesList status
+					librarian.setStatisticsFetched(steamGamesList);
 					// Update libraryStatisticsPane
-					librarian.updateLibraryStatisticsMainTab(false);
+					librarian.updateLibraryStatisticsMainTab();
+					// Signal games with invalid statistics
+					librarian.displayGamesWithInvalidStatistics();
 				}
 			} catch (InterruptedException e) {
 				cancelSteamGameStatsReaders();

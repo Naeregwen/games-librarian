@@ -130,8 +130,10 @@ public class SteamProfileReader extends SwingWorker<SteamProfile, String> {
 						// Replace steamProfile.steamGames by parameters.steamGamesList.steamGames, when id are matching
 						SteamGamesList steamGamesList = librarian.getParameters().getSteamGamesList();
 						if (steamGamesList != null && ((steamGamesList.getSteamID64() != null && steamGamesList.getSteamID64().equals(steamProfile.getSteamID64())
-								|| (steamGamesList.getSteamID() != null && steamGamesList.getSteamID().equals(steamProfile.getSteamID())))))
+								|| (steamGamesList.getSteamID() != null && steamGamesList.getSteamID().equals(steamProfile.getSteamID()))))) {
 							steamProfile.setSteamGames(steamGamesList.getSteamGames());
+							steamProfile.setStatisticsFetched(steamGamesList.getStatisticsFetched());
+						}
 						// Update profiles list
 						librarian.addProfile(steamProfile, false);
 						// Update profile tab

@@ -72,6 +72,7 @@ import components.GamesLibrarian;
 	
 	"loadingSource",
 	"initialPosition",
+	"statisticsFetched",
 	
 	"mostplayedGames",
 	"steamGames",
@@ -79,9 +80,6 @@ import components.GamesLibrarian;
 	"steamGroups"
 })
 public class SteamProfile implements Comparable<SteamProfile> {
-
-	LoadingSource loadingSource;
-	Integer initialPosition;
 
 	String steamID64;
 	String steamID;
@@ -109,6 +107,10 @@ public class SteamProfile implements Comparable<SteamProfile> {
 	String realname;
 	String summary;
 	
+	LoadingSource loadingSource;
+	Integer initialPosition;
+	Boolean statisticsFetched;
+
 	Vector<SteamGame> mostplayedGames;
 	Vector<SteamGame> steamGames;
 	Vector<SteamProfile> steamFriends;
@@ -118,40 +120,11 @@ public class SteamProfile implements Comparable<SteamProfile> {
 	 * Initialize base members
 	 */
 	public SteamProfile() {
+		statisticsFetched = false;
 		mostplayedGames = new Vector<SteamGame>();
 		steamGames = new Vector<SteamGame>();
 		steamFriends = new Vector<SteamProfile>();
 		steamGroups = new Vector<SteamGroup>();
-	}
-
-	/**
-	 * @return the initialPosition
-	 */
-	public Integer getInitialPosition() {
-		return initialPosition;
-	}
-
-	/**
-	 * @param initialPosition the initialPosition to set
-	 */
-	@XmlElement
-	public void setInitialPosition(Integer initialPosition) {
-		this.initialPosition = initialPosition;
-	}
-
-	/**
-	 * @return the loadingSource
-	 */
-	public LoadingSource getLoadingSource() {
-		return loadingSource;
-	}
-
-	/**
-	 * @param loadingSource the loadingSource to set
-	 */
-	@XmlElement
-	public void setLoadingSource(LoadingSource loadingSource) {
-		this.loadingSource = loadingSource;
 	}
 
 	/**
@@ -485,6 +458,51 @@ public class SteamProfile implements Comparable<SteamProfile> {
 	}
 
 	/**
+	 * @return the loadingSource
+	 */
+	public LoadingSource getLoadingSource() {
+		return loadingSource;
+	}
+
+	/**
+	 * @param loadingSource the loadingSource to set
+	 */
+	@XmlElement
+	public void setLoadingSource(LoadingSource loadingSource) {
+		this.loadingSource = loadingSource;
+	}
+
+	/**
+	 * @return the initialPosition
+	 */
+	public Integer getInitialPosition() {
+		return initialPosition;
+	}
+
+	/**
+	 * @param initialPosition the initialPosition to set
+	 */
+	@XmlElement
+	public void setInitialPosition(Integer initialPosition) {
+		this.initialPosition = initialPosition;
+	}
+
+	/**
+	 * @return the statisticsFetched
+	 */
+	public Boolean getStatisticsFetched() {
+		return statisticsFetched;
+	}
+
+	/**
+	 * Set statisticsFetched to true
+	 */
+	@XmlElement
+	public void setStatisticsFetched(Boolean statisticsFetched) {
+		this.statisticsFetched = statisticsFetched;
+	}
+
+	/**
 	 * @return the mostplayedGames
 	 */
 	public Vector<SteamGame> getMostplayedGames() {
@@ -678,6 +696,7 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		summary = steamProfile.getSummary();
 		loadingSource = steamProfile.getLoadingSource();
 		initialPosition = steamProfile.getInitialPosition();
+		statisticsFetched = steamProfile.getStatisticsFetched();
 		mostplayedGames = steamProfile.getMostplayedGames();
 		steamGames = steamProfile.getSteamGames();
 		steamFriends = steamProfile.getSteamFriends();
@@ -1030,7 +1049,6 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		
 		List<String> result = new Vector<String>();
 		
-		result.add(prefix + " - initialPosition : " + (initialPosition != null ? initialPosition : "null"));
 		result.add(prefix + " - steamID64 : " + (steamID64 != null ? steamID64 : "null"));
 		result.add(prefix + " - steamID : " + (steamID != null ? steamID : "null"));
 		result.add(prefix + " - onlineState : " + (onlineState != null ? onlineState : "null"));
@@ -1052,6 +1070,8 @@ public class SteamProfile implements Comparable<SteamProfile> {
 		result.add(prefix + " - realname : " + (realname != null ? realname : "null"));
 		result.add(prefix + " - summary : " + (summary != null ? summary : "null"));
 		result.add(prefix + " - loadingSource : " + (loadingSource != null ? loadingSource : "null"));
+		result.add(prefix + " - initialPosition : " + (initialPosition != null ? initialPosition : "null"));
+		result.add(prefix + " - statisticsFetched : " + (statisticsFetched != null ? statisticsFetched : "null"));
 		
 		if (mostplayedGames != null && mostplayedGames.size() >0) {
 			String subPrefix = prefix + " - MostPlayedGames";
